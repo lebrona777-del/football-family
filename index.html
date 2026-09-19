@@ -294,39 +294,57 @@ $('#addFrame').onclick=()=>{let n=prompt('კადრის სახელი?
 $('#nextFrame').onclick=()=>{if(frames.length)applyFrame(Math.min(frames.length-1,activeFrame+1))};$('#prevFrame').onclick=()=>{if(frames.length)applyFrame(Math.max(0,activeFrame-1))};
 let framePlaying=false, frameTimer=null, frameRAF=null;
 function frameMap(arr){const m=new Map();(arr||[]).forEach(o=>m.set(String(o.id),o));return m}
-function animateFrame(from,to,duration){
-  if(frameRAF)cancelAnimationFrame(frameRAF);
-  const start=performance.now(), fm=frameMap(from.objects), tm=frameMap(to.objects);
-  const ids=[...new Set([...fm.keys(),...tm.keys()])];
-  function tick(now){
-    const t=Math.min(1,(now-start)/duration), e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
-    objects=ids.map(id=>{
-      const a=fm.get(id),b=tm.get(id);
-      if(!b) return {...a,opacity:1-e};
-      if(!a) return {...b,opacity:e};
-      const o={...b};
-      if(typeof a.x==='number'&&typeof b.x==='number')o.x=a.x+(b.x-a.x)*e;
-      if(typeof a.y==='number'&&typeof b.y==='number')o.y=a.y+(b.y-a.y)*e;
-      return o;
-    });
-    render();
-    objects.forEach(o=>{const el=pitch.querySelector('[data-id="'+o.id+'"]');if(el&&o.opacity!==undefined)el.style.opacity=o.opacity});
-    if(t<1){frameRAF=requestAnimationFrame(tick)}
-    else {objects=to.objects.map(o=>({...o}));strokes=to.strokes.map(s=>({...s,pts:s.pts.map(p=>({...p}))}));render();}
+function paintAnimatedObjects(){
+  render();
+  if(boardMode){
+    const fp=$('#fullPitch');
+    if(fp){
+      objects.forEach(o=>{const el=fp.querySelector('[data-id="'+o.id+'"]');if(el){el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.opacity!==undefined)el.style.opacity=o.opacity}});
+    }
   }
-  frameRAF=requestAnimationFrame(tick);
+}
+function animateFrame(from,to,duration){
+  return new Promise(resolve=>{
+    if(frameRAF)cancelAnimationFrame(frameRAF);
+    const start=performance.now(), fm=frameMap(from.objects), tm=frameMap(to.objects);
+    const ids=[...new Set([...fm.keys(),...tm.keys()])];
+    function tick(now){
+      const t=Math.min(1,(now-start)/duration), e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+      objects=ids.map(id=>{
+        const a=fm.get(id),b=tm.get(id);
+        if(!b) return {...a,opacity:1-e};
+        if(!a) return {...b,opacity:e};
+        const o={...b};
+        if(typeof a.x==='number'&&typeof b.x==='number')o.x=a.x+(b.x-a.x)*e;
+        if(typeof a.y==='number'&&typeof b.y==='number')o.y=a.y+(b.y-a.y)*e;
+        return o;
+      });
+      paintAnimatedObjects();
+      if(t<1 && framePlaying){frameRAF=requestAnimationFrame(tick)}
+      else{
+        objects=to.objects.map(o=>({...o}));
+        strokes=to.strokes.map(s=>({...s,pts:s.pts.map(p=>({...p}))}));
+        paintAnimatedObjects();
+        frameRAF=null;
+        resolve();
+      }
+    }
+    frameRAF=requestAnimationFrame(tick);
+  });
 }
 async function playFrames(){
   if(frames.length<2){toast('ანიმაციისთვის მინიმუმ 2 კადრი დაამატე 🎬');return}
   if(framePlaying)return;
   framePlaying=true;$('#playFrames').classList.add('playing');
-  const speed=()=>Number($('#frameSpeed').value||750);
-  for(let i=Math.max(0,activeFrame<0?0:activeFrame);i<frames.length-1 && framePlaying;i++){
+  if(boardMode)copyToFull();
+  const duration=()=>Number($('#frameSpeed').value||750);
+  let start=Math.max(0,activeFrame<0?0:activeFrame);
+  for(let i=start;i<frames.length-1 && framePlaying;i++){
     activeFrame=i;renderFrames();
-    animateFrame(frames[i],frames[i+1],speed());
-    await new Promise(r=>setTimeout(r,speed()+40));
+    if(boardMode)copyToFull();
+    await animateFrame(frames[i],frames[i+1],duration());
   }
-  if(framePlaying){activeFrame=frames.length-1;applyFrame(activeFrame)}
+  if(framePlaying){activeFrame=frames.length-1;applyFrame(activeFrame);if(boardMode)copyToFull()}
   stopFrames();
 }
 function stopFrames(){framePlaying=false;$('#playFrames').classList.remove('playing');if(frameRAF)cancelAnimationFrame(frameRAF);frameRAF=null;clearTimeout(frameTimer)}
