@@ -55,18 +55,18 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 .player{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;border:3px solid #fff;box-shadow:0 2px 8px #0005}
 .red{background:#d93636}.blue{background:#2167d8}
 .ball{font-size:32px;line-height:1}.cone{font-size:30px}.man{font-size:34px}
-.playerFig{width:34px;height:52px;position:absolute;transform:translate(-50%,-50%);touch-action:none;z-index:5;filter:drop-shadow(0 2px 3px #0006)}
-.playerFig .head{position:absolute;left:50%;top:0;width:13px;height:13px;border-radius:50%;transform:translateX(-50%);background:#d59b72;border:1px solid #8a5d42}
-.playerFig .body{position:absolute;left:50%;top:11px;width:18px;height:23px;transform:translateX(-50%);background:var(--jersey,#d93636);border-radius:5px 5px 4px 4px;border:2px solid #fff;box-shadow:0 1px 2px #0004}
+.playerFig{width:46px;height:68px;position:absolute;transform:translate(-50%,-50%);touch-action:none;z-index:5;filter:drop-shadow(0 2px 3px #0006)}
+.playerFig .head{position:absolute;left:50%;top:0;width:15px;height:15px;border-radius:50%;transform:translateX(-50%);background:#d59b72;border:1px solid #8a5d42}
+.playerFig .body{position:absolute;left:50%;top:13px;width:25px;height:27px;transform:translateX(-50%);background:var(--jersey,#d93636);border-radius:7px 7px 5px 5px;border:2px solid #fff;box-shadow:0 2px 3px #0005}.playerFig .shorts{position:absolute;left:50%;top:39px;width:25px;height:13px;transform:translateX(-50%);background:var(--shorts,#222);border-radius:2px 2px 5px 5px;z-index:1}.playerFig .collar{position:absolute;left:50%;top:14px;width:8px;height:5px;transform:translateX(-50%);border:2px solid #fff;border-top:0;border-radius:0 0 6px 6px;z-index:2}.playerFig .num{position:absolute;left:50%;top:21px;
 .playerFig .num{position:absolute;left:50%;top:17px;transform:translateX(-50%);font-size:8px;color:#fff;font-weight:900;z-index:2}
 .playerFig .arm,.playerFig .leg{position:absolute;background:#d59b72;border-radius:5px;transform-origin:top center}
-.playerFig .arm{top:13px;width:5px;height:17px}
+.playerFig .arm{top:16px;width:6px;height:20px}
 .playerFig .arm.l{left:5px;transform:rotate(22deg)}.playerFig .arm.r{right:5px;transform:rotate(-22deg)}
-.playerFig .leg{top:33px;width:6px;height:18px;background:#f1f1f1;border-radius:2px 2px 5px 5px}
+.playerFig .leg{top:49px;width:7px;height:18px;background:#f1f1f1;border-radius:2px 2px 5px 5px}
 .playerFig .leg.l{left:10px;transform:rotate(7deg)}.playerFig .leg.r{right:10px;transform:rotate(-7deg)}
-.playerFig .boot{position:absolute;bottom:0;width:9px;height:4px;border-radius:4px;background:#111}
+.playerFig .boot{position:absolute;bottom:0;width:11px;height:5px;border-radius:4px;background:#111}
 .playerFig .boot.l{left:5px}.playerFig .boot.r{right:5px}
-.playerFig.blueFig{--jersey:#2167d8}.playerFig.redFig{--jersey:#d93636}.playerFig.gkFig{--jersey:#f0b400}
+.playerFig.blueFig{--jersey:#2167d8;--shorts:#173b7a}.playerFig.redFig{--jersey:#d93636;--shorts:#8f1f1f}.playerFig.gkFig{--jersey:#f0b400;--shorts:#8a6200}
 .playerFig.run .arm.l{transform:rotate(55deg)}.playerFig.run .arm.r{transform:rotate(-55deg)}.playerFig.run .leg.l{transform:rotate(-25deg)}.playerFig.run .leg.r{transform:rotate(25deg)}
 .playerFig.def .body{border-radius:3px}.playerFig.def .arm.l{transform:rotate(48deg)}.playerFig.def .arm.r{transform:rotate(-48deg)}
 .playerFig.attack .body{transform:translateX(-50%) rotate(-5deg)}.playerFig.attack .arm.l{transform:rotate(65deg)}.playerFig.attack .arm.r{transform:rotate(-15deg)}
@@ -94,6 +94,24 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);opacity:0;background:#10251a;color:#fff;padding:11px 15px;border-radius:12px;z-index:2000;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%)}
 .empty{color:#748078;text-align:center;padding:16px}
 @media(max-width:650px){.meta{grid-template-columns:1fr 1fr}.meta label:first-child{grid-column:1/-1}.player{width:36px;height:36px;font-size:13px}.tool{padding:9px 10px}.pitchCard{padding:5px}.card{border-radius:16px}.planRow{grid-template-columns:1fr 70px 40px}}
+
+/* Coach Board Pro polish */
+.tool:active{transform:translateY(1px)}
+.quickbar{display:flex;gap:7px;overflow-x:auto;padding:2px 0 4px;margin-top:8px}
+.quickbar button{flex:0 0 auto;border:1px solid #cfe0d3;background:#f6faf7;border-radius:11px;padding:8px 10px;font-weight:800;color:#164d2b}
+.sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sectionTitle h3{margin:0}
+.inspector{display:none;margin-top:10px;padding:10px;border:1px solid #dbe4de;border-radius:14px;background:#f7faf8}
+.inspector.show{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.inspector .wide{grid-column:1/-1}
+.statbar{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+.stat{background:#f5f8f6;border:1px solid #dbe4de;border-radius:12px;padding:9px;text-align:center}.stat b{display:block;font-size:18px}
+.pitch.premium{background:
+repeating-linear-gradient(90deg,#3cad51 0 8.33%,#319b47 8.33% 16.66%),
+linear-gradient(180deg,#49bf5b,#268d3f)}
+.pitch.premium:after{background:rgba(255,255,255,.98)}
+#boardMode .modebar{padding-right:60px}
+@media(max-width:650px){.statbar{grid-template-columns:repeat(2,1fr)}.inspector.show{grid-template-columns:1fr}.inspector .wide{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -143,8 +161,8 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
   <div class="assetGrid" id="assetGrid"></div>
 </div>
 <div class="toolbar" style="margin-top:8px">
-<button class="tool" id="undo">↩️ Undo</button><button class="tool" id="redo">↪️ Redo</button>
-<button class="tool" id="formation">📐 ფორმაცია</button><button class="tool" id="clear">🧹 დაფის გასუფთავება</button>
+<button class="tool" id="undo">↩️ Undo</button><button class="tool" id="redo">↪️ Redo</button><button class="tool" id="deleteSelected">🗑️ არჩეულის წაშლა</button><button class="tool" id="duplicateSelected">⧉ არჩეულის ასლი</button>
+<button class="tool" id="formation">📐 ფორმაცია</button><button class="tool" id="pitchPreset">🏟️ მოედნის ტიპი</button><button class="tool" id="printBtn">🖨️ ბეჭდვა</button><button class="tool" id="clear">🧹 დაფის გასუფთავება</button>
 <button class="tool primary" id="save">💾 შენახვა</button><button class="tool dark" id="boardOpen">⛶ დიდი დაფა</button><button class="tool" id="duplicate">📋 ასლი</button><button class="tool" id="exportBtn">⬇️ JSON</button><button class="tool" id="importBtn">⬆️ JSON</button><input id="importFile" type="file" accept="application/json" hidden>
 </div>
 </section>
@@ -155,6 +173,14 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 <svg class="svgLayer" id="svg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>
 </div></div>
 <div class="small" style="margin-top:8px">💡 დაფაზე დაჭერით არჩეული ხელსაწყო დაემატება. მოთამაშეები და ობიექტები თითით გადაადგილდება. ისარი/ხაზი — თითის გასმით.</div>
+<div id="inspector" class="inspector">
+<label>სახელი<input id="objName" placeholder="მოთამაშის სახელი"></label>
+<label>ნომერი<input id="objNum" inputmode="numeric" placeholder="10"></label>
+<label>პოზიცია<select id="objRole"><option value="standard">სტანდარტული</option><option value="gk">მეკარე</option><option value="def">მცველი</option><option value="mid">ნახევარმცველი</option><option value="attack">თავდამსხმელი</option><option value="run">მოძრაობა</option><option value="raise">ხელები ზემოთ</option><option value="side">გვერდითი პოზა</option></select></label>
+<label>ფერი<select id="objColor"><option value="red">წითელი</option><option value="blue">ლურჯი</option></select></label>
+<div class="wide"><button class="tool primary" id="applyObj">✓ ცვლილების გამოყენება</button> <button class="tool" id="lockObj">🔒 ჩაკეტვა/გახსნა</button></div>
+</div>
+<div class="statbar"><div class="stat"><b id="statPlayers">0</b><span class="small">ფეხბურთელი</span></div><div class="stat"><b id="statAssets">0</b><span class="small">ინვენტარი</span></div><div class="stat"><b id="statFrames">0</b><span class="small">კადრი</span></div><div class="stat"><b id="statStages">0</b><span class="small">ეტაპი</span></div></div>
 </section>
 
 <section class="card">
@@ -167,7 +193,7 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 <section class="card">
 <h3 style="margin:0 0 10px">🏃 ვარჯიშის გეგმა</h3>
 <div id="plan"></div>
-<button class="tool primary" id="addStage">＋ ეტაპის დამატება</button>
+<button class="tool primary" id="addStage">＋ ეტაპის დამატება</button> <button class="tool" id="planTemplate">📋 სწრაფი გეგმა</button>
 </section>
 
 <section class="card">
@@ -218,8 +244,8 @@ objects.forEach(o=>{
  if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''; if(o.name){let l=document.createElement('div');l.className='label';l.textContent=o.name;el.appendChild(l)}}
  if(o.type==='ball')el.className+=' ball',el.textContent='⚽';
  if(o.type==='cone')el.className+=' cone',el.textContent='🔶';
- if(o.type==='man')el.className+=' man',el.textContent='🧍'; if(o.type==='ladder')el.className+=' man',el.textContent='🪜'; if(o.type==='hurdle')el.className+=' man',el.textContent='🚧'; if(o.type==='pole')el.className+=' man',el.textContent='📍'; if(o.type==='marker')el.className+=' cone',el.textContent='🔵'; if(o.type==='miniGoal')el.className+=' man',el.textContent='🥅'; if(o.type==='goal')el.className+=' man',el.textContent='🥅';
- if(o.type==='figure'){el.className+=' playerFig '+(o.color==='blue'?'blueFig':'redFig')+' '+(o.role||'standard');el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="num">'+esc(o.num||'')+'</span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}
+ if(o.type==='man'){el.className+=' playerFig '+(o.color==='blue'?'blueFig':'redFig')+' standard';el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="collar"></span><span class="num"></span><span class="shorts"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>';} if(o.type==='ladder')el.className+=' man',el.textContent='🪜'; if(o.type==='hurdle')el.className+=' man',el.textContent='🚧'; if(o.type==='pole')el.className+=' man',el.textContent='📍'; if(o.type==='marker')el.className+=' cone',el.textContent='🔵'; if(o.type==='miniGoal')el.className+=' man',el.textContent='🥅'; if(o.type==='goal')el.className+=' man',el.textContent='🥅';
+ if(o.type==='figure'){el.className+=' playerFig '+(o.color==='blue'?'blueFig':'redFig')+' '+(o.role||'standard');el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="collar"></span><span class="num">'+esc(o.num||'')+'</span><span class="shorts"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}
  if(o.type==='text')el.className+=' label',el.textContent=o.text||'ტექსტი';
  if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)';}
  pitch.appendChild(el);el.addEventListener('pointerdown',objectDown);
@@ -235,7 +261,7 @@ strokes.forEach(s=>{
 function objectDown(e){
  e.stopPropagation(); if(tool==='erase'){snapshot();objects=objects.filter(o=>String(o.id)!==e.currentTarget.dataset.id);render();return}
  if(tool!=='select')return;
- let id=+e.currentTarget.dataset.id,o=objects.find(x=>x.id===id);if(!o)return;snapshot();drag={id,start:pt(e),orig:{x:o.x,y:o.y}};e.currentTarget.setPointerCapture(e.pointerId);
+ let id=+e.currentTarget.dataset.id,o=objects.find(x=>x.id===id);if(!o)return;selectObject(id);if(o.locked)return;snapshot();drag={id,start:pt(e),orig:{x:o.x,y:o.y}};e.currentTarget.setPointerCapture(e.pointerId);
 }
 pitch.addEventListener('pointermove',e=>{if(!drag)return;let p=pt(e),o=objects.find(x=>x.id===drag.id);if(!o)return;o.x=p.x;o.y=p.y;let el=pitch.querySelector('[data-id=\"'+drag.id+'\"]');if(el){el.style.left=p.x+'%';el.style.top=p.y+'%'}});
 pitch.addEventListener('pointerup',()=>{if(drag){drag=null;saveAutos();render()}});
@@ -256,7 +282,7 @@ pitch.addEventListener('pointermove',e=>{if(draw){draw.pts.push(pt(e));renderTem
 pitch.addEventListener('pointerup',()=>{if(draw){if(draw.pts.length>1)strokes.push(draw);draw=null;render();saveAutos()}})
 function renderTemp(){render();if(!draw)return;let d=draw.pts.map((p,i)=>(i?'L':'M')+p.x*10+' '+p.y*5.81).join(' ');let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('fill','none');p.setAttribute('stroke','#fff');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');svg.appendChild(p)}
 
-const assetDefs={basic:[['ball','⚽ ბურთი'],['cone','🔶 კონუსი'],['man','🧍 მანეკენი'],['zone','🟩 ზონა']],training:[['ladder','🪜 კიბე'],['hurdle','🚧 ბარიერი'],['pole','📍 ძელი'],['marker','🔵 ნიშნული']],goals:[['miniGoal','🥅 პატარა კარი'],['goal','🥅 დიდი კარი']]};
+const assetDefs={basic:[['ball','⚽ ბურთი'],['cone','🔶 კონუსი'],['man','👕 ფეხბურთელი'],['zone','🟩 ზონა']],training:[['ladder','🪜 კიბე'],['hurdle','🚧 ბარიერი'],['pole','📍 ძელი'],['marker','🔵 ნიშნული']],goals:[['miniGoal','🥅 პატარა კარი'],['goal','🥅 დიდი კარი']]};
 function renderAssets(){const box=$('#assetGrid'); if(!box)return; box.innerHTML=(assetDefs[assetCat]||assetDefs.basic).map(([t,n])=>`<button data-asset="${t}">${n}</button>`).join(''); $$('#assetGrid button').forEach(b=>b.onclick=()=>{tool='asset:'+b.dataset.asset; $$('#tools .tool').forEach(x=>x.classList.remove('active')); toast('დაფაზე დააჭირე — '+b.textContent)})}
 $$('#assetCats button').forEach(b=>b.onclick=()=>{$$('#assetCats button').forEach(x=>x.classList.remove('active'));b.classList.add('active');assetCat=b.dataset.cat;renderAssets()});
 renderAssets();
@@ -327,12 +353,42 @@ function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;',
 function renderPlan(){let box=$('#plan');box.innerHTML=plans.length?plans.map((p,i)=>`<div class="planRow"><input value="${esc(p.name)}" oninput="plans[${i}].name=this.value;saveAutosaveOnly()"><input value="${esc(p.min)}" oninput="plans[${i}].min=this.value;saveAutosaveOnly()"><button class="tool danger" onclick="plans.splice(${i},1);renderPlan()">×</button></div>`).join(''):'<div class="empty">დაამატე ვარჯიშის ეტაპები: გახურება → ტექნიკა → ტაქტიკა → თამაში.</div>'}
 window.saveAutosaveOnly=()=>localStorage.setItem('coachBoardAutosave',JSON.stringify(saveData()))
 $('#addStage').onclick=()=>{plans.push({name:'ახალი ეტაპი',min:'10'});renderPlan();saveAutos()}
+
+let selectedId=null;
+function selectedObj(){return objects.find(o=>String(o.id)===String(selectedId))}
+function updateStats(){
+ const players=objects.filter(o=>o.type==='figure'||o.type==='red'||o.type==='blue').length;
+ const assets=objects.filter(o=>!['figure','red','blue','text','zone'].includes(o.type)).length;
+ $('#statPlayers').textContent=players; $('#statAssets').textContent=assets; $('#statFrames').textContent=frames.length; $('#statStages').textContent=plans.length;
+}
+function showInspector(o){
+ const box=$('#inspector'); if(!o){box.classList.remove('show');return} box.classList.add('show');
+ $('#objName').value=o.name||''; $('#objNum').value=o.num||''; $('#objRole').value=o.role||'standard'; $('#objColor').value=o.color||((o.type==='blue')?'blue':'red');
+}
+function selectObject(id){selectedId=id;showInspector(selectedObj());}
+function applyInspector(){const o=selectedObj();if(!o)return;snapshot();o.name=$('#objName').value.trim();o.num=$('#objNum').value.trim();o.role=$('#objRole').value;o.color=$('#objColor').value;if(o.type==='red'||o.type==='blue')o.type=o.color;render();saveAutos();toast('მოთამაშე განახლდა ✓')}
+$('#applyObj').onclick=applyInspector;
+$('#lockObj').onclick=()=>{const o=selectedObj();if(!o)return;snapshot();o.locked=!o.locked;render();saveAutos();toast(o.locked?'ობიექტი ჩაიკეტა 🔒':'ობიექტი გაიხსნა 🔓')};
+$('#deleteSelected').onclick=()=>{if(selectedId==null)return;snapshot();objects=objects.filter(o=>String(o.id)!==String(selectedId));selectedId=null;render();saveAutos();toast('ობიექტი წაიშალა')};
+$('#duplicateSelected').onclick=()=>{const o=selectedObj();if(!o)return;snapshot();const c={...o,id:Date.now()+Math.random(),x:Math.min(96,o.x+4),y:Math.min(96,o.y+4)};objects.push(c);selectedId=c.id;render();saveAutos();toast('ობიექტი დაკოპირდა')};
+$('#pitchPreset').onclick=()=>{const choice=prompt('მოედანი: 1 სრული | 2 ნახევარი | 3 მესამედი | 4 ფუტსალი','1'); if(!choice)return;document.body.dataset.pitch=choice;toast('მოედნის ტიპი არჩეულია — '+choice);};
+$('#printBtn').onclick=()=>window.print();
+$('#planTemplate').onclick=()=>{snapshot();plans=[{name:'გახურება',min:'10'},{name:'ტექნიკა',min:'15'},{name:'ტაქტიკა',min:'20'},{name:'პატარა თამაში',min:'20'},{name:'დასრულება',min:'10'}];renderPlan();updateStats();saveAutos();toast('სწრაფი გეგმა შეიქმნა 📋')};
+// Enhanced selection and locked objects
+const oldRender=render;
+render=function(){oldRender();$$('#pitch .object').forEach(el=>{el.addEventListener('click',e=>{e.stopPropagation();selectObject(el.dataset.id)});if(el.dataset.id===String(selectedId))el.style.outline='3px solid #ffe45b';});updateStats();};
+// Patch pointer interaction: locked objects cannot be dragged.
+const oldObjectDown=objectDown;
+objectDown=function(e){const id=+e.currentTarget.dataset.id,o=objects.find(x=>x.id===id);if(o&&o.locked){selectObject(id);return}selectObject(id);oldObjectDown(e)};
+$('#nextFrame').onclick=()=>{if(frames.length)applyFrame(Math.min(frames.length-1,(activeFrame<0?0:activeFrame)+1))};
+$('#prevFrame').onclick=()=>{if(frames.length)applyFrame(Math.max(0,(activeFrame<0?0:activeFrame)-1))};
+
 window.addEventListener('load',()=>{let a=localStorage.getItem('coachBoardAutosave');if(a){try{let d=JSON.parse(a);if(confirm('ბოლო დაუმთავრებელი ვარჯიში აღვადგინოთ?'))load(d)}catch{}}render();renderFrames()})
 
 function modeHtml(){return ['select','red','blue','redFig','blueFig','ball','cone','man','arrow','line','zone','text','erase'].map(t=>{let names={select:'👆',red:'🔴',blue:'🔵',ball:'⚽',cone:'🔶',man:'🧍',arrow:'➡️',line:'➖',zone:'🟩',redFig:'🔴👤',blueFig:'🔵👤',text:'T',erase:'🗑️'};return `<button data-tool="${t}" onclick="setToolMode('${t}')">${names[t]}</button>`}).join('')}
 $('#modeTools').innerHTML=modeHtml();
 window.setToolMode=t=>{tool=t;setModeTool(t)}
-function copyToFull(){let fp=$('#fullPitch');fp.innerHTML=`<div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div><svg class="svgLayer" id="fullSvg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>`;objects.forEach(o=>{let el=document.createElement('div');el.className='object';el.dataset.id=o.id;el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''}else if(o.type==='ball'){el.className+=' ball';el.textContent='⚽'}else if(o.type==='cone'){el.className+=' cone';el.textContent='🔶'}else if(o.type==='man'){el.className+=' man';el.textContent='🧍'}else if(o.type==='figure'){el.className+=' playerFig '+(o.color==='blue'?'blueFig':'redFig')+' '+(o.role||'standard');el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="num">'+esc(o.num||'')+'</span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}else if(o.type==='text'){el.className+=' label';el.textContent=o.text||''}else if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)'}fp.appendChild(el)});let fs=$('#fullSvg');strokes.forEach(s=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.pts.map((q,i)=>(i?'L':'M')+q.x*5.81+' '+q.y*10).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',s.kind==='arrow'?'#fff':'#ffe56b');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');fs.appendChild(p)})}
+function copyToFull(){let fp=$('#fullPitch');fp.innerHTML=`<div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div><svg class="svgLayer" id="fullSvg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>`;objects.forEach(o=>{let el=document.createElement('div');el.className='object';el.dataset.id=o.id;el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''}else if(o.type==='ball'){el.className+=' ball';el.textContent='⚽'}else if(o.type==='cone'){el.className+=' cone';el.textContent='🔶'}else if(o.type==='man'){el.className+=' playerFig redFig standard';el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="collar"></span><span class="num"></span><span class="shorts"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}else if(o.type==='figure'){el.className+=' playerFig '+(o.color==='blue'?'blueFig':'redFig')+' '+(o.role||'standard');el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="collar"></span><span class="num">'+esc(o.num||'')+'</span><span class="shorts"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}else if(o.type==='text'){el.className+=' label';el.textContent=o.text||''}else if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)'}fp.appendChild(el)});let fs=$('#fullSvg');strokes.forEach(s=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.pts.map((q,i)=>(i?'L':'M')+q.x*5.81+' '+q.y*10).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',s.kind==='arrow'?'#fff':'#ffe56b');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');fs.appendChild(p)})}
 function openMode(){copyToFull();$('#boardMode').classList.add('show');document.body.style.overflow='hidden';boardMode=true}
 function closeMode(){$('#boardMode').classList.remove('show');document.body.style.overflow='';boardMode=false}
 $('#boardOpen').onclick=openMode;$('#quickFull').onclick=openMode;$('#closeMode').onclick=closeMode;
