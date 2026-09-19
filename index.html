@@ -3,100 +3,345 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#0b3b1b">
+<meta name="theme-color" content="#07170c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Coach Board">
-<title>Coach Board</title>
+<title>Coach Board — Football Training Planner</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#07170c;color:#fff}button,input,select,textarea{font:inherit}button{cursor:pointer}
-.app{position:fixed;inset:0;background:#07170c;overflow:hidden}.pitch{position:absolute;inset:0;background:#23743b;overflow:hidden;touch-action:none}
-.pitch:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 7%,rgba(0,0,0,.025) 7% 14%);pointer-events:none}
-.pitch:after{content:"";position:absolute;left:50%;top:50%;width:18%;aspect-ratio:1;border:3px solid rgba(255,255,255,.9);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}
-.line{position:absolute;border-color:rgba(255,255,255,.9);pointer-events:none;z-index:2}.midline{left:0;right:0;top:50%;border-top:3px solid rgba(255,255,255,.9)}.centerDot{position:absolute;left:50%;top:50%;width:10px;height:10px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);z-index:3}
-.box{position:absolute;left:26%;width:48%;height:16%;border:3px solid rgba(255,255,255,.9);z-index:2;pointer-events:none}.box.top{top:0;border-top:0}.box.bottom{bottom:0;border-bottom:0}.goal{position:absolute;left:38%;width:24%;height:4%;border:4px solid #fff;background:#ffffff18;z-index:2;pointer-events:none}.goal.top{top:0}.goal.bottom{bottom:0}
-.obj{position:absolute;transform:translate(-50%,-50%);z-index:10;user-select:none;touch-action:none}.ball{font-size:31px}.cone,.marker{font-size:28px}.man{font-size:34px}.goalObj{font-size:38px}.ladder{font-size:32px}.hurdle{font-size:32px}.pole{font-size:32px}
-.player{width:42px;height:42px;border-radius:50%;border:3px solid #fff;display:grid;place-items:center;font-weight:900;color:#fff;box-shadow:0 3px 8px #0007}.red{background:#d93636}.blue{background:#2167d8}.gk{background:#f0b400;color:#111}.obj.selected{outline:3px solid #fff;outline-offset:4px}
-.playerFig{width:48px;height:70px;position:absolute;transform:translate(-50%,-50%);z-index:11;filter:drop-shadow(0 3px 3px #0008)}.playerFig .head{position:absolute;left:50%;top:0;width:16px;height:16px;transform:translateX(-50%);border-radius:50%;background:#c98f68;border:1px solid #754f3c}.playerFig .body{position:absolute;left:50%;top:14px;width:27px;height:28px;transform:translateX(-50%);border-radius:7px 7px 4px 4px;background:var(--jersey);border:2px solid #fff}.playerFig .shorts{position:absolute;left:50%;top:41px;width:27px;height:13px;transform:translateX(-50%);background:var(--shorts);border-radius:2px 2px 5px 5px}.playerFig .arm,.playerFig .leg{position:absolute;border-radius:5px;transform-origin:top center}.playerFig .arm{top:17px;width:6px;height:21px;background:#c98f68}.playerFig .arm.l{left:5px;transform:rotate(25deg)}.playerFig .arm.r{right:5px;transform:rotate(-25deg)}.playerFig .leg{top:51px;width:7px;height:17px;background:#eee}.playerFig .leg.l{left:10px}.playerFig .leg.r{right:10px}.playerFig .boot{position:absolute;bottom:0;width:11px;height:5px;border-radius:4px;background:#111}.playerFig .boot.l{left:5px}.playerFig .boot.r{right:5px}.redFig{--jersey:#d93636;--shorts:#8f1f1f}.blueFig{--jersey:#2167d8;--shorts:#173b7a}.yellowFig{--jersey:#f0b400;--shorts:#8a6200}.playerFig.attack .body{transform:translateX(-50%) rotate(-5deg)}.playerFig.run .arm.l{transform:rotate(55deg)}.playerFig.run .arm.r{transform:rotate(-55deg)}.playerFig.run .leg.l{transform:rotate(-25deg)}.playerFig.run .leg.r{transform:rotate(25deg)}
-.topbar{position:absolute;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 10px);z-index:100;display:flex;align-items:center;gap:8px}.brand{background:#07170ccc;border:1px solid #ffffff22;backdrop-filter:blur(10px);border-radius:14px;padding:9px 12px;font-weight:900;box-shadow:0 4px 16px #0004}.planSummary{flex:1;min-width:0;background:#07170ccc;border:1px solid #ffffff22;backdrop-filter:blur(10px);border-radius:14px;padding:8px 10px}.planSummary b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.planSummary small{display:block;color:#cdebd4;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.more{width:48px;height:48px;border:1px solid #ffffff25;background:#07170cdd;color:#fff;border-radius:15px;font-size:25px;font-weight:900;box-shadow:0 4px 16px #0005}
-.hint{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 16px);transform:translateX(-50%);z-index:30;background:#07170dcc;border:1px solid #ffffff1f;padding:8px 12px;border-radius:12px;color:#e9fff0;font-size:12px;pointer-events:none;white-space:nowrap;opacity:.9}
-.sheet{position:absolute;z-index:200;left:10px;right:10px;bottom:10px;max-height:78vh;overflow:auto;background:#07170cf2;border:1px solid #ffffff1f;border-radius:22px;padding:14px;backdrop-filter:blur(18px);box-shadow:0 15px 50px #0009;display:none}.sheet.show{display:block}.sheetHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.sheetHead strong{font-size:18px}.close{border:0;background:#ffffff14;color:#fff;border-radius:11px;padding:8px 11px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.item{border:1px solid #ffffff14;background:#ffffff0b;color:#fff;border-radius:14px;padding:10px 5px;text-align:center;font-weight:800;min-height:66px}.item span{display:block;font-size:24px;margin-bottom:4px}.item.active{background:#1d9149;border-color:#4fce78}.section{margin-top:14px;padding-top:12px;border-top:1px solid #ffffff12}.section h3{font-size:13px;color:#bdebc8;margin:0 0 8px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.field label{display:block;font-size:11px;color:#bdebc8;margin:0 0 4px}.field input,.field select,.field textarea{width:100%;border:1px solid #ffffff18;background:#fff;color:#123b21;border-radius:10px;padding:9px}.field textarea{min-height:60px;resize:none}.full{grid-column:1/-1}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.action{border:0;border-radius:11px;padding:9px 12px;background:#1d9149;color:#fff;font-weight:800}.action.alt{background:#ffffff12}.action.danger{background:#8c2930}
-.toast{position:absolute;z-index:500;left:50%;top:calc(env(safe-area-inset-top) + 76px);transform:translateX(-50%) translateY(-10px);background:#fff;color:#123b21;border-radius:12px;padding:9px 13px;font-weight:800;box-shadow:0 8px 25px #0006;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.draw{position:absolute;z-index:8;pointer-events:none}.arrow{height:3px;background:#fff;transform-origin:0 50%}.arrow:after{content:"";position:absolute;right:-2px;top:50%;width:12px;height:12px;border-top:3px solid #fff;border-right:3px solid #fff;transform:translateY(-50%) rotate(45deg)}.zone{background:#1aa34a33;border:2px dashed #fff;transform:translate(-50%,-50%);border-radius:10px}
-@media(max-width:600px){.brand{display:none}.grid{grid-template-columns:repeat(3,1fr)}.hint{bottom:calc(env(safe-area-inset-bottom) + 12px);font-size:11px}.sheet{max-height:82vh}.topbar{left:8px;right:8px}.planSummary{padding:7px 9px}}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#06140a;color:#fff}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+#app{position:fixed;inset:0;background:#06140a;overflow:hidden}
+#pitch{position:absolute;inset:0;background:#23783d;overflow:hidden;touch-action:none}
+#pitch:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 8%,rgba(0,0,0,.025) 8% 16%);pointer-events:none}
+.fieldLine{position:absolute;border-color:#fff;opacity:.9;pointer-events:none;z-index:2}
+.midline{left:0;right:0;top:50%;border-top:3px solid #fff}
+.centerCircle{position:absolute;left:50%;top:50%;width:19%;aspect-ratio:1;border:3px solid #fff;border-radius:50%;transform:translate(-50%,-50%);z-index:2}
+.centerDot{position:absolute;left:50%;top:50%;width:9px;height:9px;background:#fff;border-radius:50%;transform:translate(-50%,-50%);z-index:3}
+.penalty{position:absolute;left:25%;width:50%;height:16%;border:3px solid #fff;z-index:2;pointer-events:none}
+.penalty.top{top:0;border-top:0}.penalty.bottom{bottom:0;border-bottom:0}
+.goal{position:absolute;left:37%;width:26%;height:4%;border:4px solid #fff;background:#ffffff18;z-index:2}
+.goal.top{top:0}.goal.bottom{bottom:0}
+.obj{position:absolute;transform:translate(-50%,-50%);z-index:20;user-select:none;touch-action:none}
+.player{width:48px;height:48px;border-radius:50%;border:3px solid #fff;display:grid;place-items:center;font-weight:900;color:#fff;box-shadow:0 4px 9px #0008}
+.player.red{background:#d93636}.player.blue{background:#2167d8}.player.gk{background:#f2c21b;color:#171717}
+.playerFig{width:52px;height:76px;position:absolute;transform:translate(-50%,-50%);z-index:20;filter:drop-shadow(0 4px 3px #0009)}
+.playerFig .head{position:absolute;left:50%;top:0;width:17px;height:17px;transform:translateX(-50%);border-radius:50%;background:#c98f68;border:1px solid #714b38}
+.playerFig .body{position:absolute;left:50%;top:15px;width:29px;height:29px;transform:translateX(-50%);border-radius:7px 7px 4px 4px;background:var(--jersey);border:2px solid #fff}
+.playerFig .shorts{position:absolute;left:50%;top:43px;width:29px;height:13px;transform:translateX(-50%);background:var(--shorts);border-radius:2px 2px 5px 5px}
+.playerFig .arm,.playerFig .leg{position:absolute;border-radius:5px;transform-origin:top center}
+.playerFig .arm{top:18px;width:6px;height:21px;background:#c98f68}
+.playerFig .arm.l{left:5px;transform:rotate(25deg)}.playerFig .arm.r{right:5px;transform:rotate(-25deg)}
+.playerFig .leg{top:52px;width:7px;height:18px;background:#eee}
+.playerFig .leg.l{left:10px}.playerFig .leg.r{right:10px}
+.playerFig .boot{position:absolute;bottom:0;width:12px;height:5px;border-radius:4px;background:#111}
+.playerFig .boot.l{left:4px}.playerFig .boot.r{right:4px}
+.redFig{--jersey:#d93636;--shorts:#8d2020}.blueFig{--jersey:#2167d8;--shorts:#183b79}.yellowFig{--jersey:#f2c21b;--shorts:#916f05}
+.playerFig.run .arm.l{transform:rotate(55deg)}.playerFig.run .arm.r{transform:rotate(-55deg)}
+.playerFig.run .leg.l{transform:rotate(-25deg)}.playerFig.run .leg.r{transform:rotate(25deg)}
+.playerFig.attack .body{transform:translateX(-50%) rotate(-7deg)}
+.playerFig.raise .arm.l{transform:rotate(-55deg)}.playerFig.raise .arm.r{transform:rotate(55deg)}
+.playerFig.side .body{transform:translateX(-50%) rotate(12deg)}
+.playerFig .num{position:absolute;left:50%;top:22px;transform:translateX(-50%);font-size:11px;font-weight:1000;color:#fff;text-shadow:0 1px 2px #000;z-index:3}
+.selected{outline:3px solid #fff;outline-offset:5px}
+.ball{font-size:32px}.cone{font-size:29px}.man{font-size:35px}.goalObj{font-size:42px}.ladder{font-size:34px}.hurdle{font-size:34px}.pole{font-size:34px}.marker{font-size:30px}
+.draw{position:absolute;z-index:8;pointer-events:none}.drawLine{height:4px;background:#fff;transform-origin:0 50%}.drawLine:after{content:"";position:absolute;right:-2px;top:50%;width:12px;height:12px;border-top:3px solid #fff;border-right:3px solid #fff;transform:translateY(-50%) rotate(45deg)}
+.zoneDraw{background:#1aa34a40;border:2px dashed #fff;border-radius:10px}
+.topbar{position:absolute;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 10px);z-index:100;display:flex;gap:8px;align-items:center}
+.brand{background:#07170cdd;border:1px solid #ffffff20;border-radius:14px;padding:9px 12px;font-weight:900;backdrop-filter:blur(12px)}
+.summary{flex:1;min-width:0;background:#07170cdd;border:1px solid #ffffff20;border-radius:14px;padding:8px 10px;backdrop-filter:blur(12px)}
+.summary b,.summary small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.summary small{color:#ccebd3;margin-top:2px}
+.menu{width:50px;height:50px;border:1px solid #ffffff25;background:#07170ceb;color:#fff;border-radius:15px;font-size:26px;font-weight:900}
+.hint{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 14px);transform:translateX(-50%);z-index:40;background:#07170cdd;border:1px solid #ffffff20;border-radius:13px;padding:8px 12px;font-size:12px;white-space:nowrap}
+.toast{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 78px);transform:translate(-50%,-10px);z-index:500;background:#fff;color:#143a20;border-radius:12px;padding:9px 13px;font-weight:900;opacity:0;pointer-events:none;transition:.2s;box-shadow:0 8px 25px #0007}.toast.show{opacity:1;transform:translate(-50%,0)}
+.sheet{position:absolute;left:9px;right:9px;bottom:9px;z-index:300;max-height:84vh;overflow:auto;background:#07170cf5;border:1px solid #ffffff20;border-radius:22px;padding:14px;backdrop-filter:blur(18px);box-shadow:0 18px 60px #000b;display:none}
+.sheet.show{display:block}
+.sheetHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.sheetHead strong{font-size:18px}.close{border:0;background:#ffffff14;color:#fff;border-radius:11px;padding:8px 11px}
+.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:10px}.tab{flex:0 0 auto;border:1px solid #ffffff18;background:#ffffff0b;color:#fff;border-radius:12px;padding:9px 12px;font-weight:900}.tab.active{background:#1d9149}
+.panel{display:none}.panel.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.item{border:1px solid #ffffff14;background:#ffffff0b;color:#fff;border-radius:14px;padding:9px 5px;text-align:center;font-weight:850;min-height:68px}.item span{display:block;font-size:25px;margin-bottom:4px}.item.active{background:#1d9149;border-color:#59d985}
+.section{padding-top:12px;margin-top:12px;border-top:1px solid #ffffff12}.section h3{font-size:13px;color:#bdebc8;margin:0 0 8px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.full{grid-column:1/-1}.field label{display:block;font-size:11px;color:#bdebc8;margin-bottom:4px}.field input,.field select,.field textarea{width:100%;border:1px solid #ffffff18;background:#fff;color:#173d23;border-radius:10px;padding:9px}.field textarea{min-height:70px;resize:none}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.action{border:0;border-radius:11px;padding:9px 12px;background:#1d9149;color:#fff;font-weight:900}.action.alt{background:#ffffff12}.action.danger{background:#8d2930}
+.inspector{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom) + 12px);transform:translateX(-50%);z-index:120;background:#07170cf2;border:1px solid #ffffff20;border-radius:15px;padding:9px;display:none;gap:7px;align-items:center;box-shadow:0 10px 30px #0008}.inspector.show{display:flex}.miniInput{width:70px;border:0;border-radius:9px;padding:8px}.miniBtn{border:0;border-radius:9px;padding:8px 10px;background:#1d9149;color:#fff;font-weight:800}
+#spacePanel{position:absolute;inset:0;z-index:250;background:#06140af5;display:none;overflow:auto;padding:calc(env(safe-area-inset-top) + 18px) 14px 20px}
+#spacePanel.show{display:block}.spaceHead{display:flex;justify-content:space-between;align-items:center}.spaceCards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.spaceCard{background:#ffffff0a;border:1px solid #ffffff14;border-radius:14px;padding:12px}.spaceCard b{display:block;margin-bottom:4px}.spaceCard small{color:#bdebc8}
+@media(max-width:600px){.brand{display:none}.grid{grid-template-columns:repeat(3,1fr)}.sheet{max-height:84vh}.topbar{left:8px;right:8px}.hint{font-size:11px;max-width:92vw;overflow:hidden;text-overflow:ellipsis}}
 </style>
 </head>
 <body>
-<div class="app" id="app">
-  <div class="pitch" id="pitch">
-    <div class="line midline"></div><div class="centerDot"></div><div class="box top"></div><div class="box bottom"></div><div class="goal top"></div><div class="goal bottom"></div>
+<div id="app">
+  <div id="pitch">
+    <div class="fieldLine midline"></div><div class="centerCircle"></div><div class="centerDot"></div>
+    <div class="penalty top"></div><div class="penalty bottom"></div><div class="goal top"></div><div class="goal bottom"></div>
   </div>
+
   <div class="topbar">
     <div class="brand">⚽ COACH BOARD</div>
-    <div class="planSummary"><b id="summaryTitle">ვარჯიშის გეგმა</b><small id="summaryMeta">დრო 18:00 • 60 წთ • საშუალო</small></div>
-    <button class="more" id="menuBtn">⋮</button>
+    <div class="summary"><b id="summaryTitle">ვარჯიშის გეგმა</b><small id="summaryMeta">18:00 • 60 წთ • საშუალო • U12</small></div>
+    <button class="menu" id="menuBtn">⋮</button>
   </div>
-  <div class="hint" id="hint">მოედანი მზადაა — დააჭირე ⋮ და აირჩიე რაც გჭირდება</div>
+
+  <div class="hint" id="hint">მთავარი ეკრანი: მხოლოდ მოედანი • ⋮ — ყველა ფუნქცია</div>
   <div class="toast" id="toast"></div>
+
+  <div class="inspector" id="inspector">
+    <input class="miniInput" id="objNum" placeholder="№">
+    <input class="miniInput" id="objName" placeholder="სახელი">
+    <button class="miniBtn" id="applyObj">შენახვა</button>
+    <button class="miniBtn" id="deleteObj">წაშლა</button>
+  </div>
+
   <div class="sheet" id="sheet">
     <div class="sheetHead"><strong>⚽ მწვრთნელის მენიუ</strong><button class="close" id="closeBtn">✕</button></div>
-    <div class="section" style="margin-top:0;padding-top:0;border-top:0"><h3>რას დაამატებ მოედანზე</h3><div class="grid" id="assetGrid"></div></div>
-    <div class="section"><h3>მოთამაშეები</h3><div class="grid" id="playerGrid"></div></div>
-    <div class="section"><h3>ტაქტიკა და ხაზები</h3><div class="grid" id="tacticGrid"></div></div>
-    <div class="section"><h3>ვარჯიშის გეგმა</h3>
-      <div class="formgrid">
-        <div class="field full"><label>გეგმის სახელი</label><input id="planTitle" value="ვარჯიშის გეგმა"></div>
-        <div class="field"><label>დაწყების დრო</label><input id="planTime" type="time" value="18:00"></div>
-        <div class="field"><label>ხანგრძლივობა</label><select id="planDuration"><option>30 წთ</option><option selected>60 წთ</option><option>75 წთ</option><option>90 წთ</option><option>120 წთ</option></select></div>
-        <div class="field"><label>ინტენსივობა</label><select id="planIntensity"><option>დაბალი</option><option selected>საშუალო</option><option>მაღალი</option></select></div>
-        <div class="field"><label>ასაკობრივი ჯგუფი</label><select id="planAge"><option>U8</option><option>U10</option><option selected>U12</option><option>U14</option><option>U16</option><option>უფროსები</option></select></div>
-        <div class="field full"><label>რა უნდა გააკეთოს გუნდმა?</label><textarea id="planNotes" placeholder="მაგ: პასი, ბურთის კონტროლი, პრესინგი..."></textarea></div>
-      </div>
-      <div class="actions"><button class="action" id="savePlan">💾 გეგმის შენახვა</button><button class="action alt" id="clearPitch">🧹 მოედნის გასუფთავება</button></div>
+    <div class="tabs">
+      <button class="tab active" data-tab="objects">ობიექტები</button>
+      <button class="tab" data-tab="tactics">ტაქტიკა</button>
+      <button class="tab" data-tab="plan">გეგმა</button>
+      <button class="tab" data-tab="animation">მოძრაობა</button>
+      <button class="tab" data-tab="space">სივრცე</button>
+      <button class="tab" data-tab="saved">შენახული</button>
     </div>
-    <div class="section"><h3>სწრაფი ფორმაციები</h3><div class="actions"><button class="action alt formation" data-f="4-3-3">4-3-3</button><button class="action alt formation" data-f="4-4-2">4-4-2</button><button class="action alt formation" data-f="3-5-2">3-5-2</button><button class="action alt formation" data-f="4-2-3-1">4-2-3-1</button></div></div>
+
+    <div class="panel active" id="panel-objects">
+      <div class="section" style="padding-top:0;margin-top:0;border-top:0"><h3>⚽ ფეხბურთელები</h3><div class="grid" id="playerGrid"></div></div>
+      <div class="section"><h3>🧰 სავარჯიშო ინვენტარი</h3><div class="grid" id="assetGrid"></div></div>
+    </div>
+
+    <div class="panel" id="panel-tactics">
+      <div class="section" style="padding-top:0;margin-top:0;border-top:0"><h3>📐 ფორმაციები</h3><div class="actions" id="formations"></div></div>
+      <div class="section"><h3>✏️ ხაზები და მოძრაობები</h3><div class="grid" id="toolGrid"></div></div>
+      <div class="section"><h3>🧠 სწრაფი ტაქტიკა</h3><div class="actions"><button class="action alt" id="clearDraw">🧹 ხაზების წაშლა</button><button class="action alt" id="clearPitch">🗑️ მთელი მოედნის გასუფთავება</button></div></div>
+    </div>
+
+    <div class="panel" id="panel-plan">
+      <div class="formgrid">
+        <div class="field full"><label>ვარჯიშის / გეგმის სახელი</label><input id="planTitle" value="ვარჯიშის გეგმა"></div>
+        <div class="field"><label>დაწყების დრო</label><input id="planTime" type="time" value="18:00"></div>
+        <div class="field"><label>ხანგრძლივობა</label><select id="planDuration"><option>15 წთ</option><option>30 წთ</option><option selected>60 წთ</option><option>75 წთ</option><option>90 წთ</option><option>120 წთ</option></select></div>
+        <div class="field"><label>ინტენსივობა</label><select id="planIntensity"><option>დაბალი</option><option selected>საშუალო</option><option>მაღალი</option></select></div>
+        <div class="field"><label>ასაკი</label><select id="planAge"><option>U8</option><option>U10</option><option selected>U12</option><option>U14</option><option>U16</option><option>U18</option><option>უფროსები</option></select></div>
+        <div class="field"><label>გამეორებები</label><input id="planReps" type="number" min="1" value="4"></div>
+        <div class="field"><label>დასვენება</label><input id="planRest" value="60 წმ"></div>
+        <div class="field full"><label>მწვრთნელის ჩანაწერი</label><textarea id="planNotes" placeholder="მაგ: პასი, ბურთის კონტროლი, პრესინგი..."></textarea></div>
+      </div>
+      <div class="actions"><button class="action" id="savePlan">💾 გეგმის შენახვა</button><button class="action alt" id="newPlan">＋ ახალი გეგმა</button></div>
+    </div>
+
+    <div class="panel" id="panel-animation">
+      <div class="section" style="padding-top:0;margin-top:0;border-top:0"><h3>🎬 კადრები</h3><div class="actions">
+        <button class="action" id="captureFrame">＋ კადრის დამატება</button><button class="action" id="playAnim">▶️ მოძრაობის ნახვა</button><button class="action alt" id="stopAnim">⏹ გაჩერება</button>
+      </div></div>
+      <div class="section"><h3>ბურთის მოძრაობა</h3><div class="actions"><button class="action alt" id="ballPath">⚽ ბურთის ტრაექტორია</button><button class="action alt" id="clearPaths">🧹 ტრაექტორიების გასუფთავება</button></div></div>
+      <div class="section"><h3>კადრის ხანგრძლივობა</h3><input id="frameDuration" type="range" min="300" max="3000" step="100" value="1000" style="width:100%"><small id="frameDurationLabel">1.0 წმ</small></div>
+    </div>
+
+    <div class="panel" id="panel-space">
+      <div class="section" style="padding-top:0;margin-top:0;border-top:0"><h3>📦 ცალკე სივრცე / სამუშაო ზონა</h3><p style="color:#cdebd4;font-size:13px">აქ შეგიძლია შეინახო კონკრეტული სავარჯიშო, გუნდის შემადგენლობა ან ტაქტიკური სცენარი. სივრცე იხსნება და იკეტება მენიუდან.</p></div>
+      <div class="spaceCards">
+        <div class="spaceCard"><b>📝 სავარჯიშოები</b><small>შექმენი და შეინახე ცალკე drill-ები.</small></div>
+        <div class="spaceCard"><b>👥 გუნდი</b><small>მოთამაშეები, ნომრები და სახელები.</small></div>
+        <div class="spaceCard"><b>🎬 სცენარები</b><small>კადრები და მოძრაობები.</small></div>
+        <div class="spaceCard"><b>📅 სესიები</b><small>დრო, ხანგრძლივობა, ინტენსივობა.</small></div>
+      </div>
+      <div class="actions"><button class="action" id="openSpace">📂 სივრცის გახსნა</button><button class="action alt" id="closeSpace">✕ დახურვა</button></div>
+    </div>
+
+    <div class="panel" id="panel-saved">
+      <div class="section" style="padding-top:0;margin-top:0;border-top:0"><h3>💾 შენახული მონაცემები</h3><div class="actions">
+        <button class="action" id="exportPlan">⬇️ JSON ექსპორტი</button><button class="action alt" id="importPlan">⬆️ JSON იმპორტი</button><button class="action danger" id="wipeAll">ყველაფრის წაშლა</button>
+      </div></div>
+    </div>
+  </div>
+
+  <div id="spacePanel">
+    <div class="spaceHead"><strong style="font-size:21px">📦 Coach Space</strong><button class="close" id="spaceClose">✕</button></div>
+    <div class="spaceCards">
+      <div class="spaceCard"><b>📝 Drill Library</b><small>შენი შენახული სავარჯიშოები.</small></div>
+      <div class="spaceCard"><b>👥 Players</b><small>მოთამაშეების სახელები და ნომრები.</small></div>
+      <div class="spaceCard"><b>🎬 Animations</b><small>კადრები და მოძრაობის სცენარები.</small></div>
+      <div class="spaceCard"><b>📅 Sessions</b><small>სესიების გეგმები.</small></div>
+    </div>
   </div>
 </div>
+
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const pitch=$('#pitch'), sheet=$('#sheet'), toastEl=$('#toast');
-let objects=[], activeTool=null, selected=null, drag=null, drawStart=null, drawEl=null;
-const assets=[['ball','⚽','ბურთი'],['cone','🔶','კონუსი'],['man','🧍','მანეკენი'],['goalObj','🥅','კარი'],['ladder','🪜','კიბე'],['hurdle','🚧','ბარიერი'],['pole','📍','ძელები'],['marker','🔵','ნიშნულები'],['zone','🟩','ზონა']];
-const players=[['red','🔴','ჩვენი'],['blue','🔵','მოწინააღმდეგე'],['gk','🟡','მეკარე'],['redFig','👕','წითელი ფეხბურთელი'],['blueFig','👕','ლურჯი ფეხბურთელი'],['run','🏃','მოძრავი ფეხბურთელი'],['attack','⚡','შემტევი']];
-const tactics=[['arrow','➡️','ისარი'],['line','➖','ხაზი'],['text','T','ტექსტი'],['select','👆','არჩევა'],['erase','🗑️','წაშლა']];
-function toast(t){toastEl.textContent=t;toastEl.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>toastEl.classList.remove('show'),1800)}
-function menuButton([type,icon,name],group){const b=document.createElement('button');b.className='item';b.dataset.tool=type;b.innerHTML='<span>'+icon+'</span>'+name;b.onclick=()=>choose(type,b);group.appendChild(b)}
-assets.forEach(x=>menuButton(x,$('#assetGrid')));players.forEach(x=>menuButton(x,$('#playerGrid')));tactics.forEach(x=>menuButton(x,$('#tacticGrid')));
-function choose(tool,b){activeTool=tool;$$('.item').forEach(x=>x.classList.remove('active'));b.classList.add('active'); if(tool==='select')toast('მონიშნე ობიექტი'); else if(tool==='erase')toast('წაშლა — დააჭირე ობიექტს'); else if(tool==='text')toast('მოედანზე დააჭირე ტექსტის დასაწერად'); else toast('ახლა მოედანზე დააჭირე — '+b.textContent.trim());}
-$('#menuBtn').onclick=()=>{sheet.classList.add('show');$('#hint').style.display='none'};$('#closeBtn').onclick=()=>sheet.classList.remove('show');
-function point(e){const r=pitch.getBoundingClientRect();return {x:(e.clientX-r.left)/r.width*100,y:(e.clientY-r.top)/r.height*100}}
-function addObj(type,x,y,extra={}){const o={id:Date.now()+Math.random(),type,x,y,...extra};objects.push(o);render();saveAuto()}
-function elFor(o){let el=document.createElement('div');el.className='obj';el.dataset.id=o.id;el.style.left=o.x+'%';el.style.top=o.y+'%';
- if(['red','blue','gk'].includes(o.type)){el.classList.add('player',o.type);el.textContent=o.num||''}
- else if(['redFig','blueFig','run','attack'].includes(o.type)){el.className+=' playerFig '+(o.type==='redFig'?'redFig':o.type==='blueFig'?'blueFig':'redFig')+' '+(o.type==='run'||o.type==='attack'?o.type:'');el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="shorts"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}
- else if(o.type==='ball')el.className+=' ball',el.textContent='⚽'; else if(o.type==='cone')el.className+=' cone',el.textContent='🔶'; else if(o.type==='man')el.className+=' man',el.textContent='🧍'; else if(o.type==='goalObj')el.className+=' goalObj',el.textContent='🥅'; else if(o.type==='ladder')el.className+=' ladder',el.textContent='🪜'; else if(o.type==='hurdle')el.className+=' hurdle',el.textContent='🚧'; else if(o.type==='pole')el.className+=' pole',el.textContent='📍'; else if(o.type==='marker')el.className+=' marker',el.textContent='🔵'; else if(o.type==='zone'){el.className+=' zone';el.style.width=(o.w||22)+'%';el.style.height=(o.h||15)+'%'} else if(o.type==='text'){el.textContent=o.text||'';el.style.background='#07170dcc';el.style.padding='5px 8px';el.style.borderRadius='8px';el.style.fontWeight='900';el.style.whiteSpace='nowrap'}
- el.addEventListener('pointerdown',e=>{e.stopPropagation();if(activeTool==='erase'){objects=objects.filter(x=>x.id!==o.id);selected=null;render();saveAuto();return}selected=o.id;$$('.obj').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');drag={id:o.id,offset:point(e)};pitch.setPointerCapture?.(e.pointerId)});return el}
-function render(){pitch.querySelectorAll('.obj,.draw').forEach(e=>e.remove());objects.forEach(o=>pitch.appendChild(elFor(o)))}
-pitch.addEventListener('pointermove',e=>{if(!drag)return;const p=point(e),o=objects.find(x=>x.id===drag.id);if(!o)return;o.x=Math.max(2,Math.min(98,p.x));o.y=Math.max(2,Math.min(98,p.y));const el=pitch.querySelector('[data-id="'+o.id+'"]');if(el){el.style.left=o.x+'%';el.style.top=o.y+'%'}});
-pitch.addEventListener('pointerup',e=>{if(drag){drag=null;saveAuto();return} if(!activeTool)return;const p=point(e);
- if(['select'].includes(activeTool))return;
- if(activeTool==='erase')return;
- if(activeTool==='text'){const t=prompt('რა დავწეროთ?','პასი და მოძრაობა');if(t)addObj('text',p.x,p.y,{text:t});return}
- if(activeTool==='arrow'||activeTool==='line'){drawStart=p;drawEl=document.createElement('div');drawEl.className='draw';drawEl.style.left=p.x+'%';drawEl.style.top=p.y+'%';drawEl.style.width='0';drawEl.style.height='3px';drawEl.style.background='#fff';drawEl.style.transformOrigin='0 50%';if(activeTool==='arrow')drawEl.classList.add('arrow');pitch.appendChild(drawEl);return}
- if(activeTool==='zone'){addObj('zone',p.x,p.y);return}
- if(['red','blue','gk'].includes(activeTool)){const n=prompt('მოთამაშის ნომერი?','10');addObj(activeTool,p.x,p.y,{num:n||''});return}
- addObj(activeTool,p.x,p.y);
+const pitch=$('#pitch');
+let objects=[], selected=null, activeTool='select', drag=null, drawStart=null, drawEl=null;
+let frames=[], frameDuration=1000, animTimer=null, animRAF=null, animating=false;
+
+const players=[
+ ['red','🔴','წითელი'],['blue','🔵','ლურჯი'],['gk','🟡','მეკარე'],
+ ['redFig','👕','ფეხბურთელი'],['blueFig','👕','მოწინააღმდეგე'],
+ ['run','🏃','მოძრავი'],['attack','⚡','შემტევი'],['raise','🙌','ხელაწეული']
+];
+const assets=[
+ ['ball','⚽','ბურთი'],['cone','🔶','კონუსი'],['man','🧍','მანეკენი'],['goalObj','🥅','კარი'],
+ ['ladder','🪜','კიბე'],['hurdle','🚧','ბარიერი'],['pole','📍','ძელები'],['marker','🔵','ნიშნული'],['zone','🟩','ზონა']
+];
+const tools=[['select','👆','არჩევა'],['arrow','➡️','ისარი'],['line','➖','ხაზი'],['zoneTool','▧','ზონა'],['text','T','ტექსტი'],['erase','🗑️','წაშლა']];
+
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),1700)}
+function uid(){return 'o'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+function makeItem([type,icon,name],parent){
+ const b=document.createElement('button');b.className='item';b.innerHTML='<span>'+icon+'</span>'+name;
+ b.onclick=()=>{activeTool=type;$$('.item').forEach(x=>x.classList.remove('active'));b.classList.add('active');toast(name+' — ახლა მოედანზე დააჭირე');};
+ parent.appendChild(b)
+}
+players.forEach(x=>makeItem(x,$('#playerGrid')));
+assets.forEach(x=>makeItem(x,$('#assetGrid')));
+tools.forEach(x=>makeItem(x,$('#toolGrid')));
+['4-3-3','4-4-2','3-5-2','4-2-3-1','4-1-4-1','3-4-3'].forEach(f=>{
+ const b=document.createElement('button');b.className='action alt';b.textContent=f;b.onclick=()=>formation(f);$('#formations').appendChild(b)
 });
-pitch.addEventListener('pointermove',e=>{if(!drawEl||!drawStart)return;const p=point(e);const dx=p.x-drawStart.x,dy=p.y-drawStart.y;const dist=Math.sqrt(dx*dx+dy*dy);const ang=Math.atan2(dy,dx)*180/Math.PI;drawEl.style.width=dist+'%';drawEl.style.transform='rotate('+ang+'deg)'});
-pitch.addEventListener('pointerup',e=>{if(!drawEl||!drawStart)return;const p=point(e),dx=p.x-drawStart.x,dy=p.y-drawStart.y; if(Math.sqrt(dx*dx+dy*dy)<2){drawEl.remove();drawEl=null;drawStart=null;return} const type=activeTool;drawEl.dataset.kind=type;drawEl=null;drawStart=null;toast(type==='arrow'?'ისარი დაემატა':'ხაზი დაემატა')});
-function updateSummary(){const t=$('#planTitle').value||'ვარჯიშის გეგმა',time=$('#planTime').value||'18:00',dur=$('#planDuration').value,int=$('#planIntensity').value;$('#summaryTitle').textContent=t;$('#summaryMeta').textContent='დრო '+time+' • '+dur+' • '+int}
-['planTitle','planTime','planDuration','planIntensity'].forEach(id=>$('#'+id).addEventListener('input',updateSummary));
-$('#savePlan').onclick=()=>{updateSummary();localStorage.setItem('coachPlan',JSON.stringify({title:$('#planTitle').value,time:$('#planTime').value,duration:$('#planDuration').value,intensity:$('#planIntensity').value,age:$('#planAge').value,notes:$('#planNotes').value,objects}));toast('გეგმა შენახულია 💾')};
-$('#clearPitch').onclick=()=>{if(confirm('მოედანი გავასუფთავოთ?')){objects=[];selected=null;render();saveAuto();toast('მოედანი გასუფთავებულია')}};
-function saveAuto(){localStorage.setItem('coachBoardObjects',JSON.stringify(objects))}
-function load(){try{const p=JSON.parse(localStorage.getItem('coachPlan')||'null');if(p){$('#planTitle').value=p.title||'ვარჯიშის გეგმა';$('#planTime').value=p.time||'18:00';$('#planDuration').value=p.duration||'60 წთ';$('#planIntensity').value=p.intensity||'საშუალო';$('#planAge').value=p.age||'U12';$('#planNotes').value=p.notes||''}objects=JSON.parse(localStorage.getItem('coachBoardObjects')||'[]')||[]}catch(e){objects=[]}updateSummary();render()}
-$$('.formation').forEach(b=>b.onclick=()=>formation(b.dataset.f));
-function formation(f){objects=[];const xs={gk:[50],d433:[22,38,62,78],m433:[30,50,70],a433:[22,50,78]};let coords=[];if(f==='4-3-3')coords=[[50,88],[20,72],[40,72],[60,72],[80,72],[30,55],[50,55],[70,55],[22,28],[50,25],[78,28]];if(f==='4-4-2')coords=[[50,88],[20,72],[40,72],[60,72],[80,72],[20,52],[40,52],[60,52],[80,52],[38,28],[62,28]];if(f==='3-5-2')coords=[[50,88],[28,72],[50,72],[72,72],[18,53],[34,53],[50,53],[66,53],[82,53],[38,28],[62,28]];if(f==='4-2-3-1')coords=[[50,88],[20,72],[40,72],[60,72],[80,72],[38,57],[62,57],[25,38],[50,38],[75,38],[50,20]];coords.forEach((p,i)=>addObj(i===0?'gk':'red',p[0],p[1],{num:i+1}));sheet.classList.remove('show');toast(f+' ფორმაცია დაემატა')}
+
+function objMarkup(o){
+ if(o.type==='red'||o.type==='blue'||o.type==='gk'){
+  return '<div class="player '+o.type+'">'+esc(o.num||'')+'</div>'
+ }
+ if(['redFig','blueFig','run','attack','raise','side'].includes(o.type)){
+  const cls=o.type==='redFig'?'redFig':o.type==='blueFig'?'blueFig':o.type;
+  return '<div class="playerFig '+cls+'"><span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="shorts"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span><span class="num">'+esc(o.num||'')+'</span></div>'
+ }
+ if(o.type==='text') return '<div style="font-weight:900;font-size:18px;text-shadow:0 2px 3px #000;white-space:nowrap">'+esc(o.text||'ტექსტი')+'</div>';
+ const icons={ball:'⚽',cone:'🔶',man:'🧍',goalObj:'🥅',ladder:'🪜',hurdle:'🚧',pole:'📍',marker:'🔵'};
+ if(icons[o.type]) return '<div style="font-size:34px">'+icons[o.type]+'</div>';
+ return ''
+}
+function render(){
+ pitch.querySelectorAll('.obj,.draw').forEach(e=>e.remove());
+ objects.forEach(o=>{
+  if(o.kind==='draw'){
+   const d=document.createElement('div');d.className=o.drawType==='zone'?'draw zoneDraw':'draw drawLine';
+   if(o.drawType==='line'||o.drawType==='arrow'){d.style.left=o.x+'%';d.style.top=o.y+'%';d.style.width=o.w+'%';d.style.transform='rotate('+o.a+'deg)'}
+   else {d.style.left=o.x+'%';d.style.top=o.y+'%';d.style.width=o.w+'%';d.style.height=o.h+'%'}
+   pitch.appendChild(d);return
+  }
+  const e=document.createElement('div');e.className='obj';e.dataset.id=o.id;e.innerHTML=objMarkup(o);
+  e.style.left=o.x+'%';e.style.top=o.y+'%';e.classList.toggle('selected',selected===o.id);
+  e.addEventListener('pointerdown',objectDown);pitch.appendChild(e)
+ })
+}
+function addObject(type,x,y,extra={}){
+ const o={id:uid(),type,x,y,num:extra.num||'',name:extra.name||'',text:extra.text||''};objects.push(o);selected=o.id;render();saveAuto();showInspector();return o
+}
+function point(e){const r=pitch.getBoundingClientRect();return {x:Math.max(1,Math.min(99,(e.clientX-r.left)/r.width*100)),y:Math.max(1,Math.min(99,(e.clientY-r.top)/r.height*100))}}
+function objectDown(e){
+ e.stopPropagation();const el=e.currentTarget,id=el.dataset.id,o=objects.find(x=>x.id===id);if(!o)return;
+ selected=id;showInspector();drag={id,dx:0,dy:0};el.setPointerCapture?.(e.pointerId)
+}
+pitch.addEventListener('pointerdown',e=>{
+ const p=point(e);
+ if(e.target!==pitch && !e.target.classList.contains('fieldLine') && !e.target.classList.contains('centerCircle') && !e.target.classList.contains('centerDot') && !e.target.classList.contains('penalty') && !e.target.classList.contains('goal')) return;
+ if(activeTool==='select'){selected=null;hideInspector();render();return}
+ if(activeTool==='erase'){return}
+ if(['arrow','line','zoneTool'].includes(activeTool)){drawStart=p;return}
+ if(activeTool==='text'){const t=prompt('რა ტექსტი დავწეროთ?');if(t)addObject('text',p.x,p.y,{text:t});return}
+ addObject(activeTool,p.x,p.y,{num:''})
+});
+pitch.addEventListener('pointermove',e=>{
+ if(drag){const p=point(e),o=objects.find(x=>x.id===drag.id);if(o){o.x=p.x;o.y=p.y;render()}}
+ if(drawStart && !drawEl){
+  const d=document.createElement('div');d.className=activeTool==='zoneTool'?'draw zoneDraw':'draw drawLine';pitch.appendChild(d);drawEl=d
+ }
+ if(drawStart&&drawEl){
+  const p=point(e),dx=p.x-drawStart.x,dy=p.y-drawStart.y;
+  if(activeTool==='zoneTool'){drawEl.style.left=Math.min(drawStart.x,p.x)+'%';drawEl.style.top=Math.min(drawStart.y,p.y)+'%';drawEl.style.width=Math.abs(dx)+'%';drawEl.style.height=Math.abs(dy)+'%'}
+  else {const len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI;drawEl.style.left=drawStart.x+'%';drawEl.style.top=drawStart.y+'%';drawEl.style.width=len+'%';drawEl.style.transform='rotate('+ang+'deg)'}
+ }
+});
+function endDraw(e){
+ if(drag){drag=null;saveAuto();return}
+ if(!drawStart)return;
+ const p=point(e),dx=p.x-drawStart.x,dy=p.y-drawStart.y;
+ if(Math.hypot(dx,dy)>2){
+  if(activeTool==='zoneTool')objects.push({id:uid(),kind:'draw',drawType:'zone',x:Math.min(drawStart.x,p.x),y:Math.min(drawStart.y,p.y),w:Math.abs(dx),h:Math.abs(dy)});
+  else objects.push({id:uid(),kind:'draw',drawType:activeTool,x:drawStart.x,y:drawStart.y,w:Math.hypot(dx,dy),a:Math.atan2(dy,dx)*180/Math.PI});
+  saveAuto();render()
+ }
+ drawStart=null;drawEl?.remove();drawEl=null
+}
+pitch.addEventListener('pointerup',endDraw);pitch.addEventListener('pointercancel',endDraw);
+
+function showInspector(){
+ const o=objects.find(x=>x.id===selected);if(!o||o.kind==='draw'){$('#inspector').classList.remove('show');return}
+ $('#objNum').value=o.num||'';$('#objName').value=o.name||'';$('#inspector').classList.add('show')
+}
+function hideInspector(){$('#inspector').classList.remove('show')}
+$('#applyObj').onclick=()=>{const o=objects.find(x=>x.id===selected);if(o){o.num=$('#objNum').value;o.name=$('#objName').value;saveAuto();render();toast('მოთამაშე განახლდა')}} 
+$('#deleteObj').onclick=()=>{if(selected){objects=objects.filter(o=>o.id!==selected);selected=null;hideInspector();render();saveAuto();toast('წაიშალა')}}
+
+function formation(f){
+ objects=objects.filter(o=>o.kind==='draw');
+ const maps={
+ '4-3-3':[[50,88],[18,72],[40,72],[60,72],[82,72],[28,56],[50,56],[72,56],[20,29],[50,24],[80,29]],
+ '4-4-2':[[50,88],[18,72],[40,72],[60,72],[82,72],[18,53],[40,53],[60,53],[82,53],[38,29],[62,29]],
+ '3-5-2':[[50,88],[27,72],[50,72],[73,72],[15,53],[32,53],[50,53],[68,53],[85,53],[38,29],[62,29]],
+ '4-2-3-1':[[50,88],[18,72],[40,72],[60,72],[82,72],[38,57],[62,57],[24,39],[50,39],[76,39],[50,22]],
+ '4-1-4-1':[[50,88],[18,72],[40,72],[60,72],[82,72],[50,60],[18,43],[40,43],[60,43],[82,43],[50,24]],
+ '3-4-3':[[50,88],[28,72],[50,72],[72,72],[22,52],[42,52],[58,52],[78,52],[22,28],[50,24],[78,28]]
+ };
+ (maps[f]||maps['4-3-3']).forEach((p,i)=>addObject(i===0?'gk':'red',p[0],p[1],{num:String(i+1)}));
+ $('#sheet').classList.remove('show');toast(f+' დაემატა')
+}
+
+function updateSummary(){
+ $('#summaryTitle').textContent=$('#planTitle').value||'ვარჯიშის გეგმა';
+ $('#summaryMeta').textContent=($('#planTime').value||'--:--')+' • '+($('#planDuration').value||'--')+' • '+($('#planIntensity').value||'--')+' • '+($('#planAge').value||'--')
+}
+['planTitle','planTime','planDuration','planIntensity','planAge'].forEach(id=>$('#'+id).addEventListener('input',updateSummary));
+function planData(){return {title:$('#planTitle').value,time:$('#planTime').value,duration:$('#planDuration').value,intensity:$('#planIntensity').value,age:$('#planAge').value,reps:$('#planReps').value,rest:$('#planRest').value,notes:$('#planNotes').value,objects,frames}}
+$('#savePlan').onclick=()=>{localStorage.setItem('coachPlanV3',JSON.stringify(planData()));saveAuto();toast('გეგმა შენახულია 💾')};
+$('#newPlan').onclick=()=>{if(confirm('ახალი გეგმა შევქმნათ?')){objects=[];frames=[];selected=null;hideInspector();$('#planTitle').value='ახალი ვარჯიში';$('#planNotes').value='';render();updateSummary();saveAuto();toast('ახალი გეგმა მზადაა')}};
+$('#clearPitch').onclick=()=>{if(confirm('მთელი მოედანი გავასუფთავოთ?')){objects=[];selected=null;hideInspector();render();saveAuto();toast('მოედანი გასუფთავებულია')}};
+$('#clearDraw').onclick=()=>{objects=objects.filter(o=>o.kind!=='draw');render();saveAuto();toast('ხაზები წაიშალა')};
+
+function captureFrame(){frames.push(JSON.parse(JSON.stringify(objects)));localStorage.setItem('coachFrames',JSON.stringify(frames));toast('კადრი '+frames.length+' შენახულია')}
+function interp(a,b,t){
+ const ids=[...new Set([...a.map(x=>x.id),...b.map(x=>x.id)])];const am=new Map(a.map(x=>[x.id,x])),bm=new Map(b.map(x=>[x.id,x]));
+ return ids.map(id=>{const x=am.get(id),y=bm.get(id);if(!x)return {...y};if(!y)return {...x};const o={...y};if(typeof x.x==='number'&&typeof y.x==='number')o.x=x.x+(y.x-x.x)*t;if(typeof x.y==='number'&&typeof y.y==='number')o.y=x.y+(y.y-x.y)*t;return o})
+}
+function playAnim(){
+ if(frames.length<2){toast('ჯერ მინიმუმ 2 კადრი დაამატე');return}
+ if(animRAF)cancelAnimationFrame(animRAF);let i=0;animating=true;
+ function next(){if(!animating||i>=frames.length-1){animating=false;return}
+  const from=frames[i],to=frames[i+1],start=performance.now();
+  function tick(now){if(!animating)return;const t=Math.min(1,(now-start)/frameDuration);objects=interp(from,to,t);render();if(t<1)animRAF=requestAnimationFrame(tick);else{i++;next()}}
+  animRAF=requestAnimationFrame(tick)
+ } next();toast('▶️ მოძრაობა ჩაირთო')
+}
+$('#captureFrame').onclick=captureFrame;$('#playAnim').onclick=playAnim;$('#stopAnim').onclick=()=>{animating=false;if(animRAF)cancelAnimationFrame(animRAF);toast('მოძრაობა გაჩერდა')};
+$('#frameDuration').oninput=e=>{$('#frameDurationLabel').textContent=(e.target.value/1000).toFixed(1)+' წმ';frameDuration=+e.target.value};
+$('#ballPath').onclick=()=>{activeTool='ball';toast('⚽ ახლა მოედანზე ჩასვი ბურთი და გადაადგილე კადრებს შორის')};
+$('#clearPaths').onclick=()=>{toast('ტრაექტორიები იწმინდება კადრების შეცვლით');frames=[];localStorage.removeItem('coachFrames')};
+
+$('#menuBtn').onclick=()=>$('#sheet').classList.toggle('show');$('#closeBtn').onclick=()=>$('#sheet').classList.remove('show');
+$$('.tab').forEach(t=>t.onclick=()=>{$$('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');$$('.panel').forEach(x=>x.classList.remove('active'));$('#panel-'+t.dataset.tab).classList.add('active')});
+
+$('#openSpace').onclick=()=>{$('#spacePanel').classList.add('show');$('#sheet').classList.remove('show')};
+$('#closeSpace').onclick=()=>{$('#spacePanel').classList.remove('show')};$('#spaceClose').onclick=()=>$('#spacePanel').classList.remove('show');
+
+function saveAuto(){localStorage.setItem('coachObjectsV3',JSON.stringify(objects))}
+function load(){
+ try{
+  const p=JSON.parse(localStorage.getItem('coachPlanV3')||'null');
+  if(p){$('#planTitle').value=p.title||'ვარჯიშის გეგმა';$('#planTime').value=p.time||'18:00';$('#planDuration').value=p.duration||'60 წთ';$('#planIntensity').value=p.intensity||'საშუალო';$('#planAge').value=p.age||'U12';$('#planReps').value=p.reps||4;$('#planRest').value=p.rest||'60 წმ';$('#planNotes').value=p.notes||'';objects=p.objects||[];frames=p.frames||[]}
+  else {objects=JSON.parse(localStorage.getItem('coachObjectsV3')||'[]')||[];frames=JSON.parse(localStorage.getItem('coachFrames')||'[]')||[]}
+ }catch(e){objects=[];frames=[]}
+ updateSummary();render()
+}
+$('#exportPlan').onclick=()=>{
+ const blob=new Blob([JSON.stringify(planData(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='coach-training-plan.json';a.click();URL.revokeObjectURL(a.href);toast('JSON ფაილი მზადაა')
+};
+$('#importPlan').onclick=()=>{
+ const i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=async()=>{try{const d=JSON.parse(await i.files[0].text());if(d.objects)objects=d.objects;if(d.frames)frames=d.frames;$('#planTitle').value=d.title||'ვარჯიშის გეგმა';$('#planTime').value=d.time||'18:00';$('#planDuration').value=d.duration||'60 წთ';$('#planIntensity').value=d.intensity||'საშუალო';$('#planAge').value=d.age||'U12';$('#planNotes').value=d.notes||'';updateSummary();render();saveAuto();toast('იმპორტი დასრულდა')}catch(e){toast('ფაილი ვერ წავიკითხე')}}};i.click()
+};
+$('#wipeAll').onclick=()=>{if(confirm('ყველა შენახული მონაცემი წავშალოთ?')){localStorage.clear();location.reload()}};
+
 load();
 </script>
 </body>
