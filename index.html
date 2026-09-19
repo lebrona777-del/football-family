@@ -29,14 +29,19 @@ textarea{min-height:70px;resize:vertical}
 .tool.danger{background:#fff0f0;color:#a82020}
 .primary{background:#258b4b;color:#fff}.dark{background:#123b21;color:#fff}
 .pitchCard{padding:10px}
-.pitchWrap{position:relative;width:100%;aspect-ratio:.56;border-radius:18px;overflow:hidden;background:#287b3e;touch-action:none;box-shadow:inset 0 0 0 5px #76c487,0 10px 30px #0b2c1640}
+.pitchWrap{position:relative;width:100%;aspect-ratio:.64;border-radius:18px;overflow:hidden;background:#287b3e;touch-action:none;box-shadow:inset 0 0 0 5px #76c487,0 10px 30px #0b2c1640}
 .pitch{position:absolute;inset:0;overflow:hidden;touch-action:none;
 background:
-radial-gradient(ellipse at 50% 48%,#4aa962 0%,#318f4d 48%,#26783d 100%),
-repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 7%,rgba(0,0,0,.035) 7% 14%),
-repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 2px,transparent 2px 8px);}
-.pitch:before{content:"";position:absolute;inset:2.7%;border:4px solid rgba(245,255,247,.94);border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.12),inset 0 0 35px rgba(0,0,0,.08)}
-.pitch:after{content:"";position:absolute;top:2.7%;bottom:2.7%;left:50%;width:3px;transform:translateX(-50%);background:rgba(245,255,247,.94);box-shadow:0 0 2px rgba(0,0,0,.15)}
+repeating-linear-gradient(90deg,#38a94f 0 8.33%,#2f9745 8.33% 16.66%),
+repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 2px,rgba(0,0,0,.028) 2px 5px),
+radial-gradient(circle at 18% 20%,rgba(255,255,255,.08) 0 1px,transparent 1.5px),
+radial-gradient(circle at 72% 68%,rgba(0,0,0,.08) 0 1px,transparent 1.5px),
+linear-gradient(180deg,#42b957 0%,#2e9746 48%,#27903f 100%);
+background-size:auto,auto,7px 7px,9px 9px,auto;
+box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
+.pitch:before{content:"";position:absolute;inset:2.6%;border:4px solid rgba(255,255,255,.96);border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.24),0 0 7px rgba(255,255,255,.18),inset 0 0 38px rgba(0,0,0,.10);pointer-events:none}
+.pitch:after{content:"";position:absolute;top:2.6%;bottom:2.6%;left:50%;width:3px;transform:translateX(-50%);background:rgba(255,255,255,.96);box-shadow:0 0 3px rgba(0,0,0,.22);pointer-events:none}
+.pitch .grassHighlight{position:absolute;inset:3%;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 11.8%,rgba(255,255,255,.025) 11.8% 12%);mix-blend-mode:screen}
 .pitch{--line:rgba(245,255,247,.94);--shadow:rgba(0,0,0,.12)}
 .box{position:absolute;left:27%;width:46%;height:16%;border:4px solid var(--line);box-shadow:0 0 2px var(--shadow)}
 .box:after{content:"";position:absolute;left:50%;width:22%;height:28%;border:3px solid var(--line);border-bottom:0;transform:translateX(-50%)}
