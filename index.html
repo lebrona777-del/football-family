@@ -171,8 +171,9 @@ function objectDown(e){
  if(tool!=='select')return;
  let id=+e.currentTarget.dataset.id,o=objects.find(x=>x.id===id);if(!o)return;snapshot();drag={id,start:pt(e),orig:{x:o.x,y:o.y}};e.currentTarget.setPointerCapture(e.pointerId);
 }
-pitch.addEventListener('pointermove',e=>{if(!drag)return;let p=pt(e),o=objects.find(x=>x.id===drag.id);o.x=p.x;o.y=p.y;render()});
-pitch.addEventListener('pointerup',()=>{if(drag){drag=null;saveAutos()}});
+pitch.addEventListener('pointermove',e=>{if(!drag)return;let p=pt(e),o=objects.find(x=>x.id===drag.id);if(!o)return;o.x=p.x;o.y=p.y;let el=pitch.querySelector('[data-id=\"'+drag.id+'\"]');if(el){el.style.left=p.x+'%';el.style.top=p.y+'%'}});
+pitch.addEventListener('pointerup',()=>{if(drag){drag=null;saveAutos();render()}});
+pitch.addEventListener('pointercancel',()=>{if(drag){drag=null;saveAutos();render()}});
 
 pitch.addEventListener('pointerdown',e=>{
  if(e.target!==pitch && !e.target.classList.contains('pitch'))return;
@@ -211,12 +212,31 @@ window.addEventListener('load',()=>{let a=localStorage.getItem('coachBoardAutosa
 function modeHtml(){return ['select','red','blue','ball','cone','man','arrow','line','zone','text','erase'].map(t=>{let names={select:'👆',red:'🔴',blue:'🔵',ball:'⚽',cone:'🔶',man:'🧍',arrow:'➡️',line:'➖',zone:'🟩',text:'T',erase:'🗑️'};return `<button data-tool="${t}" onclick="setToolMode('${t}')">${names[t]}</button>`}).join('')}
 $('#modeTools').innerHTML=modeHtml();
 window.setToolMode=t=>{tool=t;setModeTool(t)}
-function copyToFull(){let fp=$('#fullPitch');fp.innerHTML=`<div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div><svg class="svgLayer" id="fullSvg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>`;objects.forEach(o=>{let el=document.createElement('div');el.className='object';el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''}else if(o.type==='ball'){el.className+=' ball';el.textContent='⚽'}else if(o.type==='cone'){el.className+=' cone';el.textContent='🔶'}else if(o.type==='man'){el.className+=' man';el.textContent='🧍'}else if(o.type==='text'){el.className+=' label';el.textContent=o.text||''}else if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)'}fp.appendChild(el)});let fs=$('#fullSvg');strokes.forEach(s=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.pts.map((q,i)=>(i?'L':'M')+q.x*5.81+' '+q.y*10).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',s.kind==='arrow'?'#fff':'#ffe56b');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');fs.appendChild(p)})}
+function copyToFull(){let fp=$('#fullPitch');fp.innerHTML=`<div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div><svg class="svgLayer" id="fullSvg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>`;objects.forEach(o=>{let el=document.createElement('div');el.className='object';el.dataset.id=o.id;el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''}else if(o.type==='ball'){el.className+=' ball';el.textContent='⚽'}else if(o.type==='cone'){el.className+=' cone';el.textContent='🔶'}else if(o.type==='man'){el.className+=' man';el.textContent='🧍'}else if(o.type==='text'){el.className+=' label';el.textContent=o.text||''}else if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)'}fp.appendChild(el)});let fs=$('#fullSvg');strokes.forEach(s=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.pts.map((q,i)=>(i?'L':'M')+q.x*5.81+' '+q.y*10).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',s.kind==='arrow'?'#fff':'#ffe56b');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');fs.appendChild(p)})}
 function openMode(){copyToFull();$('#boardMode').classList.add('show');document.body.style.overflow='hidden';boardMode=true}
 function closeMode(){$('#boardMode').classList.remove('show');document.body.style.overflow='';boardMode=false}
 $('#boardOpen').onclick=openMode;$('#quickFull').onclick=openMode;$('#closeMode').onclick=closeMode;
-$('#fullPitch').addEventListener('pointerdown',e=>{if(e.target!==$('#fullPitch'))return;let r=e.currentTarget.getBoundingClientRect(),p={x:(e.clientX-r.left)/r.width*100,y:(e.clientY-r.top)/r.height*100};if(tool==='red'||tool==='blue'||tool==='ball'||tool==='cone'||tool==='man'||tool==='zone'||tool==='text'){if(tool==='red'||tool==='blue'){let n=prompt('ნომერი?','10');if(n===null)return;objects.push({id:Date.now(),type:tool,x:p.x,y:p.y,num:n})}else if(tool==='text'){let t=prompt('ტექსტი?','ვარჯიში');if(t)objects.push({id:Date.now(),type:'text',x:p.x,y:p.y,text:t})}else if(tool==='zone')objects.push({id:Date.now(),type:'zone',x:p.x,y:p.y,w:20,h:20});else objects.push({id:Date.now(),type:tool,x:p.x,y:p.y});copyToFull();saveAutos()}});
+let fullDrag=null;
+$('#fullPitch').addEventListener('pointerdown',e=>{
+ if(!boardMode)return;
+ let el=e.target.closest('.object');
+ if(el && tool==='select'){
+   e.preventDefault(); e.stopPropagation();
+   let id=+el.dataset.id, o=objects.find(x=>x.id===id); if(!o)return;
+   snapshot(); fullDrag={id}; el.setPointerCapture?.(e.pointerId);
+   return;
+ }
+ if(e.target!==$('#fullPitch'))return;let r=e.currentTarget.getBoundingClientRect(),p={x:(e.clientX-r.left)/r.width*100,y:(e.clientY-r.top)/r.height*100};if(tool==='red'||tool==='blue'||tool==='ball'||tool==='cone'||tool==='man'||tool==='zone'||tool==='text'){if(tool==='red'||tool==='blue'){let n=prompt('ნომერი?','10');if(n===null)return;objects.push({id:Date.now(),type:tool,x:p.x,y:p.y,num:n})}else if(tool==='text'){let t=prompt('ტექსტი?','ვარჯიში');if(t)objects.push({id:Date.now(),type:'text',x:p.x,y:p.y,text:t})}else if(tool==='zone')objects.push({id:Date.now(),type:'zone',x:p.x,y:p.y,w:20,h:20});else objects.push({id:Date.now(),type:tool,x:p.x,y:p.y});copyToFull();saveAutos()}});
 
-['pointerdown','pointermove','pointerup'].forEach(ev=>$('#boardMode').addEventListener(ev,e=>{if(ev==='pointerdown'&&e.target.id==='fullPitch'){/* handled above */}}));
+$('#fullPitch').addEventListener('pointermove',e=>{
+ if(!fullDrag)return;
+ let r=$('#fullPitch').getBoundingClientRect(),o=objects.find(x=>x.id===fullDrag.id);if(!o)return;
+ o.x=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100));
+ o.y=Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100));
+ let el=$('#fullPitch').querySelector('[data-id=\"'+fullDrag.id+'\"]');
+ if(el){el.style.left=o.x+'%';el.style.top=o.y+'%'}
+});
+$('#fullPitch').addEventListener('pointerup',()=>{if(fullDrag){fullDrag=null;saveAutos();copyToFull();render()}});
+$('#fullPitch').addEventListener('pointercancel',()=>{if(fullDrag){fullDrag=null;saveAutos();copyToFull();render()}});
 </script>
 </body></html>
