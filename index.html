@@ -55,6 +55,25 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 .player{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;border:3px solid #fff;box-shadow:0 2px 8px #0005}
 .red{background:#d93636}.blue{background:#2167d8}
 .ball{font-size:32px;line-height:1}.cone{font-size:30px}.man{font-size:34px}
+.playerFig{width:34px;height:52px;position:absolute;transform:translate(-50%,-50%);touch-action:none;z-index:5;filter:drop-shadow(0 2px 3px #0006)}
+.playerFig .head{position:absolute;left:50%;top:0;width:13px;height:13px;border-radius:50%;transform:translateX(-50%);background:#d59b72;border:1px solid #8a5d42}
+.playerFig .body{position:absolute;left:50%;top:11px;width:18px;height:23px;transform:translateX(-50%);background:var(--jersey,#d93636);border-radius:5px 5px 4px 4px;border:2px solid #fff;box-shadow:0 1px 2px #0004}
+.playerFig .num{position:absolute;left:50%;top:17px;transform:translateX(-50%);font-size:8px;color:#fff;font-weight:900;z-index:2}
+.playerFig .arm,.playerFig .leg{position:absolute;background:#d59b72;border-radius:5px;transform-origin:top center}
+.playerFig .arm{top:13px;width:5px;height:17px}
+.playerFig .arm.l{left:5px;transform:rotate(22deg)}.playerFig .arm.r{right:5px;transform:rotate(-22deg)}
+.playerFig .leg{top:33px;width:6px;height:18px;background:#f1f1f1;border-radius:2px 2px 5px 5px}
+.playerFig .leg.l{left:10px;transform:rotate(7deg)}.playerFig .leg.r{right:10px;transform:rotate(-7deg)}
+.playerFig .boot{position:absolute;bottom:0;width:9px;height:4px;border-radius:4px;background:#111}
+.playerFig .boot.l{left:5px}.playerFig .boot.r{right:5px}
+.playerFig.blueFig{--jersey:#2167d8}.playerFig.redFig{--jersey:#d93636}.playerFig.gkFig{--jersey:#f0b400}
+.playerFig.run .arm.l{transform:rotate(55deg)}.playerFig.run .arm.r{transform:rotate(-55deg)}.playerFig.run .leg.l{transform:rotate(-25deg)}.playerFig.run .leg.r{transform:rotate(25deg)}
+.playerFig.def .body{border-radius:3px}.playerFig.def .arm.l{transform:rotate(48deg)}.playerFig.def .arm.r{transform:rotate(-48deg)}
+.playerFig.attack .body{transform:translateX(-50%) rotate(-5deg)}.playerFig.attack .arm.l{transform:rotate(65deg)}.playerFig.attack .arm.r{transform:rotate(-15deg)}
+.playerFig.gk .arm.l{transform:rotate(75deg)}.playerFig.gk .arm.r{transform:rotate(-75deg)}.playerFig.gk .leg.l{transform:rotate(20deg)}.playerFig.gk .leg.r{transform:rotate(-20deg)}
+.playerFig.raise .arm.l{transform:rotate(-55deg)}.playerFig.raise .arm.r{transform:rotate(55deg)}
+.playerFig.side .arm.l{transform:rotate(75deg)}.playerFig.side .arm.r{transform:rotate(5deg)}
+.playerPanel{display:none;margin-top:10px;padding:10px;border:1px solid #dbe4de;border-radius:14px;background:#f7faf8}.playerPanel.show{display:block}.playerCats{display:flex;gap:7px;overflow-x:auto;padding-bottom:5px}.playerCats button{flex:0 0 auto;background:#fff;border:1px solid #dbe4de;border-radius:11px;padding:8px 10px;font-weight:800}.playerCats button.active{background:#d9f0df;border-color:#5cab72;color:#12622e}.playerAddRow{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.playerAddRow button{background:#123b21;color:#fff;border-radius:11px;padding:9px 11px;font-weight:800}
 .label{font-size:11px;background:#fff;padding:2px 5px;border-radius:5px;white-space:nowrap;box-shadow:0 1px 4px #0003}
 .zone{position:absolute;border:3px dashed #fff8;border-radius:10px;background:#ffffff14;z-index:2}
 .svgLayer{position:absolute;inset:0;width:100%;height:100%;z-index:3;overflow:visible;pointer-events:none}
@@ -96,12 +115,29 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 <button class="tool" data-tool="blue">🔵 მოწინააღმდეგე</button>
 <button class="tool" data-tool="ball">⚽ ბურთი</button>
 <button class="tool" data-tool="cone">🔶 კონუსი</button>
-<button class="tool" data-tool="man">🧍 მანეკენი</button>
+<button class="tool" id="playerTools">👕 ფეხბურთელები</button>
 <button class="tool" data-tool="arrow">➡️ ისარი</button>
 <button class="tool" data-tool="line">➖ ხაზი</button>
 <button class="tool" data-tool="zone">🟩 ზონა</button>
 <button class="tool" data-tool="text">T ტექსტი</button>
 <button class="tool danger" data-tool="erase">🗑️ წაშლა</button>
+</div>
+<div class="playerPanel" id="playerPanel">
+  <div style="font-weight:900;margin-bottom:7px">👕 ფეხბურთელების კატეგორიები</div>
+  <div class="playerCats" id="playerCats">
+    <button class="active" data-role="standard">სტანდარტული</button>
+    <button data-role="gk">🧤 მეკარე</button>
+    <button data-role="def">🛡️ მცველი</button>
+    <button data-role="mid">🎯 ნახევარმცველი</button>
+    <button data-role="attack">⚡ თავდამსხმელი</button>
+    <button data-role="run">🏃 მორბენალი</button>
+    <button data-role="raise">🙌 პოზა 1</button>
+    <button data-role="side">↔️ პოზა 2</button>
+  </div>
+  <div class="playerAddRow">
+    <button id="addRedFig">🔴 წითელი ფეხბურთელი</button>
+    <button id="addBlueFig">🔵 ლურჯი ფეხბურთელი</button>
+  </div>
 </div>
 <div class="toolbar" style="margin-top:8px">
 <button class="tool" id="undo">↩️ Undo</button><button class="tool" id="redo">↪️ Redo</button>
@@ -158,6 +194,12 @@ $$('#tools .tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;$$('#tools .too
 function setModeTool(t){$$('#modeTools button').forEach(b=>b.classList.toggle('on',b.dataset.tool===t))}
 
 function pt(e,el=pitch){let r=el.getBoundingClientRect();return {x:Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100)),y:Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100))}}
+let selectedPlayerRole='standard';
+function addFigure(color,x,y){snapshot();let num=prompt('მოთამაშის ნომერი?','10');if(num===null)return;objects.push({id:Date.now()+Math.random(),type:'figure',x,y,color,role:selectedPlayerRole,num});render();saveAutos()}
+$('#playerTools').onclick=()=>{$('#playerPanel').classList.toggle('show');$('#playerTools').classList.toggle('active');setModeTool('select');tool='select'};
+$$('#playerCats button').forEach(b=>b.onclick=()=>{selectedPlayerRole=b.dataset.role;$$('#playerCats button').forEach(x=>x.classList.remove('active'));b.classList.add('active')});
+$('#addRedFig').onclick=()=>{tool='redFig';toast('დაფაზე დააჭირე — დაემატება წითელი ფეხბურთელი')};
+$('#addBlueFig').onclick=()=>{tool='blueFig';toast('დაფაზე დააჭირე — დაემატება ლურჯი ფეხბურთელი')};
 function addObj(type,x,y,extra={}){snapshot();objects.push({id:Date.now()+Math.random(),type,x,y,...extra});render()}
 function render(){
 pitch.querySelectorAll('.object,.zone,.label').forEach(x=>x.remove());
@@ -167,6 +209,7 @@ objects.forEach(o=>{
  if(o.type==='ball')el.className+=' ball',el.textContent='⚽';
  if(o.type==='cone')el.className+=' cone',el.textContent='🔶';
  if(o.type==='man')el.className+=' man',el.textContent='🧍';
+ if(o.type==='figure'){el.className+=' playerFig '+(o.color==='blue'?'blueFig':'redFig')+' '+(o.role||'standard');el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="num">'+esc(o.num||'')+'</span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}
  if(o.type==='text')el.className+=' label',el.textContent=o.text||'ტექსტი';
  if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)';}
  pitch.appendChild(el);el.addEventListener('pointerdown',objectDown);
@@ -194,6 +237,7 @@ pitch.addEventListener('pointerdown',e=>{
  if(tool==='select')return;
  if(tool==='red'||tool==='blue'){let num=prompt('მოთამაშის ნომერი?','10');if(num!==null)addObj(tool,p.x,p.y,{num});return}
  if(tool==='ball'||tool==='cone'||tool==='man'){addObj(tool,p.x,p.y);return}
+ if(tool==='redFig'||tool==='blueFig'){addFigure(tool==='blueFig'?'blue':'red',p.x,p.y);return}
  if(tool==='text'){let t=prompt('რა ტექსტი დავწეროთ?','პასი და მოძრაობა');if(t)addObj('text',p.x,p.y,{text:t});return}
  if(tool==='zone'){addObj('zone',p.x,p.y,{w:20,h:20});return}
  if(tool==='arrow'||tool==='line'){snapshot();draw={kind:tool,pts:[p]};}
@@ -222,10 +266,10 @@ window.saveAutosaveOnly=()=>localStorage.setItem('coachBoardAutosave',JSON.strin
 $('#addStage').onclick=()=>{plans.push({name:'ახალი ეტაპი',min:'10'});renderPlan();saveAutos()}
 window.addEventListener('load',()=>{let a=localStorage.getItem('coachBoardAutosave');if(a){try{let d=JSON.parse(a);if(confirm('ბოლო დაუმთავრებელი ვარჯიში აღვადგინოთ?'))load(d)}catch{}}render()})
 
-function modeHtml(){return ['select','red','blue','ball','cone','man','arrow','line','zone','text','erase'].map(t=>{let names={select:'👆',red:'🔴',blue:'🔵',ball:'⚽',cone:'🔶',man:'🧍',arrow:'➡️',line:'➖',zone:'🟩',text:'T',erase:'🗑️'};return `<button data-tool="${t}" onclick="setToolMode('${t}')">${names[t]}</button>`}).join('')}
+function modeHtml(){return ['select','red','blue','redFig','blueFig','ball','cone','man','arrow','line','zone','text','erase'].map(t=>{let names={select:'👆',red:'🔴',blue:'🔵',ball:'⚽',cone:'🔶',man:'🧍',arrow:'➡️',line:'➖',zone:'🟩',redFig:'🔴👤',blueFig:'🔵👤',text:'T',erase:'🗑️'};return `<button data-tool="${t}" onclick="setToolMode('${t}')">${names[t]}</button>`}).join('')}
 $('#modeTools').innerHTML=modeHtml();
 window.setToolMode=t=>{tool=t;setModeTool(t)}
-function copyToFull(){let fp=$('#fullPitch');fp.innerHTML=`<div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div><svg class="svgLayer" id="fullSvg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>`;objects.forEach(o=>{let el=document.createElement('div');el.className='object';el.dataset.id=o.id;el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''}else if(o.type==='ball'){el.className+=' ball';el.textContent='⚽'}else if(o.type==='cone'){el.className+=' cone';el.textContent='🔶'}else if(o.type==='man'){el.className+=' man';el.textContent='🧍'}else if(o.type==='text'){el.className+=' label';el.textContent=o.text||''}else if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)'}fp.appendChild(el)});let fs=$('#fullSvg');strokes.forEach(s=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.pts.map((q,i)=>(i?'L':'M')+q.x*5.81+' '+q.y*10).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',s.kind==='arrow'?'#fff':'#ffe56b');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');fs.appendChild(p)})}
+function copyToFull(){let fp=$('#fullPitch');fp.innerHTML=`<div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div><svg class="svgLayer" id="fullSvg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>`;objects.forEach(o=>{let el=document.createElement('div');el.className='object';el.dataset.id=o.id;el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''}else if(o.type==='ball'){el.className+=' ball';el.textContent='⚽'}else if(o.type==='cone'){el.className+=' cone';el.textContent='🔶'}else if(o.type==='man'){el.className+=' man';el.textContent='🧍'}else if(o.type==='figure'){el.className+=' playerFig '+(o.color==='blue'?'blueFig':'redFig')+' '+(o.role||'standard');el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="num">'+esc(o.num||'')+'</span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}else if(o.type==='text'){el.className+=' label';el.textContent=o.text||''}else if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)'}fp.appendChild(el)});let fs=$('#fullSvg');strokes.forEach(s=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.pts.map((q,i)=>(i?'L':'M')+q.x*5.81+' '+q.y*10).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',s.kind==='arrow'?'#fff':'#ffe56b');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');fs.appendChild(p)})}
 function openMode(){copyToFull();$('#boardMode').classList.add('show');document.body.style.overflow='hidden';boardMode=true}
 function closeMode(){$('#boardMode').classList.remove('show');document.body.style.overflow='';boardMode=false}
 $('#boardOpen').onclick=openMode;$('#quickFull').onclick=openMode;$('#closeMode').onclick=closeMode;
@@ -239,7 +283,7 @@ $('#fullPitch').addEventListener('pointerdown',e=>{
    snapshot(); fullDrag={id}; el.setPointerCapture?.(e.pointerId);
    return;
  }
- if(e.target!==$('#fullPitch'))return;let r=e.currentTarget.getBoundingClientRect(),p={x:(e.clientX-r.left)/r.width*100,y:(e.clientY-r.top)/r.height*100};if(tool==='red'||tool==='blue'||tool==='ball'||tool==='cone'||tool==='man'||tool==='zone'||tool==='text'){if(tool==='red'||tool==='blue'){let n=prompt('ნომერი?','10');if(n===null)return;objects.push({id:Date.now(),type:tool,x:p.x,y:p.y,num:n})}else if(tool==='text'){let t=prompt('ტექსტი?','ვარჯიში');if(t)objects.push({id:Date.now(),type:'text',x:p.x,y:p.y,text:t})}else if(tool==='zone')objects.push({id:Date.now(),type:'zone',x:p.x,y:p.y,w:20,h:20});else objects.push({id:Date.now(),type:tool,x:p.x,y:p.y});copyToFull();saveAutos()}});
+ if(e.target!==$('#fullPitch'))return;let r=e.currentTarget.getBoundingClientRect(),p={x:(e.clientX-r.left)/r.width*100,y:(e.clientY-r.top)/r.height*100};if(tool==='red'||tool==='blue'||tool==='redFig'||tool==='blueFig'||tool==='ball'||tool==='cone'||tool==='man'||tool==='zone'||tool==='text'){if(tool==='red'||tool==='blue'){let n=prompt('ნომერი?','10');if(n===null)return;objects.push({id:Date.now(),type:tool,x:p.x,y:p.y,num:n})}else if(tool==='redFig'||tool==='blueFig'){let n=prompt('მოთამაშის ნომერი?','10');if(n===null)return;objects.push({id:Date.now(),type:'figure',x:p.x,y:p.y,color:tool==='blueFig'?'blue':'red',role:selectedPlayerRole,num:n})}else if(tool==='text'){let t=prompt('ტექსტი?','ვარჯიში');if(t)objects.push({id:Date.now(),type:'text',x:p.x,y:p.y,text:t})}else if(tool==='zone')objects.push({id:Date.now(),type:'zone',x:p.x,y:p.y,w:20,h:20});else objects.push({id:Date.now(),type:tool,x:p.x,y:p.y});copyToFull();saveAutos()}});
 
 $('#fullPitch').addEventListener('pointermove',e=>{
  if(!fullDrag)return;
