@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ALL COACH ASSISTANT</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#07152b;color:#fff}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+.app{min-height:100vh}.top{padding:18px 16px 10px;background:#0b1f3d;position:sticky;top:0;z-index:5}
+.logo{font-size:22px;font-weight:900}.sub{color:#9fb3d1;font-size:12px;margin-top:3px}
+.nav{display:flex;gap:8px;overflow:auto;padding:12px 0 3px}.nav button{white-space:nowrap;background:#16345e;color:#dce9ff;padding:10px 13px;border-radius:12px}.nav button.active{background:#28a7ff;color:#fff}
+main{max-width:1100px;margin:auto;padding:18px 14px 50px}.page{display:none}.page.active{display:block}
+.card{background:#0d2343;border:1px solid #1e4270;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 8px 25px #0002}
+h1{font-size:27px;margin:4px 0 8px}.muted{color:#9fb3d1}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(min-width:800px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+label{display:block;color:#a9bdd9;font-size:13px;margin-bottom:6px}input,select,textarea{width:100%;background:#081a34;color:#fff;border:1px solid #31557f;border-radius:11px;padding:11px}textarea{min-height:90px;resize:vertical}
+.btn{background:#1597ed;color:#fff;padding:11px 14px;border-radius:11px;font-weight:700}.btn.secondary{background:#17385f}.btn.danger{background:#a93245}.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#102d52;border-radius:14px;padding:15px}.num{font-size:25px;font-weight:900}
+canvas{width:100%;display:block;border-radius:15px;background:#16834d;border:2px solid #2cba75;touch-action:none}
+.boardWrap{position:relative}.boardtools{display:flex;gap:7px;overflow:auto;padding:8px 0}.tool{background:#183b63;color:#fff;padding:9px 11px;border-radius:10px;white-space:nowrap}.tool.active{background:#25a8ff}
+.list{display:grid;gap:9px}.item{background:#102d52;border-radius:12px;padding:12px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.small{font-size:12px;color:#9fb3d1}
+.phase{border-left:4px solid #25a8ff;padding:10px 12px;background:#102d52;border-radius:10px;margin-top:9px}
+.tag{display:inline-block;background:#183f68;padding:5px 8px;border-radius:8px;font-size:12px;margin:3px}
+.empty{color:#8fa8c7;text-align:center;padding:20px}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="logo">⚽ ALL COACH ASSISTANT</div>
+  <div class="sub">Professional football coaching command center</div>
+  <nav class="nav" id="nav"></nav>
+</header>
+
+<main>
+<section class="page active" id="home">
+  <div class="card">
+    <h1>მოგესალმები, მწვრთნელო ⚽</h1>
+    <p class="muted">ვარჯიში, ტაქტიკა, ფეხბურთელები და განრიგი — ერთ სივრცეში.</p>
+    <div class="stats">
+      <div class="stat"><div class="small">გუნდები</div><div class="num" id="sTeams">0</div></div>
+      <div class="stat"><div class="small">ფეხბურთელები</div><div class="num" id="sPlayers">0</div></div>
+      <div class="stat"><div class="small">ვარჯიშები</div><div class="num" id="sSessions">0</div></div>
+      <div class="stat"><div class="small">თამაშები</div><div class="num" id="sGames">0</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="coach">
+  <div class="card">
+    <h1>🤖 AI Coach</h1>
+    <p class="muted">შექმენი ვარჯიშის გეგმა ასაკის, ხანგრძლივობის და მიზნის მიხედვით.</p>
+    <div class="grid">
+      <div><label>ასაკი</label><select id="age"><option>U6-U8</option><option>U9-U12</option><option>U13-U15</option><option>U16-U18</option><option>U19-U21</option><option>Senior</option><option>Professional / First Team</option><option>Elite / High Performance</option></select></div>
+      <div><label>ხანგრძლივობა</label><select id="duration"><option>45</option><option>60</option><option>75</option><option>90</option><option>105</option><option>120</option></select></div>
+      <div><label>მოთამაშეები</label><input id="players" type="number" min="1" max="30" value="12"></div>
+      <div><label>მიზანი</label><input id="goal" placeholder="მაგ: პასი, 1v1, პოზიციური თამაში"></div>
+    </div>
+    <label style="margin-top:12px">დამატებითი მითითება</label>
+    <textarea id="notes" placeholder="მაგ: ბურთის გარეშე, 6 მოთამაშე, კონუსები და პასები..."></textarea>
+    <div class="btnrow"><button class="btn" id="generate">შექმენი ვარჯიში</button><button class="btn secondary" id="saveSession">შენახვა</button><button class="btn secondary" id="toBoard">ტაქტიკურ დაფაზე</button></div>
+  </div>
+  <div class="card">
+    <h2>🎬 სავარჯიშოს ანიმაცია</h2>
+    <canvas id="anim" width="900" height="500"></canvas>
+    <div class="btnrow"><button class="btn" id="play">▶ Play</button><button class="btn secondary" id="pause">⏸ Pause</button><button class="btn secondary" id="restart">↻ Restart</button><button class="btn secondary" id="slow">0.5×</button><button class="btn secondary" id="normal">1×</button><button class="btn secondary" id="fast">1.5×</button></div>
+    <div id="plan"></div>
+  </div>
+</section>
+
+<section class="page" id="board">
+  <div class="card">
+    <h1>📋 Tactical Board</h1>
+    <p class="muted">დაამატე მოთამაშეები, ბურთები, კონუსები, ძელები და მოძრაობის ისრები.</p>
+    <div class="boardtools" id="tools"></div>
+    <canvas id="pitch" width="1000" height="620"></canvas>
+    <div class="btnrow"><button class="btn" id="clearBoard">გასუფთავება</button><button class="btn secondary" id="saveBoard">შენახვა</button><button class="btn secondary" id="loadBoard">ჩატვირთვა</button></div>
+  </div>
+</section>
+
+<section class="page" id="teams"><div class="card"><h1>👥 გუნდები</h1><div class="grid"><input id="teamName" placeholder="გუნდის სახელი"><button class="btn" id="addTeam">დამატება</button></div><div class="list" id="teamList"></div></div></section>
+<section class="page" id="playersPage"><div class="card"><h1>🏃 ფეხბურთელები</h1><div class="grid"><input id="playerName" placeholder="სახელი და გვარი"><input id="playerPos" placeholder="პოზიცია"><button class="btn" id="addPlayer">დამატება</button></div><div class="list" id="playerList"></div></div></section>
+<section class="page" id="schedule"><div class="card"><h1>📅 განრიგი</h1><div class="grid"><input id="eventName" placeholder="ვარჯიში / თამაში"><input id="eventDate" type="datetime-local"><button class="btn" id="addEvent">დამატება</button></div><div class="list" id="eventList"></div></div></section>
+<section class="page" id="analysis"><div class="card"><h1>📊 Match Analysis</h1><textarea id="analysisText" placeholder="ჩაწერე მატჩის ანალიზი..."></textarea><div class="btnrow"><button class="btn" id="saveAnalysis">შენახვა</button></div><div class="list" id="analysisList"></div></div></section>
+<section class="page" id="library"><div class="card"><h1>📚 Coach Library</h1><div class="list" id="libraryList"></div></div></section>
+</main>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const keys={teams:"aca_teams",players:"aca_players",events:"aca_events",sessions:"aca_sessions",analysis:"aca_analysis",board:"aca_board"};
+let currentPage="home", animRunning=false, animT=0, animSpeed=1, animRAF=0;
+let boardObjects=[], boardTool="player", drawing=null;
+
+const navItems=[["home","🏠 Home"],["coach","🤖 AI Coach"],["board","📋 Tactical Board"],["teams","👥 Teams"],["schedule","📅 Schedule"],["playersPage","🏃 Players"],["analysis","📊 Analysis"],["library","📚 Library"]];
+navItems.forEach(([id,label])=>{const b=document.createElement("button");b.textContent=label;b.dataset.page=id;b.onclick=()=>showPage(id);$("nav").appendChild(b)});
+
+function data(k){try{return JSON.parse(localStorage.getItem(keys[k])||"[]")}catch(e){return[]}}
+function save(k,v){localStorage.setItem(keys[k],JSON.stringify(v))}
+function showPage(id){
+ currentPage=id;
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ $(id).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ refresh();
+}
+function refresh(){
+ $("sTeams").textContent=data("teams").length;$("sPlayers").textContent=data("players").length;$("sSessions").textContent=data("sessions").length;$("sGames").textContent=data("events").length;
+ renderList("teamList",data("teams"),x=>x.name);
+ renderList("playerList",data("players"),x=>x.name+" — "+x.pos);
+ renderList("eventList",data("events"),x=>x.name+" — "+x.date);
+ renderList("analysisList",data("analysis"),x=>x);
+ const ss=data("sessions");$("libraryList").innerHTML=ss.length?ss.map((x,i)=>`<div class="item"><div><b>${esc(x.title)}</b><div class="small">${esc(x.age)} • ${x.duration} წთ • ${x.players} მოთამაშე</div></div><button class="btn secondary" data-open="${i}">გახსნა</button></div>`).join(""):"<div class='empty'>ჯერ შენახული ვარჯიში არ არის.</div>";
+ $("libraryList").querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{let x=ss[+b.dataset.open];$("age").value=x.age;$("duration").value=x.duration;$("players").value=x.players;$("goal").value=x.goal;$("notes").value=x.notes;showPage("coach");generate()});
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function renderList(id,arr,fmt){
+ const el=$(id); if(!arr.length){el.innerHTML="<div class='empty'>ჯერ არაფერია დამატებული.</div>";return}
+ el.innerHTML=arr.map((x,i)=>`<div class="item"><div>${esc(fmt(x))}</div><button class="btn danger" data-del="${i}">წაშლა</button></div>`).join("");
+ el.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{arr.splice(+b.dataset.del,1);const map={teamList:"teams",playerList:"players",eventList:"events",analysisList:"analysis"};save(map[id],arr);refresh()});
+}
+
+$("addTeam").onclick=()=>{let v=$("teamName").value.trim();if(!v)return;let a=data("teams");a.push({name:v});save("teams",a);$("teamName").value="";refresh()};
+$("addPlayer").onclick=()=>{let n=$("playerName").value.trim();if(!n)return;let a=data("players");a.push({name:n,pos:$("playerPos").value.trim()||"—"});save("players",a);$("playerName").value="";$("playerPos").value="";refresh()};
+$("addEvent").onclick=()=>{let n=$("eventName").value.trim();if(!n)return;let a=data("events");a.push({name:n,date:$("eventDate").value||"თარიღი არ არის"});save("events",a);$("eventName").value="";refresh()};
+$("saveAnalysis").onclick=()=>{let v=$("analysisText").value.trim();if(!v)return;let a=data("analysis");a.unshift(v);save("analysis",a);$("analysisText").value="";refresh()};
+
+function generate(){
+ const age=$("age").value,dur=+$("duration").value,n=Math.max(1,+$("players").value||12),goal=$("goal").value.trim()||"ტექნიკა და გადაწყვეტილების მიღება",notes=$("notes").value.trim();
+ const noBall=/ბურთის გარეშე|ბურთი არ|უბურთო|without ball|no ball/i.test(notes+" "+goal);
+ const equipment=[];if(!noBall)equipment.push("ბურთი");if(/კონუს|cone/i.test(notes+" "+goal))equipment.push("კონუსები");if(/ძელ|pole/i.test(notes+" "+goal))equipment.push("ძელები");
+ const phases=[
+  ["1. გახურება",Math.round(dur*.12),"მოძრაობა, კოორდინაცია და აქტივაცია"],
+  ["2. ტექნიკური ნაწილი",Math.round(dur*.23),goal],
+  ["3. ტაქტიკური ნაწილი",Math.round(dur*.25),"სივრცის აღქმა, გადაწყვეტილება და პოზიციური პრინციპები"],
+  ["4. თამაშის ფორმა",Math.round(dur*.30),`${Math.min(n,10)} მოთამაშე — ინტენსიური სიტუაციური თამაში`],
+  ["5. დასრულება",Math.round(dur*.10),"დაბალი ინტენსივობა და აღდგენა"]
+ ];
+ $("plan").innerHTML=`<div class="phase"><b>პროფილი:</b> ${esc(age)} <span class="tag">${dur} წთ</span><span class="tag">${n} მოთამაშე</span><span class="tag">${noBall?"ბურთის გარეშე":equipment.join(", ")}</span></div>`+
+ phases.map(p=>`<div class="phase"><b>${p[0]}</b> — ${p[1]} წთ<div class="muted">${esc(p[2])}</div></div>`).join("");
+ resetAnim(noBall);
+}
+$("generate").onclick=generate;
+$("saveSession").onclick=()=>{let a=data("sessions");a.unshift({title:$("goal").value.trim()||"სავარჯიშო",age:$("age").value,duration:+$("duration").value,players:+$("players").value,goal:$("goal").value,notes:$("notes").value});save("sessions",a);refresh();alert("ვარჯიში შენახულია ✅")};
+$("toBoard").onclick=()=>showPage("board");
+
+const anim=$("anim"),ctx=anim.getContext("2d");
+function resetAnim(noBall){cancelAnimationFrame(animRAF);animT=0;animRunning=false;drawAnim(noBall)}
+function drawAnim(noBall){
+ const w=anim.width,h=anim.height;ctx.clearRect(0,0,w,h);ctx.fillStyle="#16834d";ctx.fillRect(0,0,w,h);
+ ctx.strokeStyle="#ffffffaa";ctx.lineWidth=3;ctx.strokeRect(25,25,w-50,h-50);ctx.beginPath();ctx.moveTo(w/2,25);ctx.lineTo(w/2,h-25);ctx.stroke();ctx.beginPath();ctx.arc(w/2,h/2,65,0,Math.PI*2);ctx.stroke();
+ const x1=120+Math.sin(animT*1.2)*20,y1=h/2+Math.sin(animT*2)*45;
+ const x2=w-160+Math.sin(animT*1.2+Math.PI)*20,y2=h/2+Math.sin(animT*2+Math.PI)*45;
+ // cones / poles
+ for(let i=0;i<5;i++){let x=270+i*70;let y=h/2+(i%2?45:-45);ctx.fillStyle="#ffcc33";ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);ctx.fill()}
+ // movement arrow
+ ctx.strokeStyle="#ffe45c";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x1+22,y1);ctx.lineTo(x2-25,y2);ctx.stroke();ctx.beginPath();ctx.moveTo(x2-40,y2-12);ctx.lineTo(x2-22,y2);ctx.lineTo(x2-40,y2+12);ctx.stroke();
+ drawPlayer(x1,y1,"A");drawPlayer(x2,y2,"B");
+ if(!noBall){let q=(Math.sin(animT)+1)/2;let bx=x1+(x2-x1)*q,by=y1+(y2-y1)*q;ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(bx,by,9,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#222";ctx.stroke()}
+ ctx.fillStyle="#fff";ctx.font="bold 20px sans-serif";ctx.fillText("A → B → A",40,55);
+}
+function drawPlayer(x,y,label){ctx.fillStyle="#dce9ff";ctx.beginPath();ctx.arc(x,y-17,9,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#dce9ff";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x,y-7);ctx.lineTo(x,y+20);ctx.moveTo(x,y+2);ctx.lineTo(x-15,y+12);ctx.moveTo(x,y+2);ctx.lineTo(x+15,y+12);ctx.moveTo(x,y+20);ctx.lineTo(x-12,y+38);ctx.moveTo(x,y+20);ctx.lineTo(x+12,y+38);ctx.stroke();ctx.fillStyle="#fff";ctx.font="bold 16px sans-serif";ctx.fillText(label,x-6,y-48)}
+function loop(){animT+=.018*animSpeed;drawAnim(/ბურთის გარეშე|ბურთი არ|უბურთო|without ball|no ball/i.test(($("notes").value||"")+" "+($("goal").value||"")));if(animRunning)animRAF=requestAnimationFrame(loop)}
+$("play").onclick=()=>{if(!animRunning){animRunning=true;loop()}};$("pause").onclick=()=>{animRunning=false;cancelAnimationFrame(animRAF)};$("restart").onclick=()=>{animT=0;drawAnim(/ბურთის გარეშე|ბურთი არ|უბურთო|without ball|no ball/i.test(($("notes").value||"")+" "+($("goal").value||"")))};$("slow").onclick=()=>animSpeed=.5;$("normal").onclick=()=>animSpeed=1;$("fast").onclick=()=>animSpeed=1.5;
+
+const toolDefs=[["player","👤 მოთამაშე"],["opponent","🔴 მოწინააღმდეგე"],["ball","⚽ ბურთი"],["cone","🔶 კონუსი"],["disc","🔵 მარკერი"],["pole","📍 ძელი"],["ladder","▤ კოორდინაციის კიბე"],["hurdle","▱ ბარიერი"],["goal","🥅 კარი"],["text","T ტექსტი"],["arrow","↗ ისარი"],["delete","⌫ წაშლა"]];
+toolDefs.forEach(([id,label])=>{let b=document.createElement("button");b.className="tool"+(id==="player"?" active":"");b.textContent=label;b.onclick=()=>{boardTool=id;document.querySelectorAll(".tool").forEach(x=>x.classList.remove("active"));b.classList.add("active")};$("tools").appendChild(b)});
+const pc=$("pitch"),pctx=pc.getContext("2d");
+function drawPitch(){pctx.clearRect(0,0,pc.width,pc.height);pctx.fillStyle="#16834d";pctx.fillRect(0,0,pc.width,pc.height);pctx.strokeStyle="#fff";pctx.lineWidth=3;pctx.strokeRect(20,20,960,580);pctx.beginPath();pctx.moveTo(500,20);pctx.lineTo(500,600);pctx.stroke();pctx.beginPath();pctx.arc(500,310,80,0,Math.PI*2);pctx.stroke();pctx.fillStyle="#fff";boardObjects.forEach(o=>drawObj(o))}
+function drawObj(o){pctx.save();pctx.translate(o.x,o.y);if(o.type==="player"||o.type==="opponent"){pctx.fillStyle=o.type==="player"?"#fff":"#ff4d5e";pctx.beginPath();pctx.arc(0,-13,8,0,Math.PI*2);pctx.fill();pctx.strokeStyle=pctx.fillStyle;pctx.lineWidth=5;pctx.beginPath();pctx.moveTo(0,-5);pctx.lineTo(0,20);pctx.moveTo(0,2);pctx.lineTo(-13,12);pctx.moveTo(0,2);pctx.lineTo(13,12);pctx.moveTo(0,20);pctx.lineTo(-10,35);pctx.moveTo(0,20);pctx.lineTo(10,35);pctx.stroke()}else if(o.type==="ball"){pctx.fillStyle="#fff";pctx.beginPath();pctx.arc(0,0,9,0,Math.PI*2);pctx.fill();pctx.strokeStyle="#111";pctx.stroke()}else if(o.type==="cone"){pctx.fillStyle="#ff9f1c";pctx.beginPath();pctx.moveTo(0,-16);pctx.lineTo(13,13);pctx.lineTo(-13,13);pctx.closePath();pctx.fill()}else if(o.type==="disc"){pctx.fillStyle="#33b5ff";pctx.beginPath();pctx.ellipse(0,0,16,7,0,0,Math.PI*2);pctx.fill()}else if(o.type==="pole"){pctx.strokeStyle="#ffe45c";pctx.lineWidth=7;pctx.beginPath();pctx.moveTo(0,18);pctx.lineTo(0,-22);pctx.stroke()}else if(o.type==="ladder"){pctx.strokeStyle="#ffe45c";pctx.lineWidth=3;pctx.strokeRect(-25,-10,50,20);for(let i=-15;i<=15;i+=10){pctx.beginPath();pctx.moveTo(i,-10);pctx.lineTo(i,10);pctx.stroke()}}else if(o.type==="hurdle"){pctx.strokeStyle="#ffcc33";pctx.lineWidth=5;pctx.beginPath();pctx.moveTo(-18,10);pctx.lineTo(-18,-8);pctx.lineTo(18,-8);pctx.lineTo(18,10);pctx.stroke()}else if(o.type==="goal"){pctx.strokeStyle="#fff";pctx.lineWidth=4;pctx.strokeRect(-35,-20,70,40)}else if(o.type==="text"){pctx.fillStyle="#fff";pctx.font="bold 18px sans-serif";pctx.fillText(o.text||"ტექსტი",-30,5)}else if(o.type==="arrow"){pctx.strokeStyle="#ffe45c";pctx.lineWidth=5;pctx.beginPath();pctx.moveTo(-30,0);pctx.lineTo(30,0);pctx.stroke();pctx.beginPath();pctx.moveTo(15,-10);pctx.lineTo(30,0);pctx.lineTo(15,10);pctx.stroke()}pctx.restore()}
+function pos(e){const r=pc.getBoundingClientRect();return{x:(e.clientX-r.left)*pc.width/r.width,y:(e.clientY-r.top)*pc.height/r.height}}
+pc.addEventListener("pointerdown",e=>{const q=pos(e);if(boardTool==="delete"){let i=boardObjects.map(o=>Math.hypot(o.x-q.x,o.y-q.y)).reduce((a,d,i)=>d<a.d?{d,i}:a,{d:1e9,i:-1}).i;if(i>=0)boardObjects.splice(i,1);drawPitch();return}if(boardTool==="arrow"){drawing={x:q.x,y:q.y};return}let o={type:boardTool,x:q.x,y:q.y};if(boardTool==="text"){let t=prompt("რა ტექსტი დავწეროთ?");if(t===null)return;o.text=t}boardObjects.push(o);drawPitch()});
+pc.addEventListener("pointermove",e=>{if(!drawing)return;drawPitch();const q=pos(e);pctx.strokeStyle="#ffe45c";pctx.lineWidth=5;pctx.beginPath();pctx.moveTo(drawing.x,drawing.y);pctx.lineTo(q.x,q.y);pctx.stroke()});
+pc.addEventListener("pointerup",e=>{if(!drawing)return;const q=pos(e);boardObjects.push({type:"arrow",x:(drawing.x+q.x)/2,y:(drawing.y+q.y)/2});drawing=null;drawPitch()});
+$("clearBoard").onclick=()=>{boardObjects=[];drawPitch()};$("saveBoard").onclick=()=>{save("board",boardObjects);alert("დაფა შენახულია ✅")};$("loadBoard").onclick=()=>{boardObjects=data("board");drawPitch()};
+
+function init(){drawPitch();refresh();generate()}
+init();
+})();
+</script>
+</body>
+</html>
