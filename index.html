@@ -115,6 +115,8 @@ linear-gradient(180deg,#49bf5b,#268d3f)}
 /* === Coach-first mobile layout === */
 body{background:#06140a}
 body.coachOnly header,body.coachOnly main>section.card:not(.pitchCard){display:none!important}
+body.coachOnly #boardMode{display:none!important}
+body.coachOnly .pitchCard{overflow:hidden!important}
 body.coachOnly main{display:block!important;max-width:none!important;width:100vw!important;padding:0!important;margin:0!important}
 body.coachOnly .pitchCard{display:block!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;min-height:100dvh!important}
 body.coachOnly .pitchCard .small,body.coachOnly .pitchCard .inspector,body.coachOnly .pitchCard .statbar{display:none!important}
@@ -181,7 +183,7 @@ body.coachOnly .float{display:none!important}
 <div class="toolbar" style="margin-top:8px">
 <button class="tool" id="undo">↩️ Undo</button><button class="tool" id="redo">↪️ Redo</button><button class="tool" id="deleteSelected">🗑️ არჩეულის წაშლა</button><button class="tool" id="duplicateSelected">⧉ არჩეულის ასლი</button>
 <button class="tool" id="formation">📐 ფორმაცია</button><button class="tool" id="pitchPreset">🏟️ მოედნის ტიპი</button><button class="tool" id="printBtn">🖨️ ბეჭდვა</button><button class="tool" id="clear">🧹 დაფის გასუფთავება</button>
-<button class="tool primary" id="save">💾 შენახვა</button><button class="tool dark" id="boardOpen">⛶ დიდი დაფა</button><button class="tool" id="duplicate">📋 ასლი</button><button class="tool" id="exportBtn">⬇️ JSON</button><button class="tool" id="importBtn">⬆️ JSON</button><input id="importFile" type="file" accept="application/json" hidden>
+<button class="tool primary" id="save">💾 შენახვა</button><button class="tool" id="duplicate">📋 ასლი</button><button class="tool" id="exportBtn">⬇️ JSON</button><button class="tool" id="importBtn">⬆️ JSON</button><input id="importFile" type="file" accept="application/json" hidden>
 </div>
 </section>
 
@@ -243,12 +245,7 @@ body.coachOnly .float{display:none!important}
   <div class="menuPanel" id="panel-training"><div class="menuSection"><h4>ვარჯიშის გეგმა</h4><div class="menuTools"><button id="menuAddStage">＋ ეტაპი</button><button id="menuPlanTemplate">📋 სწრაფი გეგმა</button></div><div id="menuPlanList" style="margin-top:8px"></div></div></div>
   <div class="menuPanel" id="panel-frames"><div class="menuSection"><h4>კადრები და მოძრაობა</h4><div class="menuTools"><button id="menuAddFrame">＋ კადრი</button><button id="menuPrev">◀️ წინა</button><button id="menuNext">▶️ შემდეგი</button><button id="menuPlay">▶️ PLAY</button><button id="menuStop">⏹ STOP</button></div><div id="menuFramesList" style="margin-top:8px"></div></div></div>
   <div class="menuPanel" id="panel-save"><div class="menuSection"><h4>ვარჯიშის ფაილები</h4><div class="menuTools"><button id="menuSave">💾 შენახვა</button><button id="menuDuplicate">📋 ასლი</button><button id="menuExport">⬇️ JSON</button><button id="menuImport">⬆️ JSON</button><button id="menuPrint">🖨️ ბეჭდვა</button></div><input id="menuImportFile" type="file" accept="application/json" hidden><div id="menuSavedList" style="margin-top:8px"></div></div></div>
-  <div class="menuPanel" id="panel-more"><div class="menuSection"><h4>დაფის მართვა</h4><div class="menuTools"><button id="menuUndo">↩️ Undo</button><button id="menuRedo">↪️ Redo</button><button id="menuClear" class="danger">🧹 გასუფთავება</button><button id="menuDelete">🗑️ წაშლა</button><button id="menuDuplicateSelected">⧉ ასლი</button><button id="menuBigBoard">⛶ დიდი დაფა</button></div></div></div>
-</div>
-<div id="boardMode">
-<div class="modebar" id="modeTools"></div>
-<div class="pitchWrap"><div class="pitch" id="fullPitch"></div></div>
-<button class="closeMode" id="closeMode">✕ დახურვა</button>
+  <div class="menuPanel" id="panel-more"><div class="menuSection"><h4>დაფის მართვა</h4><div class="menuTools"><button id="menuUndo">↩️ Undo</button><button id="menuRedo">↪️ Redo</button><button id="menuClear" class="danger">🧹 გასუფთავება</button><button id="menuDelete">🗑️ წაშლა</button><button id="menuDuplicateSelected">⧉ ასლი</button></div></div></div>
 </div>
 <div id="toast" class="toast"></div>
 
@@ -268,7 +265,7 @@ function redo(){if(!future.length)return;history.push(JSON.stringify(state()));r
 $('#undo').onclick=undo;$('#redo').onclick=redo;
 
 $$('#tools .tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;$$('#tools .tool').forEach(x=>x.classList.remove('active'));b.classList.add('active');setModeTool(tool)});
-function setModeTool(t){$$('#modeTools button').forEach(b=>b.classList.toggle('on',b.dataset.tool===t))}
+function setModeTool(t){const m=$('#modeTools');if(m)$$('#modeTools button').forEach(b=>b.classList.toggle('on',b.dataset.tool===t))}
 
 function pt(e,el=pitch){let r=el.getBoundingClientRect();return {x:Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100)),y:Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100))}}
 let selectedPlayerRole='standard';
@@ -444,12 +441,8 @@ $('#prevFrame').onclick=()=>{if(frames.length)applyFrame(Math.max(0,(activeFrame
 
 window.addEventListener('load',()=>{let a=localStorage.getItem('coachBoardAutosave');if(a){try{let d=JSON.parse(a);if(confirm('ბოლო დაუმთავრებელი ვარჯიში აღვადგინოთ?'))load(d)}catch{}}render();renderFrames()})
 
-function modeHtml(){return ['select','red','blue','redFig','blueFig','ball','cone','man','arrow','line','zone','text','erase'].map(t=>{let names={select:'👆',red:'🔴',blue:'🔵',ball:'⚽',cone:'🔶',man:'🧍',arrow:'➡️',line:'➖',zone:'🟩',redFig:'🔴👤',blueFig:'🔵👤',text:'T',erase:'🗑️'};return `<button data-tool="${t}" onclick="setToolMode('${t}')">${names[t]}</button>`}).join('')}
-$('#modeTools').innerHTML=modeHtml();
-window.setToolMode=t=>{tool=t;setModeTool(t)}
-function copyToFull(){let fp=$('#fullPitch');fp.innerHTML=`<div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div><svg class="svgLayer" id="fullSvg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>`;objects.forEach(o=>{let el=document.createElement('div');el.className='object';el.dataset.id=o.id;el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''}else if(o.type==='ball'){el.className+=' ball';el.textContent='⚽'}else if(o.type==='cone'){el.className+=' cone';el.textContent='🔶'}else if(o.type==='man'){el.className+=' playerFig redFig standard';el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="collar"></span><span class="num"></span><span class="shorts"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}else if(o.type==='figure'){el.className+=' playerFig '+(o.color==='blue'?'blueFig':'redFig')+' '+(o.role||'standard');el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="collar"></span><span class="num">'+esc(o.num||'')+'</span><span class="shorts"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}else if(o.type==='text'){el.className+=' label';el.textContent=o.text||''}else if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)'}fp.appendChild(el)});let fs=$('#fullSvg');strokes.forEach(s=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.pts.map((q,i)=>(i?'L':'M')+q.x*5.81+' '+q.y*10).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',s.kind==='arrow'?'#fff':'#ffe56b');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');fs.appendChild(p)})}
-function openMode(){copyToFull();$('#boardMode').classList.add('show');document.body.classList.add('board-open');document.documentElement.style.overflow='hidden';document.body.style.overflow='hidden';boardMode=true;requestAnimationFrame(()=>{const w=$('#fullPitch');if(w){w.style.width='100vw';w.style.height='100dvh';}})}
-function closeMode(){$('#boardMode').classList.remove('show');document.body.classList.remove('board-open');document.documentElement.style.overflow='';document.body.style.overflow='';boardMode=false}
+function setModeTool(t){tool=t;const m=$('#modeTools');if(m)$$('#modeTools button').forEach(b=>b.classList.toggle('on',b.dataset.tool===t));}
+
 function coachMenuInit(){
  document.body.classList.add('coachOnly');
  const btn=$('#coachMenuBtn'),menu=$('#coachMenu'),close=$('#coachMenuClose');
@@ -469,46 +462,17 @@ function coachMenuInit(){
  $('#menuAddBlue').onclick=()=>{$('#addBlueFig').click();menu.classList.remove('show')};
  const eq=[['ball','⚽ ბურთი'],['cone','🔶 კონუსი'],['man','🧍 ფიგურა'],['ladder','🪜 კიბე'],['hurdle','🚧 ბარიერი'],['pole','📍 ძელი'],['marker','🔵 მარკერი'],['miniGoal','🥅 პატარა კარი'],['goal','🥅 კარი'],['zone','🟩 ზონა']];
  $('#menuEquipment').innerHTML=eq.map(([k,v])=>`<button data-eq="${k}">${v}</button>`).join('');
- $$('#menuEquipment [data-eq]').forEach(b=>b.onclick=()=>{tool=b.dataset.eq;toast('დაფაზე დააჭირე: '+b.textContent);});
+ $$('#menuEquipment [data-eq]').forEach(b=>b.onclick=()=>{tool='asset:'+b.dataset.eq;toast('დაფაზე დააჭირე: '+b.textContent);});
  $$('#panel-formations [data-form]').forEach(b=>b.onclick=()=>{window.applyFormation&&window.applyFormation(b.dataset.form);});
  $('#menuPitchPreset').onclick=()=>$('#pitchPreset').click();
  $('#menuAddStage').onclick=()=>$('#addStage').click(); $('#menuPlanTemplate').onclick=()=>$('#planTemplate').click();
  $('#menuAddFrame').onclick=()=>$('#addFrame').click(); $('#menuPrev').onclick=()=>$('#prevFrame').click(); $('#menuNext').onclick=()=>$('#nextFrame').click(); $('#menuPlay').onclick=()=>$('#playFrames').click(); $('#menuStop').onclick=()=>$('#stopFrames').click();
  $('#menuSave').onclick=()=>$('#save').click(); $('#menuDuplicate').onclick=()=>$('#duplicate').click(); $('#menuExport').onclick=()=>$('#exportBtn').click(); $('#menuImport').onclick=()=>$('#importBtn').click(); $('#menuPrint').onclick=()=>$('#printBtn').click();
  $('#menuUndo').onclick=()=>undo(); $('#menuRedo').onclick=()=>redo(); $('#menuClear').onclick=()=>$('#clear').click(); $('#menuDelete').onclick=()=>$('#deleteSelected').click(); $('#menuDuplicateSelected').onclick=()=>$('#duplicateSelected').click();
- $('#menuBigBoard').onclick=()=>openMode();
+
  $('#coachMenuBtn').style.display='flex';
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',coachMenuInit);else coachMenuInit();
 
-const openBtn=document.getElementById('boardOpen');
-const quickBtn=document.getElementById('quickFull');
-const closeBtn=document.getElementById('closeMode');
-if(openBtn)openBtn.onclick=openMode;
-if(quickBtn)quickBtn.onclick=openMode;
-if(closeBtn)closeBtn.onclick=closeMode;
-
-let fullDrag=null;
-$('#fullPitch').addEventListener('pointerdown',e=>{
- if(!boardMode)return;
- let el=e.target.closest('.object');
- if(el && tool!=='erase'){
-   e.preventDefault(); e.stopPropagation();
-   let id=+el.dataset.id, o=objects.find(x=>x.id===id); if(!o)return;
-   snapshot(); fullDrag={id}; el.setPointerCapture?.(e.pointerId);
-   return;
- }
- if(e.target!==$('#fullPitch'))return;let r=e.currentTarget.getBoundingClientRect(),p={x:(e.clientX-r.left)/r.width*100,y:(e.clientY-r.top)/r.height*100};if(tool==='red'||tool==='blue'||tool==='redFig'||tool==='blueFig'||tool==='ball'||tool==='cone'||tool==='man'||tool==='zone'||tool==='text'){if(tool==='red'||tool==='blue'){let n=prompt('ნომერი?','10');if(n===null)return;objects.push({id:Date.now(),type:tool,x:p.x,y:p.y,num:n})}else if(tool==='redFig'||tool==='blueFig'){let n=prompt('მოთამაშის ნომერი?','10');if(n===null)return;objects.push({id:Date.now(),type:'figure',x:p.x,y:p.y,color:tool==='blueFig'?'blue':'red',role:selectedPlayerRole,num:n})}else if(tool==='text'){let t=prompt('ტექსტი?','ვარჯიში');if(t)objects.push({id:Date.now(),type:'text',x:p.x,y:p.y,text:t})}else if(tool==='zone')objects.push({id:Date.now(),type:'zone',x:p.x,y:p.y,w:20,h:20});else objects.push({id:Date.now(),type:tool,x:p.x,y:p.y});copyToFull();saveAutos()}});
-
-$('#fullPitch').addEventListener('pointermove',e=>{
- if(!fullDrag)return;
- let r=$('#fullPitch').getBoundingClientRect(),o=objects.find(x=>x.id===fullDrag.id);if(!o)return;
- o.x=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100));
- o.y=Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100));
- let el=$('#fullPitch').querySelector('[data-id=\"'+fullDrag.id+'\"]');
- if(el){el.style.left=o.x+'%';el.style.top=o.y+'%'}
-});
-$('#fullPitch').addEventListener('pointerup',()=>{if(fullDrag){fullDrag=null;saveAutos();copyToFull();render()}});
-$('#fullPitch').addEventListener('pointercancel',()=>{if(fullDrag){fullDrag=null;saveAutos();copyToFull();render()}});
 </script>
 </body></html>
