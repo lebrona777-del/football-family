@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALL COACH ASSISTANT</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#07120d;color:white}
+header{padding:24px;background:#123d2b}
+h1{margin:0}
+.wrap{max-width:1100px;margin:auto;padding:18px}
+.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:16px}
+button,select,input{padding:13px;border-radius:10px;border:1px solid #365a48;background:#0d1b14;color:white;font-size:15px}
+button{cursor:pointer}
+.active,.primary{background:#20b26b;color:#06130b;border:0}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:#102019;border:1px solid #294c3b;border-radius:16px;padding:18px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label{display:block;color:#9eb5a9;font-size:13px;margin-bottom:6px}
+.phase{padding:12px;margin:8px 0;background:#0a1811;border-left:4px solid #20b26b;border-radius:8px}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+#board{height:500px;border:3px solid #315e45;border-radius:16px;position:relative;overflow:hidden;background:linear-gradient(#176c3d,#125d35)}
+.obj{position:absolute;transform:translate(-50%,-50%);touch-action:none;user-select:none;font-weight:bold}
+.player{width:36px;height:36px;border-radius:50%;background:white;color:#14613b;display:grid;place-items:center}
+.opponent{background:#e95757;color:white}
+.ball{font-size:28px}
+.cone{font-size:25px}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="wrap">
+<h1>⚽ ALL COACH ASSISTANT</h1>
+<p>პროფესიონალური სამუშაო სივრცე ფეხბურთის მწვრთნელებისთვის</p>
+</div>
+</header>
+
+<main class="wrap">
+
+<div class="tabs">
+<button class="tab active" data-id="ai">🤖 AI Coach</button>
+<button class="tab" data-id="board">📋 Tactical Board</button>
+<button class="tab" data-id="tools">🧰 Coach Tools</button>
+</div>
+
+<section id="ai" class="panel active">
+<div class="card">
+<h2>AI Coach — ვარჯიშის შექმნა</h2>
+
+<div class="grid">
+
+<div>
+<label>ასაკი / დონე</label>
+<select id="age">
+<option>U6</option>
+<option>U7</option>
+<option>U8</option>
+<option>U9</option>
+<option>U10</option>
+<option>U11</option>
+<option>U12</option>
+<option>U13</option>
+<option>U14</option>
+<option>U15</option>
+<option>U16</option>
+<option>U17</option>
+<option>U18</option>
+<option>U19</option>
+<option>U20</option>
+<option>U21</option>
+<option>Senior</option>
+<option>Professional / First Team</option>
+<option>Elite / High Performance</option>
+</select>
+</div>
+
+<div>
+<label>ხანგრძლივობა</label>
+<select id="duration">
+<option>45</option>
+<option>60</option>
+<option>75</option>
+<option>90</option>
+<option>105</option>
+<option>120</option>
+</select>
+</div>
+
+<div>
+<label>მოთამაშეები</label>
+<select id="players">
+<option>6</option>
+<option>8</option>
+<option>10</option>
+<option>12</option>
+<option>14</option>
+<option>16</option>
+<option>18</option>
+<option>20</option>
+<option>22+</option>
+</select>
+</div>
+
+<div>
+<label>მიზანი</label>
+<input id="goal" placeholder="მაგ: პასი და პოზიციური თამაში">
+</div>
+
+</div>
+
+<br>
+<button class="primary" id="generate">შექმენი ვარჯიში →</button>
+<div id="result"></div>
+
+</div>
+</section>
+
+<section id="board" class="panel">
+
+<div class="card">
+<h2>მწვანე Tactical Board</h2>
+<p>დაამატე და გადაადგილე მოთამაშეები, ბურთი და კონუსები.</p>
+
+<div class="tools">
+<button onclick="add('player','P')">+ მოთამაშე</button>
+<button onclick="add('player opponent','O')">+ მოწინააღმდეგე</button>
+<button onclick="add('ball','⚽')">⚽ ბურთი</button>
+<button onclick="add('cone','🔶')">🔶 კონუსი</button>
+<button onclick="clearBoard()">გასუფთავება</button>
+<button onclick="saveBoard()">შენახვა</button>
+</div>
+</div>
+
+<div id="field"></div>
+
+</section>
+
+<section id="tools" class="panel">
+
+<div class="grid">
+
+<div class="card">
+<h3>👥 My Teams</h3>
+<p>გუნდების მართვა.</p>
+</div>
+
+<div class="card">
+<h3>📅 Schedule</h3>
+<p>ვარჯიშებისა და თამაშების დაგეგმვა.</p>
+</div>
+
+<div class="card">
+<h3>📈 Player Development</h3>
+<p>მოთამაშეების განვითარება.</p>
+</div>
+
+<div class="card">
+<h3>🎥 Match Analysis</h3>
+<p>მატჩის ანალიზი.</p>
+</div>
+
+<div class="card">
+<h3>📚 Coach Library</h3>
+<p>სავარჯიშოების ბიბლიოთეკა.</p>
+</div>
+
+<div class="card">
+<h3>🏆 My Coach Career</h3>
+<p>მწვრთნელის სამუშაო სივრცე.</p>
+</div>
+
+</div>
+</section>
+
+</main>
+
+<script>
+
+document.querySelectorAll('.tab').forEach(b=>{
+b.onclick=()=>{
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+b.classList.add('active');
+document.getElementById(b.dataset.id).classList.add('active');
+}
+});
+
+document.getElementById('generate').onclick=()=>{
+
+let a=document.getElementById('age').value;
+let d=document.getElementById('duration').value;
+let p=document.getElementById('players').value;
+let g=document.getElementById('goal').value||'ტექნიკა და გადაწყვეტილების მიღება';
+
+document.getElementById('result').innerHTML=
+
+'<div class="card">'+
+'<h3>'+a+' • '+d+' წუთი • '+p+' მოთამაშე</h3>'+
+'<div class="phase"><b>1. გახურება</b><br>10–15 წთ — მოძრაობა და ბურთთან მუშაობა.</div>'+
+'<div class="phase"><b>2. ტექნიკა</b><br>15–20 წთ — '+g+'.</div>'+
+'<div class="phase"><b>3. ტაქტიკა</b><br>15–25 წთ — პოზიციური პრინციპები.</div>'+
+'<div class="phase"><b>4. თამაში</b><br>10–25 წთ — შეზღუდვებით თამაში.</div>'+
+'<div class="phase"><b>5. დასრულება</b><br>5–10 წთ — დაბალი ინტენსივობა.</div>'+
+'</div>';
+
+};
+
+let n=0;
+
+function add(c,t){
+
+let e=document.createElement('div');
+
+e.className='obj '+c;
+e.textContent=t;
+
+e.style.left=(70+n%7*70)+'px';
+e.style.top=(70+Math.floor(n/7)*65)+'px';
+
+n++;
+
+document.getElementById('field').appendChild(e);
+
+let down=false,dx,dy;
+
+e.onpointerdown=x=>{
+down=true;
+dx=x.clientX-e.offsetLeft;
+dy=x.clientY-e.offsetTop;
+e.setPointerCapture(x.pointerId);
+};
+
+e.onpointermove=x=>{
+if(down){
+e.style.left=x.clientX-dx+'px';
+e.style.top=x.clientY-dy+'px';
+}
+};
+
+e.onpointerup=()=>down=false;
+
+}
+
+function clearBoard(){
+document.getElementById('field').innerHTML='';
+n=0;
+}
+
+function saveBoard(){
+localStorage.setItem(
+'coachBoard',
+document.getElementById('field').innerHTML
+);
+alert('დაფა შენახულია ✅');
+}
+
+</script>
+
+</body>
+</html>
