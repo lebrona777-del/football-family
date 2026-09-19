@@ -29,15 +29,15 @@ textarea{min-height:70px;resize:vertical}
 .tool.danger{background:#fff0f0;color:#a82020}
 .primary{background:#258b4b;color:#fff}.dark{background:#123b21;color:#fff}
 .pitchCard{padding:10px}
-.pitchWrap{position:relative;width:100%;aspect-ratio:1.72;border-radius:18px;overflow:hidden;background:#2f8548;touch-action:none;box-shadow:inset 0 0 0 5px #66b477,0 10px 30px #0b2c1640}
+.pitchWrap{position:relative;width:100%;aspect-ratio:.62;border-radius:18px;overflow:hidden;background:#2f8548;touch-action:none;box-shadow:inset 0 0 0 5px #66b477,0 10px 30px #0b2c1640}
 .pitch{position:absolute;inset:0;overflow:hidden;touch-action:none;background:
-linear-gradient(90deg,transparent 49.7%,#b9dfbf 49.7%,#b9dfbf 50.3%,transparent 50.3%),
+linear-gradient(0deg,transparent 49.7%,#b9dfbf 49.7%,#b9dfbf 50.3%,transparent 50.3%),
 radial-gradient(circle at 50% 50%,transparent 0 9.5%,#b9dfbf 9.5% 10.1%,transparent 10.1%),
 linear-gradient(#ffffff22,#ffffff22)}
 .pitch:before{content:"";position:absolute;inset:3%;border:4px solid #c6e4cb;border-radius:4px}
-.pitch:after{content:"";position:absolute;left:3%;right:3%;top:50%;height:2px;background:#c6e4cb}
-.box{position:absolute;top:30%;height:40%;width:14%;border:4px solid #c6e4cb}.box.left{left:3%}.box.right{right:3%}
-.goal{position:absolute;top:43%;height:14%;width:2%;border:3px solid #fff;background:#ffffff33}.goal.left{left:1%}.goal.right{right:1%}
+.pitch:after{content:"";position:absolute;top:3%;bottom:3%;left:50%;width:2px;background:#c6e4cb}
+.box{position:absolute;left:30%;width:40%;height:14%;border:4px solid #c6e4cb}.box.left{top:3%}.box.right{bottom:3%}
+.goal{position:absolute;left:43%;width:14%;height:2%;border:3px solid #fff;background:#ffffff33}.goal.left{top:1%}.goal.right{bottom:1%}
 .object{position:absolute;transform:translate(-50%,-50%);user-select:none;touch-action:none;z-index:5}
 .player{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;border:3px solid #fff;box-shadow:0 2px 8px #0005}
 .red{background:#d93636}.blue{background:#2167d8}
@@ -100,7 +100,7 @@ linear-gradient(#ffffff22,#ffffff22)}
 <section class="card pitchCard">
 <div class="pitchWrap" id="pitchWrap">
 <div class="pitch" id="pitch"><div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div>
-<svg class="svgLayer" id="svg" viewBox="0 0 1000 581" preserveAspectRatio="none"></svg>
+<svg class="svgLayer" id="svg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>
 </div></div>
 <div class="small" style="margin-top:8px">💡 დაფაზე დაჭერით არჩეული ხელსაწყო დაემატება. მოთამაშეები და ობიექტები თითით გადაადგილდება. ისარი/ხაზი — თითის გასმით.</div>
 </section>
@@ -211,7 +211,7 @@ window.addEventListener('load',()=>{let a=localStorage.getItem('coachBoardAutosa
 function modeHtml(){return ['select','red','blue','ball','cone','man','arrow','line','zone','text','erase'].map(t=>{let names={select:'👆',red:'🔴',blue:'🔵',ball:'⚽',cone:'🔶',man:'🧍',arrow:'➡️',line:'➖',zone:'🟩',text:'T',erase:'🗑️'};return `<button data-tool="${t}" onclick="setToolMode('${t}')">${names[t]}</button>`}).join('')}
 $('#modeTools').innerHTML=modeHtml();
 window.setToolMode=t=>{tool=t;setModeTool(t)}
-function copyToFull(){let fp=$('#fullPitch');fp.innerHTML=`<div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div><svg class="svgLayer" id="fullSvg" viewBox="0 0 1000 581" preserveAspectRatio="none"></svg>`;objects.forEach(o=>{let el=document.createElement('div');el.className='object';el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''}else if(o.type==='ball'){el.className+=' ball';el.textContent='⚽'}else if(o.type==='cone'){el.className+=' cone';el.textContent='🔶'}else if(o.type==='man'){el.className+=' man';el.textContent='🧍'}else if(o.type==='text'){el.className+=' label';el.textContent=o.text||''}else if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)'}fp.appendChild(el)});let fs=$('#fullSvg');strokes.forEach(s=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.pts.map((q,i)=>(i?'L':'M')+q.x*10+' '+q.y*5.81).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',s.kind==='arrow'?'#fff':'#ffe56b');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');fs.appendChild(p)})}
+function copyToFull(){let fp=$('#fullPitch');fp.innerHTML=`<div class="box left"></div><div class="box right"></div><div class="goal left"></div><div class="goal right"></div><svg class="svgLayer" id="fullSvg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>`;objects.forEach(o=>{let el=document.createElement('div');el.className='object';el.style.left=o.x+'%';el.style.top=o.y+'%';if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''}else if(o.type==='ball'){el.className+=' ball';el.textContent='⚽'}else if(o.type==='cone'){el.className+=' cone';el.textContent='🔶'}else if(o.type==='man'){el.className+=' man';el.textContent='🧍'}else if(o.type==='text'){el.className+=' label';el.textContent=o.text||''}else if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)'}fp.appendChild(el)});let fs=$('#fullSvg');strokes.forEach(s=>{let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',s.pts.map((q,i)=>(i?'L':'M')+q.x*5.81+' '+q.y*10).join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',s.kind==='arrow'?'#fff':'#ffe56b');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');fs.appendChild(p)})}
 function openMode(){copyToFull();$('#boardMode').classList.add('show');document.body.style.overflow='hidden';boardMode=true}
 function closeMode(){$('#boardMode').classList.remove('show');document.body.style.overflow='';boardMode=false}
 $('#boardOpen').onclick=openMode;$('#quickFull').onclick=openMode;$('#closeMode').onclick=closeMode;
