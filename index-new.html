@@ -1,0 +1,1186 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07121f">
+<title>ALL COACH ASSISTANT</title>
+
+<style>
+:root{
+--bg:#07121f;--panel:#0d1c2d;--line:#29425c;
+--txt:#f8fbff;--muted:#b9c9da;--green:#28c978;--blue:#35a8ff;
+}
+*{box-sizing:border-box}
+html,body{
+margin:0;background:var(--bg);color:var(--txt);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
+}
+button,input,select,textarea{font:inherit}
+button{color:#fff;cursor:pointer}
+.app{max-width:1180px;margin:auto;padding:14px 12px 42px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{
+width:45px;height:45px;border-radius:13px;
+display:grid;place-items:center;
+background:linear-gradient(135deg,var(--green),var(--blue));
+font-size:24px
+}
+h1{font-size:19px;margin:0}
+.muted{color:var(--muted)}
+.tiny{font-size:12px}
+.status{
+padding:8px 10px;border:1px solid var(--line);
+border-radius:10px;background:#102338;font-size:12px
+}
+.nav{
+display:flex;gap:7px;overflow:auto;padding-bottom:5px
+}
+.nav button{
+flex:1;min-width:105px;border:1px solid var(--line);
+background:var(--panel);border-radius:11px;
+padding:11px 8px;font-weight:800;color:var(--muted)
+}
+.nav button.active{
+background:#153c35;color:#fff;border-color:#2b9f73
+}
+.view{display:none}
+.view.active{display:block}
+.card{
+background:var(--panel);border:1px solid var(--line);
+border-radius:17px;padding:16px;margin:12px 0;
+box-shadow:0 10px 30px #0004
+}
+h2{font-size:18px;margin:0 0 5px}
+h3{font-size:15px;margin:0}
+.grid{
+display:grid;grid-template-columns:repeat(2,1fr);gap:11px
+}
+.full{grid-column:1/-1}
+label{
+display:block;font-size:13px;font-weight:800;
+color:#e7f0f8;margin-bottom:6px
+}
+input,select,textarea{
+width:100%;background:#091625;border:1px solid #35516d;
+color:#fff;border-radius:10px;padding:11px;outline:0
+}
+textarea{min-height:75px}
+input:focus,select:focus,textarea:focus{
+border-color:var(--green);box-shadow:0 0 0 3px #28c97822
+}
+.actions,.toolbar{
+display:flex;flex-wrap:wrap;gap:8px;margin-top:12px
+}
+.btn{
+border:1px solid #35536f;background:#142a41;
+border-radius:10px;padding:10px 13px;font-weight:800
+}
+.primary{
+background:linear-gradient(135deg,#20bd6e,#238dcc);border:0
+}
+.danger{background:#3b1721;border-color:#71313f}
+.ghost{background:transparent}
+.screen-head{
+display:flex;justify-content:space-between;
+align-items:center;gap:8px;margin-bottom:10px
+}
+.progress{
+height:7px;background:#07111c;border-radius:10px;
+overflow:hidden;margin:10px 0
+}
+.progress i{
+display:block;height:100%;
+background:linear-gradient(90deg,var(--green),var(--blue))
+}
+.phase{
+background:#091827;border:1px solid var(--line);
+border-radius:13px;padding:12px;margin:8px 0
+}
+.phasehead{display:flex;justify-content:space-between}
+.time{color:#6fe6a5;font-weight:900}
+.phase p{
+color:#cad6e3;font-size:13px;line-height:1.5;margin:7px 0 0
+}
+.pitch{
+position:relative;width:100%;aspect-ratio:1.72;
+background:linear-gradient(90deg,#116c41,#198b55);
+border:4px solid #fff;border-radius:8px;overflow:hidden;
+touch-action:none
+}
+.pitch:before{
+content:"";position:absolute;left:50%;top:0;bottom:0;
+width:3px;background:#ffffff99
+}
+.pitch:after{
+content:"";position:absolute;left:50%;top:50%;
+width:80px;height:80px;border:3px solid #ffffff99;
+border-radius:50%;transform:translate(-50%,-50%)
+}
+.area{
+position:absolute;top:28%;width:15%;height:44%;
+border:3px solid #ffffff88
+}
+.left{left:-2px}.right{right:-2px}
+.piece{
+position:absolute;width:38px;height:38px;border-radius:50%;
+display:grid;place-items:center;border:2px solid white;
+box-shadow:0 5px 12px #0006;font-size:12px;font-weight:900;
+touch-action:none;user-select:none
+}
+.p{background:#167bd0}.o{background:#d64559}
+.b{background:#fff;color:#111}.c{
+background:#ff9c27;color:#111;border-radius:8px
+}
+.hidden{display:none!important}
+.toolgrid{
+display:grid;grid-template-columns:repeat(2,1fr);gap:9px
+}
+.tool{
+border:1px solid var(--line);background:#091827;
+border-radius:13px;padding:14px;text-align:left
+}
+.tool b{display:block;margin-bottom:5px}
+.tool span{color:var(--muted);font-size:12px;line-height:1.4}
+.list{display:grid;gap:8px}
+.row{
+display:flex;align-items:center;justify-content:space-between;
+gap:10px;background:#091827;border:1px solid var(--line);
+border-radius:11px;padding:10px
+}
+.row small{color:var(--muted)}
+.toast{
+position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+background:#10263b;border:1px solid #47627d;border-radius:11px;
+padding:10px 14px;display:none;z-index:99
+}
+.toast.show{display:block}
+@media(max-width:650px){
+.grid{grid-template-columns:1fr}
+.full{grid-column:auto}
+.toolgrid{grid-template-columns:1fr}
+.status{display:none}
+.app{padding:10px 9px 35px}
+.card{padding:13px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="top">
+<div class="brand">
+<div class="logo">⚽</div>
+<div>
+<h1>ALL COACH ASSISTANT</h1>
+<div class="muted tiny">Football coaching command center</div>
+</div>
+</div>
+<div class="status">● მზად არის</div>
+</header>
+
+<nav class="nav">
+<button data-page="home" class="active">🏠 მთავარი</button>
+<button data-page="ai">🤖 AI Coach</button>
+<button data-page="board">📋 Tactical Board</button>
+<button data-page="teams">👥 გუნდები</button>
+<button data-page="schedule">📅 განრიგი</button>
+<button data-page="players">📈 მოთამაშეები</button>
+<button data-page="analysis">📊 ანალიზი</button>
+<button data-page="library">📚 ბიბლიოთეკა</button>
+</nav>
+
+<main>
+
+<section id="home" class="view active">
+<div class="card">
+<h2>მთავარი</h2>
+<p class="muted">ყველა ძირითადი ფუნქცია ერთ სივრცეში.</p>
+
+<div class="toolgrid">
+
+<button class="tool" data-go="ai">
+<b>🤖 AI Coach</b>
+<span>შექმენი სრული სავარჯიშო სესია.</span>
+</button>
+
+<button class="tool" data-go="board">
+<b>📋 Tactical Board</b>
+<span>დახაზე და ამოძრავე მოთამაშეები.</span>
+</button>
+
+<button class="tool" data-go="teams">
+<b>👥 My Teams</b>
+<span>გუნდებისა და შემადგენლობების მართვა.</span>
+</button>
+
+<button class="tool" data-go="schedule">
+<b>📅 Schedule</b>
+<span>ვარჯიშებისა და მატჩების დაგეგმვა.</span>
+</button>
+
+<button class="tool" data-go="players">
+<b>📈 Player Development</b>
+<span>მოთამაშეების პროგრესის ჩანაწერები.</span>
+</button>
+
+<button class="tool" data-go="analysis">
+<b>📊 Match Analysis</b>
+<span>მატჩის ჩანაწერების შექმნა.</span>
+</button>
+
+</div>
+</div>
+
+<div class="card">
+<h2>დღის სტატუსი</h2>
+<div id="homeStats" class="list"></div>
+</div>
+
+</section>
+
+
+<section id="ai" class="view">
+
+<div class="card">
+
+<div class="screen-head">
+<div>
+<h2>🤖 AI Coach</h2>
+<div class="muted tiny">სავარჯიშოს დაგეგმვა</div>
+</div>
+<button class="btn" data-go="home">← მთავარი</button>
+</div>
+
+<div class="grid">
+
+<div>
+<label>ასაკი</label>
+<select id="age">
+<option>U6</option>
+<option>U7</option>
+<option>U8</option>
+<option>U9</option>
+<option>U10</option>
+<option>U11</option>
+<option>U12</option>
+<option>U13</option>
+<option>U14</option>
+<option>U15</option>
+<option>U16</option>
+<option>U17</option>
+<option>U18</option>
+<option>U19</option>
+<option>U20</option>
+<option>U21</option>
+<option>Senior</option>
+<option>Professional / First Team</option>
+<option>Elite / High Performance</option>
+</select>
+</div>
+
+<div>
+<label>ხანგრძლივობა</label>
+<select id="duration">
+<option>45</option>
+<option>60</option>
+<option selected>75</option>
+<option>90</option>
+<option>105</option>
+<option>120</option>
+</select>
+</div>
+
+<div>
+<label>მოთამაშეები</label>
+<select id="players">
+<option>6</option>
+<option>8</option>
+<option>10</option>
+<option>12</option>
+<option selected>14</option>
+<option>16</option>
+<option>18</option>
+<option>20</option>
+<option>22+</option>
+</select>
+</div>
+
+<div>
+<label>მიზანი</label>
+<input id="goal" placeholder="მაგ: ბურთის ფლობა">
+</div>
+
+<div class="full">
+<label>დამატებითი მოთხოვნა</label>
+<textarea id="notes" placeholder="მაგ: მაღალი ინტენსივობა, პრესინგი..."></textarea>
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn primary" id="generate">შექმენი ვარჯიში →</button>
+<button class="btn" id="saveSession">💾 შენახვა</button>
+<button class="btn" id="sendBoard">➡️ Tactical Board-ზე გადატანა</button>
+</div>
+
+<div id="session" class="hidden"></div>
+
+<div id="sessionNav" class="actions hidden">
+<button class="btn" id="prevPhase">← წინა</button>
+<button class="btn" id="nextPhase">შემდეგი →</button>
+</div>
+
+</div>
+</section>
+
+
+<section id="board" class="view">
+
+<div class="card">
+
+<div class="screen-head">
+<div>
+<h2>📋 Tactical Board</h2>
+<div class="muted tiny">მოთამაშეები გადაადგილდება თითით</div>
+</div>
+<button class="btn" data-go="ai">← AI Coach</button>
+</div>
+
+<div class="toolbar">
+<button class="btn" data-add="p">+ მოთამაშე</button>
+<button class="btn" data-add="o">+ მოწინააღმდეგე</button>
+<button class="btn" data-add="b">⚽ ბურთი</button>
+<button class="btn" data-add="c">🔶 კონუსი</button>
+<button class="btn" id="clearBoard">გასუფთავება</button>
+<button class="btn primary" id="saveBoard">💾 შენახვა</button>
+<button class="btn" id="loadBoard">↻ ჩატვირთვა</button>
+</div>
+
+<div class="pitch" id="pitch">
+<div class="area left"></div>
+<div class="area right"></div>
+</div>
+
+</div>
+</section>
+
+
+<section id="teams" class="view">
+
+<div class="card">
+<div class="screen-head">
+<h2>👥 My Teams</h2>
+<button class="btn" data-go="home">← უკან</button>
+</div>
+
+<div class="grid">
+<div>
+<label>გუნდის სახელი</label>
+<input id="teamName" placeholder="მაგ: U14 A">
+</div>
+
+<div>
+<label>ასაკი</label>
+<input id="teamAge" placeholder="U14">
+</div>
+</div>
+
+<div class="actions">
+<button class="btn primary" id="addTeam">+ გუნდის დამატება</button>
+</div>
+
+</div>
+
+<div class="card">
+<div id="teamsList" class="list"></div>
+</div>
+
+</section>
+
+
+<section id="schedule" class="view">
+
+<div class="card">
+
+<div class="screen-head">
+<h2>📅 Schedule</h2>
+<button class="btn" data-go="home">← უკან</button>
+</div>
+
+<div class="grid">
+
+<div>
+<label>ღონისძიება</label>
+<input id="eventName" placeholder="ვარჯიში / მატჩი">
+</div>
+
+<div>
+<label>თარიღი და დრო</label>
+<input id="eventDate" type="datetime-local">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn primary" id="addEvent">+ დამატება</button>
+</div>
+
+</div>
+
+<div class="card">
+<div id="scheduleList" class="list"></div>
+</div>
+
+</section>
+
+
+<section id="players" class="view">
+
+<div class="card">
+
+<div class="screen-head">
+<h2>📈 Player Development</h2>
+<button class="btn" data-go="home">← უკან</button>
+</div>
+
+<div class="grid">
+
+<div>
+<label>მოთამაშე</label>
+<input id="playerName" placeholder="სახელი გვარი">
+</div>
+
+<div>
+<label>პოზიცია</label>
+<input id="playerPos" placeholder="მაგ: CM">
+</div>
+
+<div>
+<label>შეფასება 1–10</label>
+<input id="playerRating" type="number" min="1" max="10" value="7">
+</div>
+
+<div>
+<label>შენიშვნა</label>
+<input id="playerNote" placeholder="პროგრესის ჩანაწერი">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn primary" id="addPlayer">+ მოთამაშის დამატება</button>
+</div>
+
+</div>
+
+<div class="card">
+<div id="playersList" class="list"></div>
+</div>
+
+</section>
+
+
+<section id="analysis" class="view">
+
+<div class="card">
+
+<div class="screen-head">
+<h2>📊 Match Analysis</h2>
+<button class="btn" data-go="home">← უკან</button>
+</div>
+
+<div class="grid">
+
+<div>
+<label>მატჩი</label>
+<input id="matchName" placeholder="მაგ: U14 vs ...">
+</div>
+
+<div>
+<label>შედეგი</label>
+<input id="matchScore" placeholder="2-1">
+</div>
+
+<div class="full">
+<label>ანალიზი</label>
+<textarea id="matchNote" placeholder="რა იმუშავა? რა გასაუმჯობესებელია?"></textarea>
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn primary" id="addAnalysis">💾 ანალიზის შენახვა</button>
+</div>
+
+</div>
+
+<div class="card">
+<div id="analysisList" class="list"></div>
+</div>
+
+</section>
+
+
+<section id="library" class="view">
+
+<div class="card">
+
+<div class="screen-head">
+<h2>📚 Coach Library</h2>
+<button class="btn" data-go="home">← უკან</button>
+</div>
+
+<p class="muted">შენახული სავარჯიშოები აქ გამოჩნდება.</p>
+
+<div id="libraryList" class="list"></div>
+
+</div>
+
+</section>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+let currentSession = null;
+let phaseIndex = 0;
+let pieceNumber = 0;
+
+function toast(message){
+const box=$("toast");
+box.textContent=message;
+box.classList.add("show");
+clearTimeout(window.toastTimer);
+window.toastTimer=setTimeout(()=>box.classList.remove("show"),1800);
+}
+
+function go(page){
+document.querySelectorAll(".view").forEach(v=>{
+v.classList.toggle("active",v.id===page);
+});
+
+document.querySelectorAll(".nav button").forEach(b=>{
+b.classList.toggle("active",b.dataset.page===page);
+});
+
+window.scrollTo({top:0,behavior:"smooth"});
+renderAll();
+}
+
+document.querySelectorAll(".nav button").forEach(button=>{
+button.addEventListener("click",()=>go(button.dataset.page));
+});
+
+document.querySelectorAll("[data-go]").forEach(button=>{
+button.addEventListener("click",()=>go(button.dataset.go));
+});
+
+
+const profiles={
+U6:"მოძრაობა, კოორდინაცია და თამაშით სწავლა.",
+U7:"ბურთის გაცნობა, კოორდინაცია და მარტივი პასი.",
+U8:"ბურთის კონტროლი, პასი, 1v1 და სივრცე.",
+U9:"ტექნიკა, მიღება, პასი და გადაწყვეტილება.",
+U10:"ტექნიკურ-ტაქტიკური განვითარება და სივრცე.",
+U11:"მხარდაჭერა, სიგანე, პასი და შეტევა.",
+U12:"ტექნიკურ-ტაქტიკური გადაწყვეტილებები და თამაშის ტემპი.",
+U13:"პოზიციური პრინციპები და გადასვლები.",
+U14:"ინტენსივობა, პრესინგი და სივრცის გამოყენება.",
+U15:"თამაშის მოდელი, გადასვლები და პოზიციური სპეციფიკა.",
+U16:"მაღალი ინტენსივობა და მატჩის სცენარები.",
+U17:"ტაქტიკური დეტალები და გადაწყვეტილების ხარისხი.",
+U18:"მაღალი დონის ტექნიკურ-ტაქტიკური მუშაობა.",
+U19:"მატჩის მოდელი და ინდივიდუალური როლები.",
+U20:"ტაქტიკური და ფიზიკური მოთხოვნების ინტეგრაცია.",
+U21:"მატჩის სპეციფიკური მომზადება და დატვირთვა.",
+Senior:"მატჩის მოდელი და კვირის კონტექსტი.",
+"Professional / First Team":"მატჩის სპეციფიკური ტაქტიკა და დატვირთვის მართვა.",
+"Elite / High Performance":"მაღალი შესრულება, ტაქტიკა და ინდივიდუალური როლები."
+};
+
+
+function escapeHTML(text){
+return String(text||"").replace(/[&<>"']/g,char=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[char]));
+}
+
+
+function buildSession(){
+
+const age=$("age").value;
+const duration=Number($("duration").value);
+const players=$("players").value;
+const goal=$("goal").value.trim()||"ბურთის ფლობა და გადაწყვეტილების მიღება";
+const notes=$("notes").value.trim();
+
+const times=[
+Math.max(8,Math.round(duration*.12)),
+Math.max(10,Math.round(duration*.22)),
+Math.max(12,Math.round(duration*.30)),
+Math.max(10,Math.round(duration*.26))
+];
+
+times.push(Math.max(5,duration-times.reduce((a,b)=>a+b,0)));
+
+const descriptions=[
+`დინამიკური აქტივაცია ბურთით. ${profiles[age]}`,
+`${goal}. პასი, პირველი შეხება და მოძრაობა ბურთის შემდეგ.`,
+`სივრცის შექმნა, მხარდაჭერა, გადასვლა და გადაწყვეტილების მიღება.`,
+`თამაშის ფორმა ${goal}-ზე აქცენტით.`,
+`დაბალი ინტენსივობა, აღდგენა და მთავარი სწავლის პუნქტები.`
+];
+
+currentSession={
+age,
+duration,
+players,
+goal,
+notes,
+times,
+descriptions,
+created:new Date().toLocaleString("ka-GE")
+};
+
+phaseIndex=0;
+renderSession();
+
+$("session").classList.remove("hidden");
+$("sessionNav").classList.remove("hidden");
+
+return currentSession;
+}
+
+
+function renderSession(){
+
+if(!currentSession)return;
+
+const names=[
+"1. გახურება",
+"2. ტექნიკა",
+"3. ტაქტიკა",
+"4. თამაში",
+"5. დასრულება"
+];
+
+$("session").innerHTML=`
+<div class="card">
+
+<b>
+${escapeHTML(currentSession.age)}
+· ${currentSession.duration} წთ
+· ${escapeHTML(currentSession.players)} მოთამაშე
+</b>
+
+<div class="progress">
+<i style="width:${((phaseIndex+1)/5)*100}%"></i>
+</div>
+
+${currentSession.times.map((time,index)=>`
+
+<div class="phase" style="opacity:${index===phaseIndex?1:.62}">
+
+<div class="phasehead">
+<h3>${names[index]}</h3>
+<span class="time">${time} წთ</span>
+</div>
+
+<p>
+${escapeHTML(currentSession.descriptions[index])}
+</p>
+
+</div>
+
+`).join("")}
+
+${currentSession.notes?
+`<p class="muted tiny">
+შენიშვნა: ${escapeHTML(currentSession.notes)}
+</p>`:""}
+
+</div>
+`;
+
+$("prevPhase").disabled=phaseIndex===0;
+$("nextPhase").disabled=phaseIndex===4;
+}
+
+
+$("generate").addEventListener("click",()=>{
+buildSession();
+toast("ვარჯიში შეიქმნა ✓");
+});
+
+
+$("prevPhase").addEventListener("click",()=>{
+if(phaseIndex>0){
+phaseIndex--;
+renderSession();
+}
+});
+
+
+$("nextPhase").addEventListener("click",()=>{
+if(phaseIndex<4){
+phaseIndex++;
+renderSession();
+}
+});
+
+
+$("saveSession").addEventListener("click",()=>{
+
+const session=currentSession||buildSession();
+
+const sessions=
+JSON.parse(localStorage.getItem("aca_sessions")||"[]");
+
+sessions.unshift(session);
+
+localStorage.setItem(
+"aca_sessions",
+JSON.stringify(sessions.slice(0,50))
+);
+
+toast("სესია შენახულია ✓");
+renderAll();
+
+});
+
+
+$("sendBoard").addEventListener("click",()=>{
+if(!currentSession)buildSession();
+go("board");
+toast("Tactical Board მზადაა");
+});
+
+
+function makePiece(type){
+
+pieceNumber++;
+
+const piece=document.createElement("div");
+
+piece.className="piece "+type;
+
+piece.textContent=
+type==="p"
+?pieceNumber
+:type==="o"
+?"O"
+:type==="b"
+?"⚽"
+:"•";
+
+piece.style.left=(10+(pieceNumber*9)%75)+"%";
+piece.style.top=(15+(pieceNumber*13)%65)+"%";
+
+dragPiece(piece);
+
+$("pitch").appendChild(piece);
+}
+
+
+function dragPiece(piece){
+
+let dragging=false;
+
+piece.addEventListener("pointerdown",event=>{
+dragging=true;
+piece.setPointerCapture(event.pointerId);
+});
+
+piece.addEventListener("pointermove",event=>{
+
+if(!dragging)return;
+
+const rect=$("pitch").getBoundingClientRect();
+
+let x=event.clientX-rect.left-piece.offsetWidth/2;
+let y=event.clientY-rect.top-piece.offsetHeight/2;
+
+x=Math.max(0,Math.min(rect.width-piece.offsetWidth,x));
+y=Math.max(0,Math.min(rect.height-piece.offsetHeight,y));
+
+piece.style.left=x+"px";
+piece.style.top=y+"px";
+
+});
+
+piece.addEventListener("pointerup",()=>{
+dragging=false;
+});
+
+}
+
+
+document.querySelectorAll("[data-add]").forEach(button=>{
+button.addEventListener("click",()=>{
+makePiece(button.dataset.add);
+});
+});
+
+
+$("clearBoard").addEventListener("click",()=>{
+$("pitch").querySelectorAll(".piece").forEach(p=>p.remove());
+toast("დაფა გასუფთავდა");
+});
+
+
+$("saveBoard").addEventListener("click",()=>{
+
+const pieces=[...$("pitch").querySelectorAll(".piece")].map(piece=>({
+className:piece.className,
+text:piece.textContent,
+left:piece.style.left,
+top:piece.style.top
+}));
+
+localStorage.setItem(
+"aca_board",
+JSON.stringify(pieces)
+);
+
+toast("დაფა შენახულია ✓");
+
+});
+
+
+function loadBoard(){
+
+$("pitch").querySelectorAll(".piece").forEach(p=>p.remove());
+
+const pieces=
+JSON.parse(localStorage.getItem("aca_board")||"[]");
+
+pieces.forEach(saved=>{
+
+const piece=document.createElement("div");
+
+piece.className=saved.className;
+piece.textContent=saved.text;
+piece.style.left=saved.left;
+piece.style.top=saved.top;
+
+dragPiece(piece);
+
+$("pitch").appendChild(piece);
+
+});
+
+if(pieces.length){
+toast("დაფა ჩაიტვირთა ✓");
+}
+
+}
+
+
+$("loadBoard").addEventListener("click",loadBoard);
+
+
+function addData(key,data){
+
+const list=
+JSON.parse(localStorage.getItem(key)||"[]");
+
+list.unshift(data);
+
+localStorage.setItem(
+key,
+JSON.stringify(list.slice(0,100))
+);
+
+renderAll();
+}
+
+
+$("addTeam").addEventListener("click",()=>{
+
+const name=$("teamName").value.trim();
+
+if(!name){
+toast("შეიყვანე გუნდის სახელი");
+return;
+}
+
+addData("aca_teams",{
+name,
+age:$("teamAge").value.trim(),
+date:new Date().toLocaleDateString("ka-GE")
+});
+
+$("teamName").value="";
+$("teamAge").value="";
+
+toast("გუნდი დაემატა ✓");
+
+});
+
+
+$("addEvent").addEventListener("click",()=>{
+
+const name=$("eventName").value.trim();
+
+if(!name){
+toast("შეიყვანე ღონისძიება");
+return;
+}
+
+addData("aca_events",{
+name,
+date:$("eventDate").value
+});
+
+$("eventName").value="";
+$("eventDate").value="";
+
+toast("განრიგში დაემატა ✓");
+
+});
+
+
+$("addPlayer").addEventListener("click",()=>{
+
+const name=$("playerName").value.trim();
+
+if(!name){
+toast("შეიყვანე მოთამაშის სახელი");
+return;
+}
+
+addData("aca_players",{
+name,
+position:$("playerPos").value,
+rating:$("playerRating").value,
+note:$("playerNote").value
+});
+
+$("playerName").value="";
+$("playerPos").value="";
+$("playerNote").value="";
+
+toast("მოთამაშე დაემატა ✓");
+
+});
+
+
+$("addAnalysis").addEventListener("click",()=>{
+
+const name=$("matchName").value.trim();
+
+if(!name){
+toast("შეიყვანე მატჩის სახელი");
+return;
+}
+
+addData("aca_analysis",{
+name,
+score:$("matchScore").value,
+note:$("matchNote").value,
+date:new Date().toLocaleDateString("ka-GE")
+});
+
+$("matchName").value="";
+$("matchScore").value="";
+$("matchNote").value="";
+
+toast("ანალიზი შენახულია ✓");
+
+});
+
+
+function renderList(key,id,formatter){
+
+const list=
+JSON.parse(localStorage.getItem(key)||"[]");
+
+const box=$(id);
+
+if(!list.length){
+box.innerHTML=
+'<div class="muted tiny">ჯერ არაფერი დამატებულა.</div>';
+return;
+}
+
+box.innerHTML=list.map((item,index)=>`
+
+<div class="row">
+
+<div>
+${formatter(item)}
+</div>
+
+<button
+class="btn danger"
+data-delete="${key}"
+data-index="${index}">
+წაშლა
+</button>
+
+</div>
+
+`).join("");
+
+box.querySelectorAll("[data-delete]").forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+const key=button.dataset.delete;
+const index=Number(button.dataset.index);
+
+const list=
+JSON.parse(localStorage.getItem(key)||"[]");
+
+list.splice(index,1);
+
+localStorage.setItem(key,JSON.stringify(list));
+
+renderAll();
+
+toast("წაიშალა");
+
+});
+
+});
+
+}
+
+
+function renderAll(){
+
+renderList(
+"aca_teams",
+"teamsList",
+item=>`<b>${escapeHTML(item.name)}</b> · ${escapeHTML(item.age)}`
+);
+
+renderList(
+"aca_events",
+"scheduleList",
+item=>`<b>${escapeHTML(item.name)}</b> · ${escapeHTML(item.date)}`
+);
+
+renderList(
+"aca_players",
+"playersList",
+item=>`
+<b>${escapeHTML(item.name)}</b>
+· ${escapeHTML(item.position)}
+· ${escapeHTML(item.rating)}/10
+<br>
+<small>${escapeHTML(item.note)}</small>
+`
+);
+
+renderList(
+"aca_analysis",
+"analysisList",
+item=>`
+<b>${escapeHTML(item.name)}</b>
+· ${escapeHTML(item.score)}
+<br>
+<small>${escapeHTML(item.note)}</small>
+`
+);
+
+const sessions=
+JSON.parse(localStorage.getItem("aca_sessions")||"[]");
+
+$("libraryList").innerHTML=sessions.length
+?sessions.map((session,index)=>`
+
+<div class="row">
+
+<div>
+<b>${escapeHTML(session.age)} · ${session.duration} წთ</b>
+<br>
+<small>${escapeHTML(session.goal)}</small>
+</div>
+
+<button
+class="btn"
+data-open-session="${index}">
+გახსნა
+</button>
+
+</div>
+
+`).join("")
+:'<div class="muted tiny">შენახული სესიები აქ გამოჩნდება.</div>';
+
+$("libraryList")
+.querySelectorAll("[data-open-session]")
+.forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+const sessions=
+JSON.parse(localStorage.getItem("aca_sessions")||"[]");
+
+currentSession=
+sessions[Number(button.dataset.openSession)];
+
+phaseIndex=0;
+
+go("ai");
+
+$("session").classList.remove("hidden");
+$("sessionNav").classList.remove("hidden");
+
+renderSession();
+
+});
+
+});
+
+
+$("homeStats").innerHTML=`
+
+<div class="row">
+<b>გუნდები</b>
+<span>${JSON.parse(localStorage.getItem("aca_teams")||"[]").length}</span>
+</div>
+
+<div class="row">
+<b>მოთამაშეები</b>
+<span>${JSON.parse(localStorage.getItem("aca_players")||"[]").length}</span>
+</div>
+
+<div class="row">
+<b>შენახული სესიები</b>
+<span>${sessions.length}</span>
+</div>
+
+<div class="row">
+<b>მატჩის ანალიზები</b>
+<span>${JSON.parse(localStorage.getItem("aca_analysis")||"[]").length}</span>
+</div>
+
+`;
+
+}
+
+
+loadBoard();
+renderAll();
+
+})();
+</script>
+
+</body>
+</html>
