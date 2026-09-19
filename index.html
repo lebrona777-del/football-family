@@ -73,7 +73,7 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 .playerFig.gk .arm.l{transform:rotate(75deg)}.playerFig.gk .arm.r{transform:rotate(-75deg)}.playerFig.gk .leg.l{transform:rotate(20deg)}.playerFig.gk .leg.r{transform:rotate(-20deg)}
 .playerFig.raise .arm.l{transform:rotate(-55deg)}.playerFig.raise .arm.r{transform:rotate(55deg)}
 .playerFig.side .arm.l{transform:rotate(75deg)}.playerFig.side .arm.r{transform:rotate(5deg)}
-.playerPanel{display:none;margin-top:10px;padding:10px;border:1px solid #dbe4de;border-radius:14px;background:#f7faf8}.playerPanel.show{display:block}.playerCats{display:flex;gap:7px;overflow-x:auto;padding-bottom:5px}.playerCats button{flex:0 0 auto;background:#fff;border:1px solid #dbe4de;border-radius:11px;padding:8px 10px;font-weight:800}.playerCats button.active{background:#d9f0df;border-color:#5cab72;color:#12622e}.playerAddRow{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.playerAddRow button{background:#123b21;color:#fff;border-radius:11px;padding:9px 11px;font-weight:800}
+.playerPanel{display:none;margin-top:10px;padding:10px;border:1px solid #dbe4de;border-radius:14px;background:#f7faf8}.playerPanel.show{display:block}.playerCats{display:flex;gap:7px;overflow-x:auto;padding-bottom:5px}.playerCats button{flex:0 0 auto;background:#fff;border:1px solid #dbe4de;border-radius:11px;padding:8px 10px;font-weight:800}.playerCats button.active{background:#d9f0df;border-color:#5cab72;color:#12622e}.playerAddRow{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.assetCats{display:flex;gap:7px;overflow-x:auto;margin-top:9px;padding-bottom:5px}.assetCats button{flex:0 0 auto;background:#fff;border:1px solid #dbe4de;border-radius:11px;padding:8px 10px;font-weight:800}.assetCats button.active{background:#d9f0df;border-color:#5cab72;color:#12622e}.assetGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:8px}.assetGrid button{padding:9px 5px;border-radius:10px;background:#123b21;color:#fff;font-weight:800}.frames{display:flex;gap:7px;overflow-x:auto;padding:3px 0}.frame{flex:0 0 90px;border:1px solid #dbe4de;background:#f7faf8;border-radius:11px;padding:8px;font-weight:800}.frame.active{background:#d9f0df;border-color:#5cab72}.frame small{display:block;color:#66736b;margin-top:3px}.frameActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.playerAddRow button{background:#123b21;color:#fff;border-radius:11px;padding:9px 11px;font-weight:800}
 .label{font-size:11px;background:#fff;padding:2px 5px;border-radius:5px;white-space:nowrap;box-shadow:0 1px 4px #0003}
 .zone{position:absolute;border:3px dashed #fff8;border-radius:10px;background:#ffffff14;z-index:2}
 .svgLayer{position:absolute;inset:0;width:100%;height:100%;z-index:3;overflow:visible;pointer-events:none}
@@ -138,11 +138,14 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
     <button id="addRedFig">🔴 წითელი ფეხბურთელი</button>
     <button id="addBlueFig">🔵 ლურჯი ფეხბურთელი</button>
   </div>
+  <div style="font-weight:900;margin-top:10px">🧰 ინვენტარი</div>
+  <div class="assetCats" id="assetCats"><button class="active" data-cat="basic">ძირითადი</button><button data-cat="training">ვარჯიში</button><button data-cat="goals">კარები</button></div>
+  <div class="assetGrid" id="assetGrid"></div>
 </div>
 <div class="toolbar" style="margin-top:8px">
 <button class="tool" id="undo">↩️ Undo</button><button class="tool" id="redo">↪️ Redo</button>
 <button class="tool" id="formation">📐 ფორმაცია</button><button class="tool" id="clear">🧹 დაფის გასუფთავება</button>
-<button class="tool primary" id="save">💾 შენახვა</button><button class="tool dark" id="boardOpen">⛶ დიდი დაფა</button>
+<button class="tool primary" id="save">💾 შენახვა</button><button class="tool dark" id="boardOpen">⛶ დიდი დაფა</button><button class="tool" id="duplicate">📋 ასლი</button><button class="tool" id="exportBtn">⬇️ JSON</button><button class="tool" id="importBtn">⬆️ JSON</button><input id="importFile" type="file" accept="application/json" hidden>
 </div>
 </section>
 
@@ -152,6 +155,13 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 <svg class="svgLayer" id="svg" viewBox="0 0 581 1000" preserveAspectRatio="none"></svg>
 </div></div>
 <div class="small" style="margin-top:8px">💡 დაფაზე დაჭერით არჩეული ხელსაწყო დაემატება. მოთამაშეები და ობიექტები თითით გადაადგილდება. ისარი/ხაზი — თითის გასმით.</div>
+</section>
+
+<section class="card">
+<h3 style="margin:0 0 10px">🎬 ვარჯიშის კადრები</h3>
+<div class="small">ააწყვე ერთი ვარჯიში რამდენიმე კადრად და შემდეგ გადაათვალიერე ნაბიჯ-ნაბიჯ.</div>
+<div class="frames" id="frames"></div>
+<div class="frameActions"><button class="tool primary" id="addFrame">＋ ახალი კადრი</button><button class="tool" id="nextFrame">▶️ შემდეგი</button><button class="tool" id="prevFrame">◀️ წინა</button></div>
 </section>
 
 <section class="card">
@@ -179,13 +189,13 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const pitch=$('#pitch'), svg=$('#svg'), title=$('#title'), date=$('#date'), notes=$('#notes'), duration=$('#duration');
 let tool='select', objects=[], strokes=[], history=[], future=[], drag=null, draw=null, boardMode=false;
-let plans=[];
+let plans=[]; let frames=[]; let activeFrame=-1; let assetCat="basic";
 date.value=new Date().toISOString().slice(0,10);
 
 function toast(t){let x=$('#toast');x.textContent=t;x.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove('show'),1700)}
 function snapshot(){history.push(JSON.stringify(state()));if(history.length>40)history.shift();future=[]}
-function state(){return {objects:objects.map(o=>({...o})),strokes:strokes.map(s=>({...s,pts:s.pts.map(p=>({...p}))}))}}
-function restore(s){objects=s.objects||[];strokes=s.strokes||[];render()}
+function state(){return {objects:objects.map(o=>({...o})),strokes:strokes.map(s=>({...s,pts:s.pts.map(p=>({...p}))})),frames:frames.map(f=>({name:f.name,objects:f.objects.map(o=>({...o})),strokes:f.strokes.map(s=>({...s,pts:s.pts.map(p=>({...p}))}))}))}}
+function restore(s){objects=s.objects||[];strokes=s.strokes||[];frames=s.frames||frames||[];render();renderFrames()}
 function undo(){if(!history.length)return;future.push(JSON.stringify(state()));restore(JSON.parse(history.pop()))}
 function redo(){if(!future.length)return;history.push(JSON.stringify(state()));restore(JSON.parse(future.pop()))}
 $('#undo').onclick=undo;$('#redo').onclick=redo;
@@ -208,7 +218,7 @@ objects.forEach(o=>{
  if(o.type==='red'||o.type==='blue'){el.className+=' player '+o.type;el.textContent=o.num||''; if(o.name){let l=document.createElement('div');l.className='label';l.textContent=o.name;el.appendChild(l)}}
  if(o.type==='ball')el.className+=' ball',el.textContent='⚽';
  if(o.type==='cone')el.className+=' cone',el.textContent='🔶';
- if(o.type==='man')el.className+=' man',el.textContent='🧍';
+ if(o.type==='man')el.className+=' man',el.textContent='🧍'; if(o.type==='ladder')el.className+=' man',el.textContent='🪜'; if(o.type==='hurdle')el.className+=' man',el.textContent='🚧'; if(o.type==='pole')el.className+=' man',el.textContent='📍'; if(o.type==='marker')el.className+=' cone',el.textContent='🔵'; if(o.type==='miniGoal')el.className+=' man',el.textContent='🥅'; if(o.type==='goal')el.className+=' man',el.textContent='🥅';
  if(o.type==='figure'){el.className+=' playerFig '+(o.color==='blue'?'blueFig':'redFig')+' '+(o.role||'standard');el.innerHTML='<span class="head"></span><span class="arm l"></span><span class="arm r"></span><span class="body"></span><span class="num">'+esc(o.num||'')+'</span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span>'}
  if(o.type==='text')el.className+=' label',el.textContent=o.text||'ტექსტი';
  if(o.type==='zone'){el.className='zone';el.style.width=(o.w||18)+'%';el.style.height=(o.h||18)+'%';el.style.transform='translate(-50%,-50%)';}
@@ -236,7 +246,7 @@ pitch.addEventListener('pointerdown',e=>{
  let p=pt(e);
  if(tool==='select')return;
  if(tool==='red'||tool==='blue'){let num=prompt('მოთამაშის ნომერი?','10');if(num!==null)addObj(tool,p.x,p.y,{num});return}
- if(tool==='ball'||tool==='cone'||tool==='man'){addObj(tool,p.x,p.y);return}
+ if(tool==='ball'||tool==='cone'||tool==='man'){addObj(tool,p.x,p.y);return} if(tool.startsWith('asset:')){addObj(tool.slice(6),p.x,p.y);return}
  if(tool==='redFig'||tool==='blueFig'){addFigure(tool==='blueFig'?'blue':'red',p.x,p.y);return}
  if(tool==='text'){let t=prompt('რა ტექსტი დავწეროთ?','პასი და მოძრაობა');if(t)addObj('text',p.x,p.y,{text:t});return}
  if(tool==='zone'){addObj('zone',p.x,p.y,{w:20,h:20});return}
@@ -246,16 +256,29 @@ pitch.addEventListener('pointermove',e=>{if(draw){draw.pts.push(pt(e));renderTem
 pitch.addEventListener('pointerup',()=>{if(draw){if(draw.pts.length>1)strokes.push(draw);draw=null;render();saveAutos()}})
 function renderTemp(){render();if(!draw)return;let d=draw.pts.map((p,i)=>(i?'L':'M')+p.x*10+' '+p.y*5.81).join(' ');let p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('fill','none');p.setAttribute('stroke','#fff');p.setAttribute('stroke-width','5');p.setAttribute('stroke-linecap','round');svg.appendChild(p)}
 
+const assetDefs={basic:[['ball','⚽ ბურთი'],['cone','🔶 კონუსი'],['man','🧍 მანეკენი'],['zone','🟩 ზონა']],training:[['ladder','🪜 კიბე'],['hurdle','🚧 ბარიერი'],['pole','📍 ძელი'],['marker','🔵 ნიშნული']],goals:[['miniGoal','🥅 პატარა კარი'],['goal','🥅 დიდი კარი']]};
+function renderAssets(){const box=$('#assetGrid'); if(!box)return; box.innerHTML=(assetDefs[assetCat]||assetDefs.basic).map(([t,n])=>`<button data-asset="${t}">${n}</button>`).join(''); $$('#assetGrid button').forEach(b=>b.onclick=()=>{tool='asset:'+b.dataset.asset; $$('#tools .tool').forEach(x=>x.classList.remove('active')); toast('დაფაზე დააჭირე — '+b.textContent)})}
+$$('#assetCats button').forEach(b=>b.onclick=()=>{$$('#assetCats button').forEach(x=>x.classList.remove('active'));b.classList.add('active');assetCat=b.dataset.cat;renderAssets()});
+renderAssets();
+function cloneState(){return {objects:objects.map(o=>({...o})),strokes:strokes.map(s=>({...s,pts:s.pts.map(p=>({...p}))}))}}
+function applyFrame(i){if(!frames[i])return; objects=frames[i].objects.map(o=>({...o}));strokes=frames[i].strokes.map(s=>({...s,pts:s.pts.map(p=>({...p}))}));activeFrame=i;render();renderFrames();saveAutos()}
+function captureFrame(name){frames.push({name:name||`კადრი ${frames.length+1}`,...cloneState()});activeFrame=frames.length-1;renderFrames();saveAutos();toast('კადრი შენახულია 🎬')}
+function renderFrames(){let box=$('#frames');if(!box)return;box.innerHTML=frames.length?frames.map((f,i)=>`<button class="frame ${i===activeFrame?'active':''}" data-i="${i}">${esc(f.name)}<small>${f.objects.length} ობიექტი</small></button>`).join(''):'<div class="empty">ჯერ კადრები არ გაქვს.</div>';$$('#frames .frame').forEach(b=>b.onclick=()=>applyFrame(+b.dataset.i))}
+$('#addFrame').onclick=()=>{let n=prompt('კადრის სახელი?',`კადრი ${frames.length+1}`);if(n!==null)captureFrame(n)};
+$('#nextFrame').onclick=()=>{if(frames.length)applyFrame(Math.min(frames.length-1,activeFrame+1))};$('#prevFrame').onclick=()=>{if(frames.length)applyFrame(Math.max(0,activeFrame-1))};
+$('#duplicate').onclick=()=>{snapshot();let d=saveData();title.value=(title.value||'ვარჯიში')+' — ასლი';frames=d.frames||frames;save();toast('ვარჯიში დუბლირებულია 📋')};
+$('#exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify(saveData(),null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(title.value||'coach-training')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('#importBtn').onclick=()=>$('#importFile').click();$('#importFile').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{load(JSON.parse(r.result))}catch{toast('JSON ფაილი ვერ ჩაიტვირთა')}};r.readAsText(f)};
 function formation(name='4-3-3'){snapshot();objects=objects.filter(o=>!['red','blue'].includes(o.type));let sets={ '4-3-3':[ [8,50],[25,18],[25,39],[25,61],[25,82],[48,25],[48,50],[48,75],[75,22],[78,50],[75,78]], '4-4-2':[[8,50],[25,18],[25,39],[25,61],[25,82],[48,18],[48,39],[48,61],[48,82],[76,40],[76,60]], '3-5-2':[[8,50],[27,25],[27,50],[27,75],[50,15],[50,35],[50,50],[50,65],[50,85],[77,38],[77,62]], '4-2-3-1':[[8,50],[25,18],[25,39],[25,61],[25,82],[43,36],[43,64],[61,22],[61,50],[61,78],[80,50]]};(sets[name]||sets['4-3-3']).forEach((p,i)=>objects.push({id:Date.now()+i,type:'red',x:p[0],y:p[1],num:i+1}));render();saveAutos()}
 $('#formation').onclick=()=>{let n=prompt('ფორმაცია: 4-3-3, 4-4-2, 3-5-2 ან 4-2-3-1','4-3-3');if(n)formation(n)}
 
 $('#clear').onclick=()=>{if(confirm('დაფა მთლიანად გავასუფთავოთ?')){snapshot();objects=[];strokes=[];render()}}
 
-function saveData(){return {title:title.value||'ჩემი ვარჯიში',date:date.value,duration:duration.value,notes:notes.value,objects,strokes,plans}}
+function saveData(){return {title:title.value||'ჩემი ვარჯიში',date:date.value,duration:duration.value,notes:notes.value,objects,strokes,plans,frames}}
 function save(){let d=saveData(),all=JSON.parse(localStorage.getItem('coachBoardFinal')||'[]');let id=Date.now();all.unshift({id,...d});localStorage.setItem('coachBoardFinal',JSON.stringify(all.slice(0,50)));toast('ვარჯიში შენახულია 💾');renderSaved()}
 function saveAutos(){localStorage.setItem('coachBoardAutosave',JSON.stringify(saveData()))}
 $('#save').onclick=save;$('#quickSave').onclick=save;
-function load(d){title.value=d.title||'';date.value=d.date||'';duration.value=d.duration||'30 წთ';notes.value=d.notes||'';objects=d.objects||[];strokes=d.strokes||[];plans=d.plans||[];render();toast('ვარჯიში ჩაიტვირთა')}
+function load(d){title.value=d.title||'';date.value=d.date||'';duration.value=d.duration||'30 წთ';notes.value=d.notes||'';objects=d.objects||[];strokes=d.strokes||[];plans=d.plans||[];frames=d.frames||[];activeFrame=-1;render();renderFrames();toast('ვარჯიში ჩაიტვირთა')}
 function renderSaved(){let all=JSON.parse(localStorage.getItem('coachBoardFinal')||'[]'),box=$('#saved');box.innerHTML=all.length?all.map(d=>`<div class="saved"><div><b>${esc(d.title)}</b><span class="small">${d.date||''} • ${d.duration||''}</span></div><div><button class="tool" onclick='loadById(${d.id})'>გახსნა</button><button class="tool danger" onclick='delById(${d.id})'>წაშლა</button></div></div>`).join(''):'<div class="empty">ჯერ შენახული ვარჯიში არ გაქვს.</div>'}
 window.loadById=id=>{let d=JSON.parse(localStorage.getItem('coachBoardFinal')||'[]').find(x=>x.id===id);if(d)load(d)}
 window.delById=id=>{let a=JSON.parse(localStorage.getItem('coachBoardFinal')||'[]').filter(x=>x.id!==id);localStorage.setItem('coachBoardFinal',JSON.stringify(a));renderSaved()}
@@ -264,7 +287,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;',
 function renderPlan(){let box=$('#plan');box.innerHTML=plans.length?plans.map((p,i)=>`<div class="planRow"><input value="${esc(p.name)}" oninput="plans[${i}].name=this.value;saveAutosaveOnly()"><input value="${esc(p.min)}" oninput="plans[${i}].min=this.value;saveAutosaveOnly()"><button class="tool danger" onclick="plans.splice(${i},1);renderPlan()">×</button></div>`).join(''):'<div class="empty">დაამატე ვარჯიშის ეტაპები: გახურება → ტექნიკა → ტაქტიკა → თამაში.</div>'}
 window.saveAutosaveOnly=()=>localStorage.setItem('coachBoardAutosave',JSON.stringify(saveData()))
 $('#addStage').onclick=()=>{plans.push({name:'ახალი ეტაპი',min:'10'});renderPlan();saveAutos()}
-window.addEventListener('load',()=>{let a=localStorage.getItem('coachBoardAutosave');if(a){try{let d=JSON.parse(a);if(confirm('ბოლო დაუმთავრებელი ვარჯიში აღვადგინოთ?'))load(d)}catch{}}render()})
+window.addEventListener('load',()=>{let a=localStorage.getItem('coachBoardAutosave');if(a){try{let d=JSON.parse(a);if(confirm('ბოლო დაუმთავრებელი ვარჯიში აღვადგინოთ?'))load(d)}catch{}}render();renderFrames()})
 
 function modeHtml(){return ['select','red','blue','redFig','blueFig','ball','cone','man','arrow','line','zone','text','erase'].map(t=>{let names={select:'👆',red:'🔴',blue:'🔵',ball:'⚽',cone:'🔶',man:'🧍',arrow:'➡️',line:'➖',zone:'🟩',redFig:'🔴👤',blueFig:'🔵👤',text:'T',erase:'🗑️'};return `<button data-tool="${t}" onclick="setToolMode('${t}')">${names[t]}</button>`}).join('')}
 $('#modeTools').innerHTML=modeHtml();
