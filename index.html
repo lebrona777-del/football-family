@@ -73,7 +73,7 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 .playerFig.gk .arm.l{transform:rotate(75deg)}.playerFig.gk .arm.r{transform:rotate(-75deg)}.playerFig.gk .leg.l{transform:rotate(20deg)}.playerFig.gk .leg.r{transform:rotate(-20deg)}
 .playerFig.raise .arm.l{transform:rotate(-55deg)}.playerFig.raise .arm.r{transform:rotate(55deg)}
 .playerFig.side .arm.l{transform:rotate(75deg)}.playerFig.side .arm.r{transform:rotate(5deg)}
-.playerPanel{display:none;margin-top:10px;padding:10px;border:1px solid #dbe4de;border-radius:14px;background:#f7faf8}.playerPanel.show{display:block}.playerCats{display:flex;gap:7px;overflow-x:auto;padding-bottom:5px}.playerCats button{flex:0 0 auto;background:#fff;border:1px solid #dbe4de;border-radius:11px;padding:8px 10px;font-weight:800}.playerCats button.active{background:#d9f0df;border-color:#5cab72;color:#12622e}.playerAddRow{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.assetCats{display:flex;gap:7px;overflow-x:auto;margin-top:9px;padding-bottom:5px}.assetCats button{flex:0 0 auto;background:#fff;border:1px solid #dbe4de;border-radius:11px;padding:8px 10px;font-weight:800}.assetCats button.active{background:#d9f0df;border-color:#5cab72;color:#12622e}.assetGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:8px}.assetGrid button{padding:9px 5px;border-radius:10px;background:#123b21;color:#fff;font-weight:800}.frames{display:flex;gap:7px;overflow-x:auto;padding:3px 0}.frame{flex:0 0 90px;border:1px solid #dbe4de;background:#f7faf8;border-radius:11px;padding:8px;font-weight:800}.frame.active{background:#d9f0df;border-color:#5cab72}.frame small{display:block;color:#66736b;margin-top:3px}.frameActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.playerAddRow button{background:#123b21;color:#fff;border-radius:11px;padding:9px 11px;font-weight:800}
+.playerPanel{display:none;margin-top:10px;padding:10px;border:1px solid #dbe4de;border-radius:14px;background:#f7faf8}.playerPanel.show{display:block}.playerCats{display:flex;gap:7px;overflow-x:auto;padding-bottom:5px}.playerCats button{flex:0 0 auto;background:#fff;border:1px solid #dbe4de;border-radius:11px;padding:8px 10px;font-weight:800}.playerCats button.active{background:#d9f0df;border-color:#5cab72;color:#12622e}.playerAddRow{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.assetCats{display:flex;gap:7px;overflow-x:auto;margin-top:9px;padding-bottom:5px}.assetCats button{flex:0 0 auto;background:#fff;border:1px solid #dbe4de;border-radius:11px;padding:8px 10px;font-weight:800}.assetCats button.active{background:#d9f0df;border-color:#5cab72;color:#12622e}.assetGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:8px}.assetGrid button{padding:9px 5px;border-radius:10px;background:#123b21;color:#fff;font-weight:800}.frames{display:flex;gap:7px;overflow-x:auto;padding:3px 0}.frame{flex:0 0 90px;border:1px solid #dbe4de;background:#f7faf8;border-radius:11px;padding:8px;font-weight:800}.frame.active{background:#d9f0df;border-color:#5cab72}.frame small{display:block;color:#66736b;margin-top:3px}.frameActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.frameActions select{border:1px solid #dbe4de;background:#fff;color:#123b21}.playing{box-shadow:0 0 0 3px #65d889 inset!important}.playerAddRow button{background:#123b21;color:#fff;border-radius:11px;padding:9px 11px;font-weight:800}
 .label{font-size:11px;background:#fff;padding:2px 5px;border-radius:5px;white-space:nowrap;box-shadow:0 1px 4px #0003}
 .zone{position:absolute;border:3px dashed #fff8;border-radius:10px;background:#ffffff14;z-index:2}
 .svgLayer{position:absolute;inset:0;width:100%;height:100%;z-index:3;overflow:visible;pointer-events:none}
@@ -161,7 +161,7 @@ box-shadow:inset 0 0 35px rgba(0,0,0,.16),inset 0 0 0 8px rgba(0,0,0,.06)}
 <h3 style="margin:0 0 10px">🎬 ვარჯიშის კადრები</h3>
 <div class="small">ააწყვე ერთი ვარჯიში რამდენიმე კადრად და შემდეგ გადაათვალიერე ნაბიჯ-ნაბიჯ.</div>
 <div class="frames" id="frames"></div>
-<div class="frameActions"><button class="tool primary" id="addFrame">＋ ახალი კადრი</button><button class="tool" id="nextFrame">▶️ შემდეგი</button><button class="tool" id="prevFrame">◀️ წინა</button></div>
+<div class="frameActions"><button class="tool primary" id="addFrame">＋ ახალი კადრი</button><button class="tool" id="nextFrame">▶️ შემდეგი</button><button class="tool" id="prevFrame">◀️ წინა</button><button class="tool primary" id="playFrames">▶️ PLAY</button><button class="tool" id="stopFrames">⏹ STOP</button><select id="frameSpeed" class="tool"><option value="1200">ნელა</option><option value="750" selected>ნორმალური</option><option value="450">სწრაფი</option></select></div>
 </section>
 
 <section class="card">
@@ -266,6 +266,46 @@ function captureFrame(name){frames.push({name:name||`კადრი ${frames.le
 function renderFrames(){let box=$('#frames');if(!box)return;box.innerHTML=frames.length?frames.map((f,i)=>`<button class="frame ${i===activeFrame?'active':''}" data-i="${i}">${esc(f.name)}<small>${f.objects.length} ობიექტი</small></button>`).join(''):'<div class="empty">ჯერ კადრები არ გაქვს.</div>';$$('#frames .frame').forEach(b=>b.onclick=()=>applyFrame(+b.dataset.i))}
 $('#addFrame').onclick=()=>{let n=prompt('კადრის სახელი?',`კადრი ${frames.length+1}`);if(n!==null)captureFrame(n)};
 $('#nextFrame').onclick=()=>{if(frames.length)applyFrame(Math.min(frames.length-1,activeFrame+1))};$('#prevFrame').onclick=()=>{if(frames.length)applyFrame(Math.max(0,activeFrame-1))};
+let framePlaying=false, frameTimer=null, frameRAF=null;
+function frameMap(arr){const m=new Map();(arr||[]).forEach(o=>m.set(String(o.id),o));return m}
+function animateFrame(from,to,duration){
+  if(frameRAF)cancelAnimationFrame(frameRAF);
+  const start=performance.now(), fm=frameMap(from.objects), tm=frameMap(to.objects);
+  const ids=[...new Set([...fm.keys(),...tm.keys()])];
+  function tick(now){
+    const t=Math.min(1,(now-start)/duration), e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+    objects=ids.map(id=>{
+      const a=fm.get(id),b=tm.get(id);
+      if(!b) return {...a,opacity:1-e};
+      if(!a) return {...b,opacity:e};
+      const o={...b};
+      if(typeof a.x==='number'&&typeof b.x==='number')o.x=a.x+(b.x-a.x)*e;
+      if(typeof a.y==='number'&&typeof b.y==='number')o.y=a.y+(b.y-a.y)*e;
+      return o;
+    });
+    render();
+    objects.forEach(o=>{const el=pitch.querySelector('[data-id="'+o.id+'"]');if(el&&o.opacity!==undefined)el.style.opacity=o.opacity});
+    if(t<1){frameRAF=requestAnimationFrame(tick)}
+    else {objects=to.objects.map(o=>({...o}));strokes=to.strokes.map(s=>({...s,pts:s.pts.map(p=>({...p}))}));render();}
+  }
+  frameRAF=requestAnimationFrame(tick);
+}
+async function playFrames(){
+  if(frames.length<2){toast('ანიმაციისთვის მინიმუმ 2 კადრი დაამატე 🎬');return}
+  if(framePlaying)return;
+  framePlaying=true;$('#playFrames').classList.add('playing');
+  const speed=()=>Number($('#frameSpeed').value||750);
+  for(let i=Math.max(0,activeFrame<0?0:activeFrame);i<frames.length-1 && framePlaying;i++){
+    activeFrame=i;renderFrames();
+    animateFrame(frames[i],frames[i+1],speed());
+    await new Promise(r=>setTimeout(r,speed()+40));
+  }
+  if(framePlaying){activeFrame=frames.length-1;applyFrame(activeFrame)}
+  stopFrames();
+}
+function stopFrames(){framePlaying=false;$('#playFrames').classList.remove('playing');if(frameRAF)cancelAnimationFrame(frameRAF);frameRAF=null;clearTimeout(frameTimer)}
+$('#playFrames').onclick=playFrames;$('#stopFrames').onclick=stopFrames;
+
 $('#duplicate').onclick=()=>{snapshot();let d=saveData();title.value=(title.value||'ვარჯიში')+' — ასლი';frames=d.frames||frames;save();toast('ვარჯიში დუბლირებულია 📋')};
 $('#exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify(saveData(),null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(title.value||'coach-training')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 $('#importBtn').onclick=()=>$('#importFile').click();$('#importFile').onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{load(JSON.parse(r.result))}catch{toast('JSON ფაილი ვერ ჩაიტვირთა')}};r.readAsText(f)};
