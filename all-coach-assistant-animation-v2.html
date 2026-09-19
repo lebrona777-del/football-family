@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07121f">
+<title>ALL COACH ASSISTANT</title>
+<style>
+:root{--bg:#07121f;--panel:#0d1c2d;--panel2:#12263b;--line:#29425c;--txt:#f8fbff;--muted:#b9c9da;--green:#28c978;--blue:#35a8ff;--red:#ef5d72;--pitch:#14814d}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+button,input,select,textarea{font:inherit}button{color:#fff;cursor:pointer}
+.app{max-width:1180px;margin:auto;padding:14px 12px 42px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:45px;height:45px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--green),var(--blue));font-size:24px}
+h1{font-size:19px;margin:0}.muted{color:var(--muted)}.tiny{font-size:12px}
+.status{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#102338;font-size:12px}
+.nav{display:flex;gap:7px;overflow:auto;padding-bottom:5px}.nav button{flex:1;min-width:105px;border:1px solid var(--line);background:var(--panel);border-radius:11px;padding:11px 8px;font-weight:800;color:var(--muted)}.nav button.active{background:#153c35;color:#fff;border-color:#2b9f73}
+.view{display:none}.view.active{display:block}.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px;margin:12px 0;box-shadow:0 10px 30px #0004}
+h2{font-size:18px;margin:0 0 5px}h3{font-size:15px;margin:0}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}.full{grid-column:1/-1}
+label{display:block;font-size:13px;font-weight:800;color:#e7f0f8;margin-bottom:6px}input,select,textarea{width:100%;background:#091625;border:1px solid #35516d;color:#fff;border-radius:10px;padding:11px;outline:0}textarea{min-height:75px}
+input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px #28c97822}
+.actions,.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.btn{border:1px solid #35536f;background:#142a41;border-radius:10px;padding:10px 13px;font-weight:800}.primary{background:linear-gradient(135deg,#20bd6e,#238dcc);border:0}.danger{background:#3b1721;border-color:#71313f}.ghost{background:transparent}
+.screen-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.progress{height:7px;background:#07111c;border-radius:10px;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));width:0}
+.phase{background:#091827;border:1px solid var(--line);border-radius:13px;padding:12px;margin:8px 0}.phasehead{display:flex;justify-content:space-between}.time{color:#6fe6a5;font-weight:900}.phase p{color:#cad6e3;font-size:13px;line-height:1.5;margin:7px 0 0}
+.pitch{position:relative;width:100%;aspect-ratio:1.72;background:linear-gradient(90deg,#116c41,#198b55);border:4px solid #fff;border-radius:8px;overflow:hidden;touch-action:none}.pitch:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;background:#ffffff99}.pitch:after{content:"";position:absolute;left:50%;top:50%;width:80px;height:80px;border:3px solid #ffffff99;border-radius:50%;transform:translate(-50%,-50%)}.area{position:absolute;top:28%;width:15%;height:44%;border:3px solid #ffffff88}.left{left:-2px}.right{right:-2px}
+.piece{position:absolute;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:2px solid white;box-shadow:0 5px 12px #0006;font-size:12px;font-weight:900;touch-action:none;user-select:none}.p{background:#167bd0}.o{background:#d64559}.b{background:#fff;color:#111}.c{background:#ff9c27;color:#111;border-radius:8px}
+.list{display:grid;gap:8px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#091827;border:1px solid var(--line);border-radius:11px;padding:10px}.row small{color:var(--muted)}
+.toolgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.tool{border:1px solid var(--line);background:#091827;border-radius:13px;padding:14px;text-align:left}.tool b{display:block;margin-bottom:5px}.tool span{color:var(--muted);font-size:12px;line-height:1.4}
+.hidden{display:none!important}.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#10263b;border:1px solid #47627d;border-radius:11px;padding:10px 14px;display:none;z-index:99}.toast.show{display:block}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.toolgrid{grid-template-columns:1fr}.status{display:none}.app{padding:10px 9px 35px}.card{padding:13px}}
+
+/* Animation Studio */
+.anim-card{margin-top:14px}.anim-stage{position:relative;background:linear-gradient(90deg,#176b40,#228a52);border:3px solid #fff;border-radius:12px;overflow:hidden;aspect-ratio:1.75;touch-action:none}.anim-stage svg{width:100%;height:100%;display:block}.anim-ui{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.anim-ui .btn{min-width:92px}.anim-status{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:9px}.anim-bar{height:7px;background:#07111c;border-radius:10px;overflow:hidden;flex:1}.anim-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .15s linear}.man-skin{fill:#d8a07a}.kit-blue{fill:#1b74d1}.kit-dark{fill:#10243b}.kit-white{fill:#fff}.pole{fill:#f5a623}.pole-base{fill:#d67d0c}.ball-fill{fill:#fff;stroke:#111;stroke-width:1.5}.route{fill:none;stroke:#d8ff4b;stroke-width:3;stroke-dasharray:8 7;opacity:.9}.anim-label{font-size:12px;font-weight:800;fill:#fff;paint-order:stroke;stroke:#0a2618;stroke-width:4}.coach-tip{margin-top:10px;padding:11px;border:1px solid var(--line);background:#091827;border-radius:11px;color:#dbe8f4;font-size:13px;line-height:1.45}
+.anim-player{filter:url(#shadow);transition:transform .85s cubic-bezier(.2,.8,.2,1)}
+.anim-player .num{font-size:12px;font-weight:900;fill:#fff}
+.anim-player .skin{fill:#d8a07a}.anim-player .shirt{fill:#1b74d1}.anim-player .shorts{fill:#10243b}.anim-player .sock{fill:#fff}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div class="brand"><div class="logo">⚽</div><div><h1>ALL COACH ASSISTANT</h1><div class="muted tiny">Football coaching command center</div></div></div>
+ <div class="status" id="status">● მზად არის</div>
+</header>
+
+<nav class="nav" id="mainNav">
+ <button data-page="home" class="active">🏠 მთავარი</button>
+ <button data-page="ai">🤖 AI Coach</button>
+ <button data-page="board">📋 Tactical Board</button>
+ <button data-page="teams">👥 გუნდები</button>
+ <button data-page="schedule">📅 განრიგი</button>
+ <button data-page="players">📈 მოთამაშეები</button>
+ <button data-page="analysis">📊 ანალიზი</button>
+ <button data-page="library">📚 ბიბლიოთეკა</button>
+</nav>
+
+<main>
+<section id="home" class="view active">
+ <div class="card"><h2>მთავარი</h2><p class="muted">ყველა ძირითადი ფუნქცია ერთ სამუშაო სივრცეში.</p>
+  <div class="toolgrid">
+   <button class="tool" data-go="ai"><b>🤖 AI Coach</b><span>შექმენი სრული სავარჯიშო სესია.</span></button>
+   <button class="tool" data-go="board"><b>📋 Tactical Board</b><span>დახაზე და ამოძრავე მოთამაშეები.</span></button>
+   <button class="tool" data-go="teams"><b>👥 My Teams</b><span>გუნდებისა და შემადგენლობების მართვა.</span></button>
+   <button class="tool" data-go="schedule"><b>📅 Schedule</b><span>ვარჯიშებისა და მატჩების დაგეგმვა.</span></button>
+   <button class="tool" data-go="players"><b>📈 Player Development</b><span>მოთამაშეების პროგრესის ჩანაწერები.</span></button>
+   <button class="tool" data-go="analysis"><b>📊 Match Analysis</b><span>მატჩის ჩანაწერების შექმნა.</span></button>
+  </div>
+ </div>
+ <div class="card"><h2>დღის სტატუსი</h2><div id="homeStats" class="list"></div></div>
+</section>
+
+<section id="ai" class="view">
+ <div class="card"><div class="screen-head"><div><h2>🤖 AI Coach</h2><div class="muted tiny">სავარჯიშოს დაგეგმვა</div></div><button class="btn ghost" data-go="home">← მთავარი</button></div>
+ <div class="grid">
+  <div><label>ასაკი</label><select id="age"><option>U6</option><option>U7</option><option>U8</option><option>U9</option><option>U10</option><option>U11</option><option>U12</option><option>U13</option><option>U14</option><option>U15</option><option>U16</option><option>U17</option><option>U18</option><option>U19</option><option>U20</option><option>U21</option><option>Senior</option><option>Professional / First Team</option><option>Elite / High Performance</option></select></div>
+  <div><label>ხანგრძლივობა</label><select id="duration"><option>45</option><option>60</option><option selected>75</option><option>90</option><option>105</option><option>120</option></select></div>
+  <div><label>მოთამაშეები</label><select id="players"><option>6</option><option>8</option><option>10</option><option>12</option><option selected>14</option><option>16</option><option>18</option><option>20</option><option>22+</option></select></div>
+  <div><label>მიზანი</label><input id="goal" placeholder="მაგ: ბურთის ფლობა"></div>
+  <div class="full"><label>დამატებითი მოთხოვნა</label><textarea id="notes" placeholder="მაგ: მაღალი ინტენსივობა, პრესინგი, მცირე მოედანი..."></textarea></div>
+ </div>
+ <div class="actions"><button class="btn primary" id="generate">შექმენი ვარჯიში →</button><button class="btn" id="saveSession">💾 შენახვა</button><button class="btn" id="sendBoard">➡️ Tactical Board-ზე გადატანა</button></div>
+ <div id="session" class="hidden"></div>
+ <div id="sessionNav" class="actions hidden"><button class="btn" id="prevPhase">← წინა</button><button class="btn" id="nextPhase">შემდეგი →</button></div>
+ </div>
+</section>
+
+<section id="board" class="view">
+ <div class="card"><div class="screen-head"><div><h2>📋 Tactical Board</h2><div class="muted tiny">მოთამაშეები გადაადგილდება თითით ან მაუსით</div></div><button class="btn ghost" data-go="ai">← AI Coach</button></div>
+ <div class="toolbar"><button class="btn" data-add="p">+ მოთამაშე</button><button class="btn" data-add="o">+ მოწინააღმდეგე</button><button class="btn" data-add="b">⚽ ბურთი</button><button class="btn" data-add="c">🔶 კონუსი</button><button class="btn" id="clearBoard">გასუფთავება</button><button class="btn primary" id="saveBoard">💾 შენახვა</button><button class="btn" id="loadBoard">↻ ჩატვირთვა</button></div>
+ <div class="pitch" id="pitch"><div class="area left"></div><div class="area right"></div></div>
+ </div>
+
+ <div class="card anim-card">
+  <div class="screen-head"><div><h2>🎬 Animated Drill Studio</h2><div class="muted tiny">რეალისტურ სტილში აჩვენე ფეხბურთელის, ბურთისა და დგარების მოძრაობა.</div></div></div>
+  <div class="grid">
+   <div><label>სავარჯიშო</label><select id="animDrill"><option value="zigzag">დრიბლინგი დგარებებს შორის → პასი</option><option value="passmove">პასი და მოძრაობა</option><option value="press">პრესინგის რეაქცია</option></select></div>
+   <div><label>ანიმაციაში მოთამაშეები</label><input id="animPlayerCount" type="number" min="2" max="30" value="6" inputmode="numeric"></div>
+   <div><label>სიჩქარე</label><select id="animSpeed"><option value="1">1×</option><option value="0.65">1.5×</option><option value="1.6">0.6×</option></select></div>
+  </div>
+  <div class="anim-stage" id="animStage">
+   <svg viewBox="0 0 900 515" role="img" aria-label="ფეხბურთის სავარჯიშოს ანიმაცია">
+    <defs><filter id="shadow"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity=".35"/></filter></defs>
+    <rect x="22" y="28" width="856" height="459" rx="8" fill="none" stroke="#ffffff" stroke-width="3" opacity=".75"/>
+    <line x1="450" y1="28" x2="450" y2="487" stroke="#fff" stroke-width="2" opacity=".55"/>
+    <circle cx="450" cy="258" r="60" fill="none" stroke="#fff" stroke-width="2" opacity=".55"/>
+    <path id="animRoute" class="route" d="M115 270 C180 170 220 170 280 320 C340 430 390 150 450 260 C510 370 560 170 620 300 C700 390 750 250 805 258"/>
+    <g id="poles"></g>
+    <g id="animPlayers"></g>
+    <g id="animReceiver" filter="url(#shadow)" transform="translate(810 250)">
+      <circle class="man-skin" cx="0" cy="-28" r="13"/>
+      <rect class="kit-dark" x="-15" y="-14" width="30" height="43" rx="8"/>
+      <rect class="kit-white" x="-12" y="-8" width="24" height="5" rx="2"/>
+      <rect class="kit-dark" x="-14" y="28" width="12" height="31" rx="5"/>
+      <rect class="kit-dark" x="2" y="28" width="12" height="31" rx="5"/>
+      <rect class="kit-white" x="-16" y="56" width="16" height="7" rx="3"/>
+      <rect class="kit-white" x="3" y="56" width="16" height="7" rx="3"/>
+      <text x="0" y="3" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">9</text>
+    </g>
+    <g id="animBall" filter="url(#shadow)"><circle class="ball-fill" cx="125" cy="310" r="9"/><path d="M120 307l5-4 5 4-2 6h-6z" fill="#111"/></g>
+    <text class="anim-label" x="85" y="390">START</text><text class="anim-label" x="785" y="390">FINISH</text>
+   </svg>
+  </div>
+  <div class="anim-status"><span id="animStatus" class="muted tiny">მზად არის — დააჭირე Play-ს</span><div class="anim-bar"><i id="animProgress"></i></div></div>
+  <div class="anim-ui"><button class="btn primary" id="animPlay">▶️ Play</button><button class="btn" id="animPause">⏸ Pause</button><button class="btn" id="animReset">🔄 თავიდან</button><button class="btn" id="animFromBoard">📋 დაფიდან სცადე</button></div>
+  <div class="coach-tip">💡 <b>Coach Tip:</b> ბურთი მიჰყვება ფეხბურთელს პატარა შეხებებით; დგარებთან მიმართულება იცვლება და ბოლოს ხდება პასი მეორე ფეხბურთელზე.</div>
+ </div>
+</section>
+
+<section id="teams" class="view">
+ <div class="card"><div class="screen-head"><h2>👥 My Teams</h2><button class="btn" data-go="home">← უკან</button></div><div class="grid"><div><label>გუნდის სახელი</label><input id="teamName" placeholder="მაგ: U14 A"></div><div><label>ასაკი</label><input id="teamAge" placeholder="U14"></div></div><div class="actions"><button class="btn primary" id="addTeam">+ გუნდის დამატება</button></div></div>
+ <div class="card"><div id="teamsList" class="list"></div></div>
+</section>
+
+<section id="schedule" class="view">
+ <div class="card"><div class="screen-head"><h2>📅 Schedule</h2><button class="btn" data-go="home">← უკან</button></div><div class="grid"><div><label>ღონისძიება</label><input id="eventName" placeholder="ვარჯიში / მატჩი"></div><div><label>თარიღი და დრო</label><input id="eventDate" type="datetime-local"></div></div><div class="actions"><button class="btn primary" id="addEvent">+ დამატება</button></div></div>
+ <div class="card"><div id="scheduleList" class="list"></div></div>
+</section>
+
+<section id="players" class="view">
+ <div class="card"><div class="screen-head"><h2>📈 Player Development</h2><button class="btn" data-go="home">← უკან</button></div><div class="grid"><div><label>მოთამაშე</label><input id="playerName" placeholder="სახელი გვარი"></div><div><label>პოზიცია</label><input id="playerPos" placeholder="მაგ: CM"></div><div><label>შეფასება 1–10</label><input id="playerRating" type="number" min="1" max="10" value="7"></div><div><label>შენიშვნა</label><input id="playerNote" placeholder="პროგრესის ჩანაწერი"></div></div><div class="actions"><button class="btn primary" id="addPlayer">+ მოთამაშის დამატება</button></div></div>
+ <div class="card"><div id="playersList" class="list"></div></div>
+</section>
+
+<section id="analysis" class="view">
+ <div class="card"><div class="screen-head"><h2>📊 Match Analysis</h2><button class="btn" data-go="home">← უკან</button></div><div class="grid"><div><label>მატჩი</label><input id="matchName" placeholder="მაგ: U14 vs ..."></div><div><label>შედეგი</label><input id="matchScore" placeholder="2-1"></div><div class="full"><label>ანალიზი</label><textarea id="matchNote" placeholder="რა იმუშავა? რა გასაუმჯობესებელია?"></textarea></div></div><div class="actions"><button class="btn primary" id="addAnalysis">💾 ანალიზის შენახვა</button></div></div>
+ <div class="card"><div id="analysisList" class="list"></div></div>
+</section>
+
+<section id="library" class="view">
+ <div class="card"><div class="screen-head"><h2>📚 Coach Library</h2><button class="btn" data-go="home">← უკან</button></div><p class="muted">აქ ავტომატურად გამოჩნდება შენახული სავარჯიშოები და ჩანაწერები.</p><div id="libraryList" class="list"></div></div>
+</section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(()=>{"use strict";
+const $=id=>document.getElementById(id), views=[...document.querySelectorAll(".view")], nav=[...document.querySelectorAll("#mainNav button")];
+let history=[], phaseIndex=0, currentSession=null, pieceNo=0;
+const toast=m=>{const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(window.__t);window.__t=setTimeout(()=>t.classList.remove("show"),1700)};
+const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+function go(page,push=true){const cur=views.find(v=>v.classList.contains("active"))?.id;if(push&&cur&&cur!==page)history.push(cur);views.forEach(v=>v.classList.toggle("active",v.id===page));nav.forEach(b=>b.classList.toggle("active",b.dataset.page===page));window.scrollTo({top:0,behavior:"smooth"});renderAll()}
+nav.forEach(b=>b.onclick=()=>go(b.dataset.page));document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+window.onpopstate=()=>{const p=history.pop()||"home";go(p,false)};
+
+const profile=a=>({U6:"მოძრაობა, კოორდინაცია და თამაშით სწავლა.",U7:"ბურთის გაცნობა, კოორდინაცია და მარტივი პასი.",U8:"ბურთის კონტროლი, პასი, 1v1 და სივრცე.",U9:"ტექნიკა, მიღება, პასი და გადაწყვეტილება.",U10:"ტექნიკურ-ტაქტიკური განვითარება და სივრცე.",U11:"მხარდაჭერა, სიგანე, პასი და შეტევა.",U12:"ტექნიკურ-ტაქტიკური გადაწყვეტილებები და ტემპი.",U13:"პოზიციური პრინციპები და გადასვლები.",U14:"ინტენსივობა, პრესინგი და სივრცის გამოყენება.",U15:"თამაშის მოდელი, გადასვლები და პოზიციური სპეციფიკა.",U16:"მაღალი ინტენსივობა და მატჩის სცენარები.",U17:"ტაქტიკური დეტალები და გადაწყვეტილების ხარისხი.",U18:"მაღალი დონის ტექნიკურ-ტაქტიკური მუშაობა.",U19:"მატჩის მოდელი და ინდივიდუალური როლები.",U20:"ტაქტიკური და ფიზიკური მოთხოვნების ინტეგრაცია.",U21:"მატჩის სპეციფიკური მომზადება და დატვირთვა.",Senior:"მატჩის მოდელი და კვირის კონტექსტი.","Professional / First Team":"მატჩის სპეციფიკური ტაქტიკა და დატვირთვის მართვა.","Elite / High Performance":"მაღალი შესრულება, ტაქტიკა და ინდივიდუალური როლები."}[a]||"ტექნიკურ-ტაქტიკური განვითარება.");
+
+function buildSession(){let age=$("age").value,d=+$("duration").value,n=$("players").value,g=$("goal").value.trim()||"ბურთის ფლობა და გადაწყვეტილების მიღება",note=$("notes").value.trim();let times=[Math.max(8,Math.round(d*.12)),Math.max(10,Math.round(d*.22)),Math.max(12,Math.round(d*.30)),Math.max(10,Math.round(d*.26))];times.push(Math.max(5,d-times.reduce((a,b)=>a+b,0)));let desc=[`დინამიკური აქტივაცია ბურთით. ${profile(age)}`,`${g}. პასი, პირველი შეხება და მოძრაობა ბურთის შემდეგ.`,`სივრცის შექმნა, მხარდაჭერა, გადასვლა და გადაწყვეტილების მიღება.`,`თამაშის ფორმა ${g}-ზე აქცენტით; coaching points რეალურ სიტუაციებში.`,`დაბალი ინტენსივობა, აღდგენა და მთავარი სწავლის პუნქტების შეჯამება.`];currentSession={age,d,n,g,note,times,desc,created:new Date().toLocaleString("ka-GE")};phaseIndex=0;renderSession();$("session").classList.remove("hidden");$("sessionNav").classList.remove("hidden");return currentSession}
+function renderSession(){if(!currentSession)return;let names=["1. გახურება","2. ტექნიკა","3. ტაქტიკა","4. თამაში","5. დასრულება"];$("session").innerHTML=`<div class="card"><b>${esc(currentSession.age)} · ${currentSession.d} წთ · ${esc(currentSession.n)} მოთამაშე</b><div class="progress"><i style="width:${((phaseIndex+1)/5)*100}%"></i></div>${currentSession.times.map((t,i)=>`<div class="phase" ${i!==phaseIndex?'style="opacity:.62"':''}><div class="phasehead"><h3>${names[i]}</h3><span class="time">${t} წთ</span></div><p>${esc(currentSession.desc[i])}</p></div>`).join("")}${currentSession.note?`<p class="muted tiny">შენიშვნა: ${esc(currentSession.note)}</p>`:""}</div>`;$("prevPhase").disabled=phaseIndex===0;$("nextPhase").disabled=phaseIndex===4}
+$("generate").onclick=()=>{buildSession();toast("ვარჯიში შეიქმნა ✓")};
+$("prevPhase").onclick=()=>{if(phaseIndex>0){phaseIndex--;renderSession()}};
+$("nextPhase").onclick=()=>{if(phaseIndex<4){phaseIndex++;renderSession()}};
+$("saveSession").onclick=()=>{const s=currentSession||buildSession(),a=JSON.parse(localStorage.getItem("aca_sessions")||"[]");a.unshift(s);localStorage.setItem("aca_sessions",JSON.stringify(a.slice(0,50)));toast("სესია შენახულია ✓");renderAll()};
+$("sendBoard").onclick=()=>{if(!currentSession)buildSession();go("board");toast("სესიის იდეა Tactical Board-ზე მზადაა")};
+
+function boardPiece(type,x,y){pieceNo++;let e=document.createElement("div");e.className="piece "+type;e.textContent=type==="p"?pieceNo:type==="o"?"O":type==="b"?"⚽":"•";e.style.left=(x??(10+(pieceNo*9)%75))+"%";e.style.top=(y??(15+(pieceNo*13)%65))+"%";drag(e);$("pitch").appendChild(e)}
+function drag(e){let down=false,ox=0,oy=0;e.onpointerdown=ev=>{down=true;let r=e.getBoundingClientRect();ox=ev.clientX-r.left;oy=ev.clientY-r.top;e.setPointerCapture(ev.pointerId)};e.onpointermove=ev=>{if(!down)return;let r=$("pitch").getBoundingClientRect(),x=ev.clientX-r.left-ox,y=ev.clientY-r.top-oy;e.style.left=Math.max(0,Math.min(r.width-e.offsetWidth,x))+"px";e.style.top=Math.max(0,Math.min(r.height-e.offsetHeight,y))+"px"};e.onpointerup=()=>down=false}
+document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>boardPiece(b.dataset.add));
+$("clearBoard").onclick=()=>{$("pitch").querySelectorAll(".piece").forEach(e=>e.remove());toast("დაფა გასუფთავდა")};
+$("saveBoard").onclick=()=>{let a=[...$("pitch").querySelectorAll(".piece")].map(e=>({c:e.className,t:e.textContent,l:e.style.left,tp:e.style.top}));localStorage.setItem("aca_board",JSON.stringify(a));toast("დაფა შენახულია ✓")};
+$("loadBoard").onclick=()=>loadBoard(true);
+function loadBoard(clear){if(clear)$("pitch").querySelectorAll(".piece").forEach(e=>e.remove());let a=JSON.parse(localStorage.getItem("aca_board")||"[]");a.forEach(o=>{let e=document.createElement("div");e.className=o.c;e.textContent=o.t;e.style.left=o.l;e.style.top=o.tp;drag(e);$("pitch").appendChild(e)});if(a.length)toast("დაფა ჩაიტვირთა ✓")}
+
+function addStored(key,obj){let a=JSON.parse(localStorage.getItem(key)||"[]");a.unshift(obj);localStorage.setItem(key,JSON.stringify(a.slice(0,100)));renderAll()}
+$("addTeam").onclick=()=>{let n=$("teamName").value.trim();if(!n)return toast("შეიყვანე გუნდის სახელი");addStored("aca_teams",{name:n,age:$("teamAge").value.trim(),date:new Date().toLocaleDateString("ka-GE")});$("teamName").value="";toast("გუნდი დაემატა ✓")};
+$("addEvent").onclick=()=>{let n=$("eventName").value.trim();if(!n)return toast("შეიყვანე ღონისძიება");addStored("aca_events",{name:n,date:$("eventDate").value});$("eventName").value="";toast("განრიგში დაემატა ✓")};
+$("addPlayer").onclick=()=>{let n=$("playerName").value.trim();if(!n)return toast("შეიყვანე მოთამაშის სახელი");addStored("aca_players",{name:n,pos:$("playerPos").value,r:$("playerRating").value,note:$("playerNote").value});$("playerName").value="";toast("მოთამაშე დაემატა ✓")};
+$("addAnalysis").onclick=()=>{let n=$("matchName").value.trim();if(!n)return toast("შეიყვანე მატჩი");addStored("aca_analysis",{name:n,score:$("matchScore").value,note:$("matchNote").value,date:new Date().toLocaleDateString("ka-GE")});$("matchName").value="";toast("ანალიზი შენახულია ✓")};
+
+function list(key,target,format){let a=JSON.parse(localStorage.getItem(key)||"[]"),box=$(target);box.innerHTML=a.length?a.map((o,i)=>`<div class="row"><div>${format(o)}<br><small>${esc(o.date||"")}</small></div><button class="btn danger" data-remove="${key}:${i}">წაშლა</button></div>`).join(""):'<div class="muted tiny">ჯერ არაფერი დამატებულა.</div>';box.querySelectorAll("[data-remove]").forEach(b=>b.onclick=()=>{let [k,i]=b.dataset.remove.split(":");let x=JSON.parse(localStorage.getItem(k)||"[]");x.splice(+i,1);localStorage.setItem(k,JSON.stringify(x));renderAll();toast("წაიშალა")})}
+function renderAll(){
+list("aca_teams","teamsList",o=>`<b>${esc(o.name)}</b> · ${esc(o.age||"")}`);
+list("aca_events","scheduleList",o=>`<b>${esc(o.name)}</b> · ${esc(o.date||"")}`);
+list("aca_players","playersList",o=>`<b>${esc(o.name)}</b> · ${esc(o.pos||"")} · შეფასება ${esc(o.r||"")}/10<br><small>${esc(o.note||"")}</small>`);
+list("aca_analysis","analysisList",o=>`<b>${esc(o.name)}</b> · ${esc(o.score||"")}<br><small>${esc(o.note||"")}</small>`);
+let s=JSON.parse(localStorage.getItem("aca_sessions")||"[]");$("libraryList").innerHTML=s.length?s.map((o,i)=>`<div class="row"><div><b>${esc(o.age)} · ${o.d} წთ</b><br><small>${esc(o.g)}</small></div><button class="btn" data-lib="${i}">გახსნა</button></div>`).join(""):'<div class="muted tiny">შენახული სესიები აქ გამოჩნდება.</div>';
+$("libraryList").querySelectorAll("[data-lib]").forEach(b=>b.onclick=()=>{let a=JSON.parse(localStorage.getItem("aca_sessions")||"[]");currentSession=a[+b.dataset.lib];phaseIndex=0;go("ai");renderSession();$("session").classList.remove("hidden");$("sessionNav").classList.remove("hidden")});
+$("homeStats").innerHTML=`<div class="row"><b>გუნდები</b><span>${JSON.parse(localStorage.getItem("aca_teams")||"[]").length}</span></div><div class="row"><b>მოთამაშეები</b><span>${JSON.parse(localStorage.getItem("aca_players")||"[]").length}</span></div><div class="row"><b>შენახული სესიები</b><span>${s.length}</span></div><div class="row"><b>მატჩის ანალიზები</b><span>${JSON.parse(localStorage.getItem("aca_analysis")||"[]").length}</span></div>`;
+}
+
+
+/* Animated Drill Studio */
+const anim={timer:null,playing:false,step:0};
+const animFrames={
+ zigzag:[
+  {p:[105,250],b:[125,310],msg:'1. მოთამაშე იწყებს ბურთით მოძრაობას'},
+  {p:[205,190],b:[220,230],msg:'2. პირველი დგარის მარცხნივ გავლა'},
+  {p:[285,330],b:[300,365],msg:'3. მეორე დგარის მარჯვნივ გავლა'},
+  {p:[390,190],b:[405,225],msg:'4. მიმართულების შეცვლა'},
+  {p:[500,325],b:[515,360],msg:'5. ზიგზაგის გაგრძელება'},
+  {p:[620,220],b:[635,255],msg:'6. ბოლო დგარის გავლა'},
+  {p:[735,250],b:[750,285],msg:'7. მიმღებ ფეხბურთელთან მისვლა'},
+  {p:[785,250],b:[805,270],msg:'8. პასი პარტნიორთან'}
+ ],
+ passmove:[
+  {p:[105,250],b:[125,310],msg:'1. იწყებს მოძრაობას'},
+  {p:[300,250],b:[320,310],msg:'2. გადააქვს ბურთი სივრცეში'},
+  {p:[500,190],b:[520,250],msg:'3. იცვლის მიმართულებას'},
+  {p:[680,270],b:[700,310],msg:'4. ამზადებს პასს'},
+  {p:[785,250],b:[805,270],msg:'5. პასი პარტნიორთან'}
+ ],
+ press:[
+  {p:[390,250],b:[410,300],msg:'1. ბურთის მიღება'},
+  {p:[470,220],b:[490,270],msg:'2. იწყება წნეხი'},
+  {p:[560,300],b:[580,340],msg:'3. კეტავს პასის ხაზს'},
+  {p:[650,235],b:[670,275],msg:'4. მიმართულების შეცვლა'},
+  {p:[735,250],b:[755,285],msg:'5. ბურთის დაბრუნება'}
+ ]
+};
+
+function makeAnimatedPlayer(num,x,y,kind='blue'){
+  const ns='http://www.w3.org/2000/svg';
+  const g=document.createElementNS(ns,'g');
+  g.setAttribute('class','anim-player');
+  g.setAttribute('transform',`translate(${x} ${y})`);
+  g.dataset.num=num;
+  g.innerHTML=`
+    <circle class="skin" cx="0" cy="-28" r="11"/>
+    <rect class="shirt" x="-13" y="-16" width="26" height="36" rx="7"/>
+    <rect class="shorts" x="-12" y="20" width="24" height="10" rx="3"/>
+    <rect class="shorts" x="-11" y="29" width="9" height="27" rx="4"/>
+    <rect class="shorts" x="2" y="29" width="9" height="27" rx="4"/>
+    <rect class="sock" x="-13" y="55" width="12" height="6" rx="2"/>
+    <rect class="sock" x="2" y="55" width="12" height="6" rx="2"/>
+    <text class="num" x="0" y="3" text-anchor="middle">${num}</text>`;
+  $('animPlayers').appendChild(g);
+  return g;
+}
+
+function renderPlayers(){
+  const layer=$('animPlayers');
+  if(!layer)return;
+  layer.innerHTML='';
+  let n=Math.max(2,Math.min(30,Number($('animPlayerCount')?.value||6)));
+  // First player is the animated dribbler.
+  makeAnimatedPlayer(1,105,250);
+  // Remaining players are positioned as realistic support players.
+  const spots=[
+    [235,120],[235,385],[380,100],[380,410],[520,120],[520,400],
+    [650,120],[650,390],[735,150],[735,360],[815,130],[815,370],
+    [170,130],[170,390],[300,260],[600,260],[760,260],[430,260],
+    [560,90],[560,430],[690,90],[690,430],[820,210],[820,300],[120,130],[120,390],[330,70],[330,450]
+  ];
+  for(let i=2;i<=n;i++){
+    const sp=spots[i-2]||[120+(i%6)*120,80+((i*73)%350)];
+    makeAnimatedPlayer(i,sp[0],sp[1]);
+  }
+}
+
+function renderAnimFrame(f){
+ const layer=$('animPlayers'),b=$('animBall'); if(!layer||!b)return;
+ const dribbler=layer.querySelector('.anim-player');
+ if(dribbler)dribbler.setAttribute('transform',`translate(${f.p[0]} ${f.p[1]})`);
+ b.querySelector('circle').setAttribute('cx',f.b[0]);
+ b.querySelector('circle').setAttribute('cy',f.b[1]);
+ b.querySelector('path').setAttribute('transform',`translate(${f.b[0]-125} ${f.b[1]-310})`);
+ $('animStatus').textContent=f.msg;
+}
+
+function resetAnim(){
+ if(anim.timer)clearInterval(anim.timer);
+ anim.timer=null;anim.playing=false;anim.step=0;
+ renderPlayers();
+ renderAnimFrame(animFrames[$('animDrill').value][0]);
+ $('animProgress').style.width='0%';
+}
+
+function startAnim(){
+ if(anim.playing)return;
+ anim.playing=true;
+ const frames=animFrames[$('animDrill').value];
+ const speed=+$('animSpeed').value;
+ renderAnimFrame(frames[anim.step]);
+ anim.timer=setInterval(()=>{
+   anim.step++;
+   if(anim.step>=frames.length){
+     clearInterval(anim.timer);anim.timer=null;anim.playing=false;anim.step=0;
+     $('animProgress').style.width='100%';
+     $('animStatus').textContent='✅ ვარჯიში დასრულდა — ბურთი პარტნიორთან მივიდა';
+     return;
+   }
+   renderAnimFrame(frames[anim.step]);
+   $('animProgress').style.width=((anim.step)/(frames.length-1)*100)+'%';
+ },900*speed);
+}
+
+$('animPlay').onclick=startAnim;
+$('animPause').onclick=()=>{
+ if(anim.timer)clearInterval(anim.timer);
+ anim.timer=null;anim.playing=false;
+ $('animStatus').textContent='⏸ შეჩერებულია';
+};
+$('animReset').onclick=resetAnim;
+$('animDrill').onchange=resetAnim;
+$('animPlayerCount').oninput=()=>{
+ if(anim.playing){ if(anim.timer)clearInterval(anim.timer);anim.timer=null;anim.playing=false; }
+ resetAnim();
+};
+$('animFromBoard').onclick=()=>{
+ const pieces=[...$('pitch').querySelectorAll('.piece')];
+ const players=pieces.filter(x=>x.classList.contains('p'));
+ if(players.length>=1){
+   $('animDrill').value='zigzag';
+   const count=Math.max(2,Math.min(30,players.length));
+   $('animPlayerCount').value=count;
+   resetAnim();
+   toast(`დაფიდან ${count} მოთამაშე აიღო — ახლა ანიმაციით აჩვენე`);
+ }else toast('ჯერ Tactical Board-ზე დაამატე მოთამაშე');
+};
+resetAnim();
+
+loadBoard(false);renderAll();
+})();
+</script>
+</body>
+</html>
