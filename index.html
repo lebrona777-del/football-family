@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <title>Coach Board — Football Training</title>
 <style>
-:root{--green:#0b2816;--pitch:#31874a;--pitch2:#3b9755;--ink:#10251a;--panel:#fff;--muted:#66736b;--accent:#218a49;--danger:#c93636}
+:root{--green:#0b2816;--pitch:#2d8a46;--pitch2:#3d9b56;--ink:#10251a;--panel:#fff;--muted:#66736b;--accent:#218a49;--danger:#c93636}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:#eef3ef;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
 body{min-height:100vh}
@@ -29,15 +29,23 @@ textarea{min-height:70px;resize:vertical}
 .tool.danger{background:#fff0f0;color:#a82020}
 .primary{background:#258b4b;color:#fff}.dark{background:#123b21;color:#fff}
 .pitchCard{padding:10px}
-.pitchWrap{position:relative;width:100%;aspect-ratio:.62;border-radius:18px;overflow:hidden;background:#2f8548;touch-action:none;box-shadow:inset 0 0 0 5px #66b477,0 10px 30px #0b2c1640}
-.pitch{position:absolute;inset:0;overflow:hidden;touch-action:none;background:
-linear-gradient(0deg,transparent 49.7%,#b9dfbf 49.7%,#b9dfbf 50.3%,transparent 50.3%),
-radial-gradient(circle at 50% 50%,transparent 0 9.5%,#b9dfbf 9.5% 10.1%,transparent 10.1%),
-linear-gradient(#ffffff22,#ffffff22)}
-.pitch:before{content:"";position:absolute;inset:3%;border:4px solid #c6e4cb;border-radius:4px}
-.pitch:after{content:"";position:absolute;top:3%;bottom:3%;left:50%;width:2px;background:#c6e4cb}
-.box{position:absolute;left:30%;width:40%;height:14%;border:4px solid #c6e4cb}.box.left{top:3%}.box.right{bottom:3%}
-.goal{position:absolute;left:43%;width:14%;height:2%;border:3px solid #fff;background:#ffffff33}.goal.left{top:1%}.goal.right{bottom:1%}
+.pitchWrap{position:relative;width:100%;aspect-ratio:.56;border-radius:18px;overflow:hidden;background:#287b3e;touch-action:none;box-shadow:inset 0 0 0 5px #76c487,0 10px 30px #0b2c1640}
+.pitch{position:absolute;inset:0;overflow:hidden;touch-action:none;
+background:
+radial-gradient(ellipse at 50% 48%,#4aa962 0%,#318f4d 48%,#26783d 100%),
+repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 7%,rgba(0,0,0,.035) 7% 14%),
+repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 2px,transparent 2px 8px);}
+.pitch:before{content:"";position:absolute;inset:2.7%;border:4px solid rgba(245,255,247,.94);border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.12),inset 0 0 35px rgba(0,0,0,.08)}
+.pitch:after{content:"";position:absolute;top:2.7%;bottom:2.7%;left:50%;width:3px;transform:translateX(-50%);background:rgba(245,255,247,.94);box-shadow:0 0 2px rgba(0,0,0,.15)}
+.pitch{--line:rgba(245,255,247,.94);--shadow:rgba(0,0,0,.12)}
+.box{position:absolute;left:27%;width:46%;height:16%;border:4px solid var(--line);box-shadow:0 0 2px var(--shadow)}
+.box:after{content:"";position:absolute;left:50%;width:22%;height:28%;border:3px solid var(--line);border-bottom:0;transform:translateX(-50%)}
+.box.left:after{bottom:-4px;border-radius:70% 70% 0 0}.box.right:after{top:-4px;border-radius:0 0 70% 70%}.box.left{top:2.7%}.box.right{bottom:2.7%}
+.goal{position:absolute;left:39%;width:22%;height:2.8%;border:3px solid #fff;background:linear-gradient(#ffffff33,#ffffff12);box-shadow:0 1px 4px #0004}.goal.left{top:.7%}.goal.right{bottom:.7%}
+.pitchWrap:after{content:"";position:absolute;left:50%;top:50%;width:18.8%;aspect-ratio:1;border:4px solid rgba(245,255,247,.94);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1;box-shadow:0 0 2px rgba(0,0,0,.12)}
+.pitchWrap:before{content:"";position:absolute;left:50%;top:50%;width:1.3%;aspect-ratio:1;border-radius:50%;background:#fff;transform:translate(-50%,-50%);z-index:2;pointer-events:none;box-shadow:0 0 3px #0005}
+#boardMode .pitchWrap:before,#boardMode .pitchWrap:after{z-index:1}
+
 .object{position:absolute;transform:translate(-50%,-50%);user-select:none;touch-action:none;z-index:5}
 .player{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;border:3px solid #fff;box-shadow:0 2px 8px #0005}
 .red{background:#d93636}.blue{background:#2167d8}
@@ -220,7 +228,7 @@ let fullDrag=null;
 $('#fullPitch').addEventListener('pointerdown',e=>{
  if(!boardMode)return;
  let el=e.target.closest('.object');
- if(el && tool==='select'){
+ if(el && tool!=='erase'){
    e.preventDefault(); e.stopPropagation();
    let id=+el.dataset.id, o=objects.find(x=>x.id===id); if(!o)return;
    snapshot(); fullDrag={id}; el.setPointerCapture?.(e.pointerId);
